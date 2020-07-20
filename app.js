@@ -1,3 +1,4 @@
+const passport = require("passport");
 
 var express 			= require("express"),
 	app 				= express(),
@@ -166,7 +167,9 @@ app.get("/register", funtion(req,res){
 */
 
 Admin.register(new Admin( { email: "cerverae18@hotmail.com"}), "diabloPen2205", function(err, admin){
-	
+	if(err){
+		console.log("erooor");
+	}
 });
 
 
