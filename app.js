@@ -167,13 +167,13 @@ app.get("/register", function(req, res){
 
 app.post("/register", function(req,res){
 	Admin.register((
-		{email: req.body.username
+		{username: req.body.username
 	  }),
 		req.body.password,
 		(err, user) => {
 		if (err) {
 		  console.log(err);
-		  console.log(req.body.email);
+		  console.log(req.body.username);
 		} else {
 		  passport.authenticate('local')(req, res, () =>{
 			res.redirect('/login');
