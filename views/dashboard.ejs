@@ -1,0 +1,55 @@
+<%- include("partials/header") %>
+
+<link rel="stylesheet" href="dashboard.css">
+
+
+<%- include("partials/navbar") %>
+
+<div class="row text-center justify-content-center">
+
+  <div class="col-sm-3 rounded ">
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">Orders Today</h5>
+        <h1>15</h1>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-sm-3 rounded ">
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">Deliveries for Today</h5>
+        <h1>4</h1>
+ 
+      </div>
+    </div>
+  </div>
+
+  <div class="col-sm-3 rounded ">
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">Orders for Tommorow</h5>
+        <h1>5</h1>
+      </div>
+    </div>
+  </div>
+
+  
+
+</div>
+
+<div class="row justify-content-center rounded">
+    <div class="col-lg-6">
+      <div class="card" id="graphCard">
+      <canvas id="myChart" width="400" height="400"></canvas>
+    </div>
+    </div>
+</div>
+
+
+<%- include("partials/framejs") %>
+<script type="text/javascript" src="navbar.js"></script>
+<script type="text/javascript" src="dashboard.js"></script>
+
+<%- include("partials/footer") %>

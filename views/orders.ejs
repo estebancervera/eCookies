@@ -1,0 +1,35 @@
+<%- include("partials/header") %>
+
+<link rel="stylesheet" href="orders.css">
+
+
+<%- include("partials/navbar") %>
+
+<div class="container border border-dark rounded-lg">
+<table id="example" class="display" style="width:100%">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Delivery Date</th>
+                <th>Phone</th>
+                <th>Quantity</th>
+                <th>Order Date</th>
+                
+            </tr>
+        </thead>
+        <tfoot>
+            <tr>
+                <th>Name</th>
+                <th>Phone</th>
+                <th>Delivery Date</th>
+                <th>Quantity</th>
+                <th>Order Date</th>
+            </tr>
+        </tfoot>
+    </table>
+</div>
+<%- include("partials/framejs") %>
+<script type="text/javascript" src="navbar.js"></script>
+<script type="text/javascript" src="orders.js"></script>
+
+<%- include("partials/footer") %>

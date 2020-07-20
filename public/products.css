@@ -1,0 +1,28 @@
+.indent{
+	margin-top: 25px;
+	margin-left: 25px;
+}
+.btn-danger{
+	
+}
+
+img {
+  display: block;
+  max-width:400px;
+  max-height:400px;
+  width: auto;
+  height: auto;
+}
+.mb-2{
+	margin: 15px;
+}
+
+
+.bi-pencil-square{
+	color: white;
+}
+
+.bi-trash-fill{
+	color: white;
+}
+
