@@ -165,9 +165,9 @@ app.get("/register", funtion(req,res){
 
 */
 
-Admin.register(new Admin( { email: "cerverae18@hotmail.com"}), "diabloPen2205", function(err, admin){
-	
-});
+// Admin.register(new Admin( { email: "email@example.com"}), "password", function(err, admin){
+
+// });
 
 
 // show login form
