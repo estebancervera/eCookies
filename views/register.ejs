@@ -1,0 +1,29 @@
+<%- include("partials/header") %>
+
+<link rel="stylesheet" href="/new.css">
+
+<div class="container">
+     
+    <form action="/register" method="POST">
+            
+              <div class="form-group">
+                 <label for="FormControlInput1">Email</label>
+                <input type="text" name="username" class="form-control" id="FormControlInput1"  required placeholder="">
+              </div>
+    
+              <div class="form-group">
+                <label for="FormControlInput1">Password</label>
+               <input type="text" name="password" class="form-control" id="FormControlInput1"  required placeholder="">
+             </div>
+            
+             <div class="form-group">
+                <button type="submit button"  class="btn btn-primary">Register</button>
+           </div>
+           
+    
+    </form>
+    </div>   
+
+    <%- include("partials/framejs") %>
+
+    <%- include("partials/footer") %>

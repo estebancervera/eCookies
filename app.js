@@ -1,6 +1,7 @@
 
 
-var express 			= require("express"),
+
+const express 			= require("express"),
 	app 				= express(),
 	mongoose 			= require('mongoose');
 	bodyParser 			= require("body-parser"),
@@ -158,13 +159,27 @@ app.delete("/products/:id", isLoggedIn, function(req, res){
 //AUTH ROUTES
 
 //show register form
-/*
-app.get("/register", funtion(req,res){
 
-	res.render("register")
+app.get("/register", function(req, res){
+	res.render("register");
 });
 
-*/
+
+app.post("/register", function(req,res){
+Admin.register( new Admin({email: req.body.email}), req.body.password, function(err, user){
+	if(err){
+		console.log(err);
+		return res.render('register');
+	}
+	passport.authenticate("local")(req, res, function(){
+		res.redirect("/login")
+	});
+});
+
+	
+});
+
+
 
 
 
@@ -172,11 +187,6 @@ app.get("/register", funtion(req,res){
 // show login form
 app.get("/login", function(req, res){
 
-	Admin.register(new Admin( { email: "cerverae18@hotmail.com"}), "diabloPen2205", function(err, admin){
-		if(err){
-			console.log("erooor");
-		}
-	});
 	res.render("login");
 });
 
