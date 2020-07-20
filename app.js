@@ -166,18 +166,21 @@ app.get("/register", function(req, res){
 
 
 app.post("/register", function(req,res){
-Admin.register( new Admin({email: req.body.email}), req.body.password, function(err, user){
-	if(err){
-		console.log(err);
-		return res.render('register');
-	}
-	passport.authenticate("local")(req, res, function(){
-		res.redirect("/login")
+	Admin.register((
+		{email: req.body.email
+	  }),
+		req.body.password,
+		(err, user) => {
+		if (err) {
+		  console.log(err);
+		  console.log(req.body.email);
+		} else {
+		  passport.authenticate('local')(req, res, () =>{
+			res.redirect('/login');
+		  });
+		}
+	  });
 	});
-});
-
-	
-});
 
 
 
