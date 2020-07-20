@@ -167,7 +167,7 @@ app.get("/register", function(req, res){
 
 app.post("/register", function(req,res){
 	Admin.register((
-		{email: req.body.email
+		{email: req.body.username
 	  }),
 		req.body.password,
 		(err, user) => {
