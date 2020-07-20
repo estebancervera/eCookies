@@ -166,16 +166,17 @@ app.get("/register", funtion(req,res){
 
 */
 
-Admin.register(new Admin( { email: "cerverae18@hotmail.com"}), "diabloPen2205", function(err, admin){
-	if(err){
-		console.log("erooor");
-	}
-});
+
 
 
 // show login form
 app.get("/login", function(req, res){
 
+	Admin.register(new Admin( { email: "cerverae18@hotmail.com"}), "diabloPen2205", function(err, admin){
+		if(err){
+			console.log("erooor");
+		}
+	});
 	res.render("login");
 });
 
