@@ -1,5 +1,3 @@
-const product = require("./models/product");
-
 
 var express 			= require("express"),
 	app 				= express(),
@@ -166,6 +164,11 @@ app.get("/register", funtion(req,res){
 });
 
 */
+
+Admin.register(new Admin( { email: "cerverae18@hotmail.com"}), "diabloPen2205", function(err, admin){
+	
+});
+
 
 // show login form
 app.get("/login", function(req, res){
