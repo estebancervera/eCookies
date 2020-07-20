@@ -1,7 +1,6 @@
-const product = require("./models/product");
 
 
-var express 			= require("express"),
+const express 			= require("express"),
 	app 				= express(),
 	mongoose 			= require('mongoose');
 	bodyParser 			= require("body-parser"),
@@ -18,9 +17,9 @@ var express 			= require("express"),
 
 
 	 
-mongoose.connect('mongodb://localhost:27017/cookie_shop_test', {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
+mongoose.connect('mongodb+srv://estebancervera:diabloPen2205@ecookies.rqkpz.mongodb.net/<ecookies>?retryWrites=true&w=majority', {
+ 	 useNewUrlParser: true,
+  	useUnifiedTopology: true,
 	useFindAndModify: false
 })
 .then(() => console.log('Connected to DB!'))
