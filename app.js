@@ -12,7 +12,8 @@ const express 			= require("express"),
 	Admin 				= require("./models/admin"),
 	Product 			= require("./models/product"),
 	Packet 				= require("./models/packet"),
-	Order 				= require("./models/order")
+	Order 				= require("./models/order"),
+	User				= require("./models/user")
 
 	 
 
@@ -233,6 +234,18 @@ app.get("/products/json", function(req, res){
 		};
 	});
 
+});
+
+app.get("/users/register", function(req,res){
+	User.create( req.body, function(err){
+		if(err){
+			console.log("ERROR: " + err);
+			res.render("new");
+		}else{
+			console.log("USer added")
+		}
+		
+	});
 });
 
 
