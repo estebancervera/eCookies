@@ -246,7 +246,7 @@ app.post("/users/register", function(req,res){
 			res.send(err);
 		}else{
 			console.log("USer added")
-			res.send(newUser);
+			res.send("YAY");
 		}
 		
 	});
