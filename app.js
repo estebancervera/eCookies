@@ -237,12 +237,22 @@ app.get("/products/json", function(req, res){
 });
 
 app.get("/users/register", function(req,res){
-	User.create( req.body, function(err){
+
+	var newUser = new User({
+		firstname: req.body.firstname,
+		lastname: req.body.lastname,
+		email: req.body.email,
+    	password: req.body.password,
+    	phone: req.body.phone
+	});
+
+	User.create( newUser, function(err){
 		if(err){
 			console.log("ERROR: " + err);
-			res.render("new");
+			res.send(err);
 		}else{
 			console.log("USer added")
+			res.send(newUser);
 		}
 		
 	});
