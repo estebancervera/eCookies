@@ -30,6 +30,7 @@ mongoose.connect( process.env.MONGODB_URI  || 'mongodb://localhost:27017/cookie_
 
 app.set("view engine", "ejs");
 app.use(bodyParser.urlencoded({extended: true}));
+app.use(express.json());
 app.use(express.static("public"));
 app.use(methodOverride("_method"));
 app.use(expressSanitizer());
