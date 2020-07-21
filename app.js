@@ -1,265 +1,61 @@
+const express 			= require("express");
+const mongoose 			= require('mongoose');
+const methodOverride 	= require("method-override");
+const expressSanitizer 	= require('express-sanitizer');
+const passport 			= require('passport');
+const session 			= require('express-session');
 
+const	app 			= express();
 
-
-const express 			= require("express"),
-	app 				= express(),
-	mongoose 			= require('mongoose');
-	bodyParser 			= require("body-parser"),
- 	methodOverride 		= require("method-override"),
- 	expressSanitizer 	= require("express-sanitizer"),
-	passport 			= require("passport"),
-	LocalStrategy 		= require("passport-local"),
-	Admin 				= require("./models/admin"),
-	Product 			= require("./models/product"),
-	Packet 				= require("./models/packet"),
-	Order 				= require("./models/order"),
-	User				= require("./models/user")
-
+require('./config/passport')(passport);
 	 
+// DB config
+
+const db  = require('./config/keys').MongoURI
+
+// CONNECT TO MONGO
+
+mongoose.connect(db, { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false})
+.then( () => console.log("Connected to MongoDB"))
+.catch(err => console.log(err));
 
 
-	 
-mongoose.connect( process.env.MONGODB_URI  || 'mongodb://localhost:27017/cookie_shop_test', {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-	useFindAndModify: false
-})
-.then(() => console.log('Connected to DB!'))
-.catch(error => console.log(error.message));
-
+//EJS
 
 app.set("view engine", "ejs");
-app.use(bodyParser.urlencoded({extended: true}));
-app.use(express.json());
 app.use(express.static("public"));
-app.use(methodOverride("_method"));
-app.use(expressSanitizer());
 
-//PASSPORT CONFIGURATION
+//BodyParser
 
-app.use(require("express-session")({
+app.use(express.urlencoded({extended: true}));
+app.use(express.json());
+
+// Express Session
+
+app.use(session({
 	secret: "eCookies las mejores galletas",
-	resave: false,
-	saveUninitialized: false
+	resave: true,
+	saveUninitialized: true
 }));
 
+// Passport middleware
 app.use(passport.initialize());
 app.use(passport.session());
-passport.use( new LocalStrategy(Admin.authenticate()));
-passport.serializeUser(Admin.serializeUser());
-passport.deserializeUser(Admin.deserializeUser());
 
-//ROUTES
-
-app.get("/", function(req, res){
-	res.redirect("/login");
-});
-
-app.get("/dashboard", isLoggedIn, function(req, res){
-	res.render("dashboard");
-});
-
-app.get("/orders", isLoggedIn, function(req, res){
-	res.render("orders");
-});
+//METHOD OVERIDE
+app.use(methodOverride("_method"));
 
 
-app.get("/products",isLoggedIn, function(req, res){
-	Product.find({}, function(err, products){
-	if(err){
-		console.log("ERROR: F : " + err);
-	}else{;
-		//console.log(";successfull find");
-		res.render("products", {products: products});
-	};
-});
-	
-});
+// ROUTES
 
-app.get("/products/new",isLoggedIn, function(req, res){
-	res.render("new");;
-});	
+app.use('/products', require('./routes/products'));
+app.use('/users', require('./routes/users'));
+app.use('/admin', require('./routes/admin'));
+app.use('/api', require('./routes/api'));
+
+app.use('/', require('./routes/index'));
 
 
-//EDIT
-	
-app.get("/products/:id/edit",isLoggedIn, function(req, res){
-	Product.findById(req.params.id, function(err, foundProduct){
-					 if (err){
-						 res.redirect("/products")
-					 }else{
-						 res.render("edit", {product: foundProduct});
-					 }
-			});
-	
-});
+const PORT = process.env.PORT || 3000;
 
-//CREATE
-
-app.post("/products", isLoggedIn, function(req, res){
-	
-	var isAvailable = req.body.product.available;
-	
-	if(isAvailable === 'on'){
-		req.body.product.available = true;
-	}else{
-		req.body.product.available = false;
-	}
-	
-	req.body.product.description = req.sanitize(req.body.product.description);
-	
-	Product.create( req.body.product, function(err){
-	if(err){
-		console.log("ERROR: " + err);
-		res.render("new");
-	}else{
-		res.redirect("/products")
-	}
-});
-
-});
-
-//UPDATE ROUTE
-
-app.put("/products/:id", isLoggedIn, function(req, res){
-	
-	var isAvailable = req.body.product.available;
-	
-	if(isAvailable === 'on'){
-		req.body.product.available = true;
-	}else{
-		req.body.product.available = false;
-	}
-	
-	req.body.product.description = req.sanitize(req.body.product.description);
-	
-	Product.findByIdAndUpdate(req.params.id, req.body.product, function(err, updatedProduct){
-		if(err){
-			res.redirect("/products")
-		}else{
-			res.redirect("/products")
-		}
-	} );
-	
-});
-
-//DELETE ROUTE
-
-
-app.delete("/products/:id", isLoggedIn, function(req, res){
-		Product.findByIdAndRemove(req.params.id, function(err){
-			if(err){
-				res.redirect("/products");
-			}else{
-				res.redirect("/products");
-			}
-		})
-});
-	
-
-//=======================
-//AUTH ROUTES
-
-//show register form
-
-app.get("/register", function(req, res){
-	res.render("register");
-});
-
-
-app.post("/register", function(req,res){
-	Admin.register((
-		{username: req.body.username
-	  }),
-		req.body.password,
-		(err, user) => {
-		if (err) {
-		  console.log(err);
-		  console.log(req.body.username);
-		} else {
-		  passport.authenticate('local')(req, res, () =>{
-			res.redirect('/login');
-		  });
-		}
-	  });
-	});
-
-
-
-
-
-
-// show login form
-app.get("/login", function(req, res){
-
-	res.render("login");
-});
-
-//handle login logic
-app.post("/login",
-passport.authenticate("local", {
-	successRedirect: "/dashboard", 
-	failureRedirect: "/login"}),
-function(req, res){
-});
-
-//logout
-
-app.get("/logout", isLoggedIn, function(req , res){
-	req.logout();
-	res.redirect("/login");
-});
-
-function isLoggedIn(req, res, next){
-	if(req.isAuthenticated()){
-		return next();
-	}
-	res.redirect("/login");
-}
-
-
-//============================================
-
-// APP ROUTES
-
-//============================================
-
-app.get("/products/json", function(req, res){
-
-	Product.find({}, function(err, products){
-		if(err){
-			console.log("ERROR: F : " + err);
-		}else{;
-			//console.log(";successfull find");
-			res.json(products);
-		};
-	});
-
-});
-
-app.post("/users/register", function(req,res){
-
-	console.log(req.body);
-
-	User.create( req.body, function(err){
-		if(err){
-			console.log("ERROR: " + err);
-			res.send(err);
-		}else{
-			console.log("USer added")
-			res.send("YAY");
-		}
-		
-	});
-});
-
-
-
-app.get("*", function(req, res){
-	res.redirect("/login");
-});
-
-
-app.listen(process.env.PORT, process.env.IP, function(){
-	console.log("Server is running!");
-});
+app.listen(PORT, console.log(`Server started on port ${PORT}`));

@@ -3,18 +3,36 @@ var passportLocalMongoose = require("passport-local-mongoose");
 const Order = require("./order");
 
 var userSchema = new mongoose.Schema({
-    firstname: String,
-    lastname: String,
-    email: String,
-    password: String,
+    firstname: {
+        type: String,
+        required: true
+    },
+    lastname: {
+        type: String,
+        required: true
+    },
+    email:  {
+        type: String,
+        required: true
+    },
+    password:  {
+        type: String,
+        required: true
+    },
     orders: [Order.schema],
-    phone: String,
+    phone:  {
+        type: String,
+        required: true
+    },
+    date: {
+        type: Date,
+        default: Date.now
+    }
 
 
 
 
 });
 
-//userSchema.plugin(passportLocalMongoose);
 
 module.exports = mongoose.model("User", userSchema);
