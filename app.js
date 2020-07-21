@@ -236,7 +236,7 @@ app.get("/products/json", function(req, res){
 
 });
 
-app.get("/users/register", function(req,res){
+app.post("/users/register", function(req,res){
 
 	var newUser = new User({
 		firstname: req.body.firstname,
