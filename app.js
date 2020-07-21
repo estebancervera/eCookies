@@ -238,15 +238,9 @@ app.get("/products/json", function(req, res){
 
 app.post("/users/register", function(req,res){
 
-	var newUser = new User({
-		firstname: req.body.firstname,
-		lastname: req.body.lastname,
-		email: req.body.email,
-    	password: req.body.password,
-    	phone: req.body.phone
-	});
+	
 
-	User.create( newUser, function(err){
+	User.create( req.body, function(err){
 		if(err){
 			console.log("ERROR: " + err);
 			res.send(err);
