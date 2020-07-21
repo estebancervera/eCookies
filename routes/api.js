@@ -6,7 +6,7 @@ const Product = require('../models/product');
 
 //PRODUCTS API
 
-app.get("/products", function(req, res){
+router.get("/products", function(req, res){
 
 	Product.find({}, function(err, products){
 		if(err){
