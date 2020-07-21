@@ -238,7 +238,7 @@ app.get("/products/json", function(req, res){
 
 app.post("/users/register", function(req,res){
 
-	
+	console.log(req.body);
 
 	User.create( req.body, function(err){
 		if(err){
