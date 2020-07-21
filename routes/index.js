@@ -17,7 +17,7 @@ router.get("/orders", ensureAuthenticated, function(req, res){
 	res.render("orders");
 });
 
-app.get("*", ensureAuthenticated, function(req, res){
+router.get("*", ensureAuthenticated, function(req, res){
 	res.redirect("/dashboard");
 });
 
