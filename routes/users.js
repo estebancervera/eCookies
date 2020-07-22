@@ -13,7 +13,7 @@ const User = require("../models/user");
 
 router.post('/register', (req, res) => {
     const { firstname, lastname, email, password, phone } = req.body;
-
+    console.log( req.body);
     User.findOne({email: email})
         .then(user => {
             if(user){
