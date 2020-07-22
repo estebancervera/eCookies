@@ -39,7 +39,7 @@ router.post('/register', (req, res) => {
 
                         newUser.save()
                             .then(user => {
-                                res.send(newUser.toJSON);
+                                res.send(newUser);
                                 console.log("user added")
                             })
                             .catch(err => console.log(err));
