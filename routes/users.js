@@ -3,6 +3,7 @@ const router = express.Router();
 const bcrypt = require('bcryptjs');
 const {ensureAuthenticated } = require('../config/auth')
 const passport = require('passport');
+const utils = require('../config/utils');
 
 
 
@@ -55,6 +56,7 @@ router.post('/login', (req, res,) => {
         successMessage: 'Succesful',
         failureMessage: 'Failure'
     })(req, res, next);
+    
 });
 
 router.get('/logout', (req, res) => {
