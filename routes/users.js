@@ -38,6 +38,7 @@ router.post('/register', (req, res) => {
                         newUser.save()
                             .then(user => {
                                 res.send("User added succesfully");
+                                console.log("user added")
                             })
                             .catch(err => console.log(err));
 
