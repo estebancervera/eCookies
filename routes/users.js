@@ -14,10 +14,12 @@ const User = require("../models/user");
 router.post('/register', (req, res) => {
     const { firstname, lastname, email, password, phone } = req.body;
     console.log( req.body);
+    console.log(lastname);
     User.findOne({email: email})
         .then(user => {
             if(user){
-                res.send("email already registered")
+                console.log("user already registered");
+                res.send("email already registered");
             }else{
                 const newUser = new User({
                     firstname,
@@ -31,7 +33,7 @@ router.post('/register', (req, res) => {
                 bcrypt.genSalt(10, (err, salt) =>
                     bcrypt.hash(newUser.password, salt, (err, hash) =>{
                         if(err){
-                            console.log(err);''
+                            console.log(err);
                         }
                         newUser.password = hash;
 
