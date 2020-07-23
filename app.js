@@ -1,3 +1,5 @@
+require('dotenv').config()
+
 const express 			= require("express");
 const mongoose 			= require('mongoose');
 const methodOverride 	= require("method-override");
@@ -51,7 +53,8 @@ app.use(methodOverride("_method"));
 app.use('/products', require('./routes/products'));
 app.use('/users', require('./routes/users'));
 app.use('/admin', require('./routes/admin'));
-app.use('/api', require('./routes/api'));
+app.use('/api', require('./routes/api/orders'));
+app.use('/api', require('./routes/api/products'));
 
 app.use('/', require('./routes/index'));
 

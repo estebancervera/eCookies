@@ -1,9 +1,7 @@
 
 const LocalStrategy = require('passport-local').Strategy;
 const bcrypt = require('bcryptjs');
-const ExtractJwt = require('passport-jwt').ExtractJwt;
-const JwtStrategy = require('passport-jwt').JwtStrategy;
-const utils = require('./utils');
+
 
 // Load User model
 const User = require('../models/user');
@@ -15,11 +13,7 @@ function SessionConstructor(userId, userGroup, details) {
     this.details = details;
   }
 
-  const options = {
-      jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-      secretOrKey: "Secret Ket eCookies",
-      algorithms: ['RS256']
-  }
+
 
 module.exports = function(passport){
     passport.use('local-user-signup', new LocalStrategy({ 
@@ -64,28 +58,6 @@ module.exports = function(passport){
         })
     );
     
-    // passport.use('jwt-token', new JwtStrategy(options, function(jwt_payload, done){
-
-    //     User.findOne({_id: jwt_payload.sub}, function(err, user){
-
-    //         if(err){
-    //             return done(err, false);
-    //         }
-    //         if(user){
-    //             return done(null, user);
-    //         }else{
-    //             return done(null, false);
-    //         }
-
-    //     });
-
-    // }));
-
-
-
-
-
-
 
 
     passport.serializeUser((userObject, done) => {

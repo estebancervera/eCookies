@@ -1,9 +1,12 @@
+
+   
 const express  = require('express');
 const router = express.Router();
 const bcrypt = require('bcryptjs');
 const {ensureAuthenticated } = require('../config/auth')
 const passport = require('passport');
-const utils = require('../config/utils');
+const jwt = require('jsonwebtoken');
+                                                                                        
 
 
 
@@ -20,7 +23,7 @@ router.post('/register', (req, res) => {
         .then(user => {
             if(user){
                 console.log("user already registered");
-                res.send("email already registered");
+                res.json({"message": "email already registered"});
             }else{
                 const newUser = new User({
                     firstname,
@@ -40,7 +43,7 @@ router.post('/register', (req, res) => {
 
                         newUser.save()
                             .then(user => {
-                                res.send(newUser);
+                                res.json(newUser);
                                 console.log("user added")
                             })
                             .catch(err => console.log(err));
@@ -51,13 +54,37 @@ router.post('/register', (req, res) => {
 
 });
 
-router.post('/login', (req, res,next) => {
-    passport.authenticate('local-user-signup', {
-        successMessage: 'Succesful',
-        failureMessage: 'Failure'
+router.post('/login', (req, res, next) => {
+    passport.authenticate('local-user-signup',
+    (err, user, info) => {
+      if (err) {
+        return next(err);
+      }
+  
+      if (!user) {
+        return res.json({"message": "No User found"});
+      }
+
+  
+      req.logIn(user, function(err) {
+        if (err) {
+          return next(err);
+        }
+        // User Found
+
+        const userTokenObject = {
+                    id: user._id,
+                    email: user.email
+                }
+       const accessToken = jwt.sign(userTokenObject, process.env.ACCESS_TOKEN_SECRET);
+       res.json({accessToken: accessToken});
+
+      });
+  
     })(req, res, next);
-    
-});
+  });
+
+
 
 router.get('/logout', (req, res) => {
     req.logout();

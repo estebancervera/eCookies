@@ -1,11 +1,18 @@
 var mongoose = require("mongoose");
-const Product = require("./product");
+
+const Cookie = require("./cookie");
     
 
 
 var packetSchema = new mongoose.Schema({
-    quantity: Number,
-    products: [Product.schema]
+    quantity: {
+        type: Number,
+        required: true
+    },
+    products: {
+        type: [Cookie.schema],
+        required: true
+    }
 });
 
 module.exports = mongoose.model("Packet", packetSchema);

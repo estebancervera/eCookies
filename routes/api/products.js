@@ -1,12 +1,12 @@
 const express  = require('express');
 const router = express.Router();
+const {authenticateToken } = require('../../config/auth')
 
-const Order = require("../models/order");
-const Product = require('../models/product');
+const Product = require('../../models/product');
 
 //PRODUCTS API
 
-router.get("/products", function(req, res){
+router.get("/products", authenticateToken,(req, res) => {
 
 	Product.find({}, function(err, products){
 		if(err){
