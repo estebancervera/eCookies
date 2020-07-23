@@ -15,7 +15,7 @@ router.get("/products", authenticateToken,(req, res) => {
 			//console.log(";successfull find");
 			res.json(products);
 		};
-	});d
+	});
 
 });
 
