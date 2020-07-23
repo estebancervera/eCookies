@@ -62,7 +62,7 @@ router.post('/login', (req, res, next) => {
       }
   
       if (!user) {
-        return res.json({"message": "No User found"});
+        return  res.json({isError: true, message: "User not found"});
       }
 
   

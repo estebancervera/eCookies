@@ -10,12 +10,12 @@ router.get("/products", authenticateToken,(req, res) => {
 
 	Product.find({}, function(err, products){
 		if(err){
-			console.log("ERROR: api : " + err);
+			res.json({isError: true, message: "Error loading products"});
 		}else{;
 			//console.log(";successfull find");
 			res.json(products);
 		};
-	});
+	});d
 
 });
 
