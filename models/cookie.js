@@ -8,7 +8,7 @@ var cookieSchema = new mongoose.Schema({
         type: Number,
         required: true
     },
-    products: {
+    product: {
         type: Product.schema,
         required: true
     }

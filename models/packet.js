@@ -9,7 +9,7 @@ var packetSchema = new mongoose.Schema({
         type: Number,
         required: true
     },
-    products: {
+    cookies: {
         type: [Cookie.schema],
         required: true
     }

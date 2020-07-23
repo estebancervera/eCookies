@@ -4,6 +4,10 @@ const Packet = require("./packet");
 
 
 var orderSchema = new mongoose.Schema({
+    user: {
+        type: mongoose.Schema.Types.ObjectId ,
+        required: true
+    },
 	orderDate: {
         type: Date,
         default: Date.now

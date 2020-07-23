@@ -19,7 +19,9 @@ var userSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    orders: [Order.schema],
+    orders: [{ 
+        type: mongoose.Schema.Types.ObjectId,
+         ref: "Post"}],
     phone:  {
         type: String,
         required: true

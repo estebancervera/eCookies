@@ -3,7 +3,7 @@
 const express  = require('express');
 const router = express.Router();
 const bcrypt = require('bcryptjs');
-const {ensureAuthenticated } = require('../config/auth')
+const {ensureAuthenticated } = require('../config/auth');
 const passport = require('passport');
 const jwt = require('jsonwebtoken');
                                                                                         
@@ -43,7 +43,7 @@ router.post('/register', (req, res) => {
 
                         newUser.save()
                             .then(user => {
-                                res.json(newUser);
+                                res.json({message: "User added succesfully"});
                                 console.log("user added")
                             })
                             .catch(err => console.log(err));
