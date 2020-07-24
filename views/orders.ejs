@@ -5,12 +5,13 @@
 
 <%- include("partials/navbar") %>
 
+<% var options = {hour: 'numeric', minute: 'numeric', weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }; %>
+
 <div class="container border border-dark rounded-lg">
     <table data-toggle="table">
         <thead>
           <tr>
-            <th>User</th>
-            <th>Phone</th>
+            
             <th>Order Date</th>
             <th>Number of Cookies</th>
             <th>Number of Packets</th>
@@ -19,7 +20,7 @@
           </tr>
         </thead>
         <tbody>
-        <% users.forEach(function(user){  user.orders.forEach(function(order){ %>
+        <% orders.forEach(function(order){ %>
 
       
 
@@ -28,17 +29,16 @@
                    <%  order.packets.forEach((packet) => { numCookies += packet.quantity;}) %>
           
           <tr>
-            <td><%= user.firstname %> <%=user.lastname %></td>
-            <td><%= user.phone %></td>
-            <td><%= order.orderDate %></td>
+            
+            <td><%= order.orderDate.toLocaleString() %></td>
             <td><%= numCookies %></td>
             <td><%= order.packets.length %></td>
-            <td><%= order.deliveryDate %></td>
+            <td><%= order.deliveryDate.toLocaleString() %></td>
             <td><a href="/orders/<%= order._id %>/show">SHOW</a></td>
           </tr>
         
           <% });  %>
-          <%  }); %>
+          
         </tbody>
       </table>
 </div>

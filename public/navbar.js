@@ -1,7 +1,6 @@
 
 var navs = document.getElementsByClassName("nav-item");
 
-console.log("LOLOL");
 
 for (var i = 0; i < navs.length; i++) {
   navs[i].addEventListener("click", function() {

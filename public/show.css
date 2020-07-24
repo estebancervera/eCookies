@@ -1,0 +1,18 @@
+
+.important {
+	color: red;
+}
+
+.moreMargin {
+	margin : 30px;
+}
+
+#mainDiv {
+    margin-top: 40px;
+    margin-bottom: 40px;
+}
+
+.verticalMargin {
+    margin-top: 20px;
+    margin-bottom: 20px;
+}

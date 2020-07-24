@@ -1,52 +1,60 @@
 <%- include("partials/header") %>
 
-<link rel="stylesheet" href="orders.css">
+<link rel="stylesheet" href="/show.css">
 
 
 <%- include("partials/navbar") %>
-<% data.user.orders.forEach((order) => { %>
-    
-    <%if (order._id === data.orderID){ %>
 
+<% var options = {hour: 'numeric', minute: 'numeric', weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }; %>
+<div class="container border border-dark rounded-lg" id="mainDiv">
+  <h2><b>User:</b> </h2>
+  <h2 class="important"><%= data.user.firstname%> <%= data.user.lastname %></h2>
+  <h3><b>Delivery Date:</b> </h3>
+  <h4 class="important"><%= data.order.deliveryDate.toLocaleString("en-US", options) %></h4>
+  <% var x = 0; var total = 0; %>
 
-
-<div class="container border border-dark rounded-lg">
-    <h2>User: <%= data.user.firstname%> <%= data.user.lastname %></h2>
-    <h3>Delivery Date: <%= order.deliveryDate %></h2>
-    <% var x = 0; %>
-   <% order.packets.forEach((packet) => { %>
+  <div class="container">
+    <% data.order.packets.forEach((packet) => { %>
+      <% var precioPaquete = 0 %>
     <% x++; %>
-    <div class = "container">
-        <h5>Packet <%= x %></h5>
-        
-        <table data-toggle="table">
-            <thead>
-              <tr>
-                <th>Quantity</th>
-                <th>Cookie</th>
-              </tr>
-            </thead>
-            <tbody>
-                <% packet.cookies.forEach((cookie) => { %>
-              <tr>
-                <td><%= cookie.quantity %></td>
-                <td><%= cookie.product.name %></td>
-              </tr>
-              <%});%>
-            </tbody>
-    
-    </div>
 
+    <table data-toggle="table">
+      <h3 class="moreMargin"><b>Packet <%= x %></b></h3>
+      <thead>
+        <tr>
+          <th>Quantity</th>
+          <th>Cookie</th>
+          <th>Price</th>
+          <th>Total</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% packet.cookies.forEach((cookie) => { %>
+          <% precioPaquete += cookie.quantity * cookie.product.price %>
+        <tr>
+          <td><%= cookie.quantity %></td>
+          <td><%= cookie.product.name %></td>
+          <td><%= cookie.product.price %></td>
+          <td><%= cookie.quantity * cookie.product.price %></td>
+        </tr>
+        <%});%>
+      </tbody>
+      <% total += precioPaquete; %>
+      <h5><b>Precio:   </b><%= precioPaquete %></h5>
+    </table>
     <%});%>
+    <h1 class= "verticalMargin">Total: <span class= "important"><%= total%> $</span></h1>
+    <div class = "container moreMargin">
+      
+    <h4><b>Phone:   </b><%= data.user.phone %></h4>
+    <h4><b>Email: </b><%= data.user.email %></h4>
+    </div>
+  </div>
 
 </div>
-<%  }%>
-<%}); %>
+
 <%- include("partials/framejs") %>
 <script type="text/javascript" src="navbar.js"></script>
+<script type="text/javascript" src="orders.js"></script>
 
 <%- include("partials/footer") %>
-
-
-
-      </table>

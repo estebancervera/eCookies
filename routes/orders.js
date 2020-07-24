@@ -8,14 +8,14 @@ const Order = require("../models/order");
 const User = require("../models/user");
 
 router.get("/",ensureAuthenticated, function(req, res){
-	User.find({
-		"orders.deliveryDate": {$gte : Date.now()} 
+	Order.find({
+		deliveryDate: {$gte : Date.now()} 
 
-	}, (err, users)=> {
+	}, (err, order)=> {
 
-		console.log(users);
+		//console.log(order);
 
-		res.render("orders", {users: users});
+		res.render("orders", {orders: order});
 
 	})
 
@@ -23,8 +23,10 @@ router.get("/",ensureAuthenticated, function(req, res){
 });
 
 router.get("/:id/show",ensureAuthenticated, function(req, res){
+
 	
-	User.find({ "orders._id" : req.params.id}, function(err, user){
+	
+	User.findOne({ "orders" : req.params.id}, function(err, user){
 		if (err){
 			console.log("failed show");
 			res.redirect("/orders");
@@ -32,7 +34,20 @@ router.get("/:id/show",ensureAuthenticated, function(req, res){
 			console.log("-----------------")
 			console.log(user);
 
-			
+			Order.findById(req.params.id, (err, order) =>{
+				if(err){
+					console.log(err);
+					res.redirect("/orders");
+				}
+				else{
+					const data = {
+						user: user,
+						order: order
+					}
+
+					res.render("show", {data: data})
+				}
+			});
 		}
 });
 	
