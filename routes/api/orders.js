@@ -9,13 +9,13 @@ const User = require('../../models/user');
 
 router.get("/orders", authenticateToken,(req, res) => {
     console.log(req.user);
-    User.findById(req.user.id)
-    .then(user => {
-        if(!user){
+    Order.find({user: req.user.id})
+    .then(orders => {
+        if(!orders){
             console.log(user);
             res.json({message: 'Token invalid, no User with that token'});
         }else{
-            res.json(user.orders);
+            res.json(orders);
         }
 
        

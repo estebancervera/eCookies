@@ -60,12 +60,11 @@ const FourDaysP = new Date(ThreeDaysP);
 FourDaysP.setDate(FourDaysP.getDate() - 1);
 
 var dataS = "<%- data.graph %>";
-console.log(dataS);
+
 var data = dataS.split(',').map(function(item) {
     return parseInt(item, 10);
 });
 
-console.log(data);
 
 var myChart = new Chart(ctx, {
 type: 'line',
