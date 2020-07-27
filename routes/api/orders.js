@@ -40,15 +40,15 @@ router.post("/orders", authenticateToken,(req, res) => {
 
    Order.create(order, (err, order) => {
         if (err){
-            res.json({message: "failed to create order"});
+            res.json({isError: true, message: "No se pudo crear la orden."});
             console.log(err);
         }
         else{
         User.findOneAndUpdate({_id: req.user.id}, {$push: {orders: order}}, (err, result) =>{
             if(err){
-                res.json({message: "failed to add order"})
+                res.json({isError: true, message: "Hubo un error con la orden"})
             }else{
-                res.json({message: "order added successfully"})
+                res.json({isError: false, message: "Orden agregada exitosamente!"})
             }
         });
     }
