@@ -5,7 +5,6 @@ const mongoose 			= require('mongoose');
 const methodOverride 	= require("method-override");
 const passport 			= require('passport');
 const session 			= require('express-session');
-
 const	app 			= express();
 
 require('./config/passport')(passport);
@@ -14,8 +13,8 @@ require('./config/passport')(passport);
 
 const db  = require('./config/keys').MongoURI
 
-// CONNECT TO MONGO
 
+// CONNECT TO MONGO
 mongoose.connect(db, { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false})
 .then( () => console.log("Connected to MongoDB"))
 .catch(err => console.log(err));
@@ -25,6 +24,7 @@ mongoose.connect(db, { useNewUrlParser: true, useUnifiedTopology: true, useFindA
 
 app.set("view engine", "ejs");
 app.use(express.static("public"));
+app.use('/uploads',express.static("uploads"));
 
 //BodyParser
 

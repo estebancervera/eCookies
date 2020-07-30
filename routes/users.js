@@ -23,7 +23,7 @@ router.post('/register', (req, res) => {
         .then(user => {
             if(user){
                 console.log("user already registered");
-                res.json({isError: false, message: "Email already register"});
+                res.json({isError: true, message: "El Email ya esta usado."});
             }else{
                 const newUser = new User({
                     firstname,
@@ -43,7 +43,7 @@ router.post('/register', (req, res) => {
 
                         newUser.save()
                             .then(user => {
-                                res.json({isError: false, message: "User added succesfully"});
+                                res.json({isError: false, message: "Se registro exitosamente al usuario."});
                                 console.log("user added")
                             })
                             .catch(err => console.log(err));
@@ -62,7 +62,7 @@ router.post('/login', (req, res, next) => {
       }
   
       if (!user) {
-        return  res.json({isError: true, message: "User not found"});
+        return  res.json({isError: true, message: "Usuario no encontrado"});
       }
 
   
