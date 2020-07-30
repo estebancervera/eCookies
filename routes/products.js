@@ -3,6 +3,7 @@ const router = express.Router();
 const { ensureAuthenticated } = require("../config/auth");
 const mongoose = require("mongoose");
 const path = require('path');
+const crypto = require("crypto");
 const fs = require('fs');
 const {promisify } = require('util');
 const unlinkAsync = promisify(fs.unlink);
@@ -15,7 +16,7 @@ const storage = multer.diskStorage({
     cb(null, './uploads');
   },
   filename: function(req, file,cb){
-     cb(null, Date.now() + file.originalname);
+     cb(null, Date.now() + crypto.randomBytes(8).toString("hex") + path.extname(file.originalname) );
   }
 })
 
