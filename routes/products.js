@@ -17,8 +17,8 @@ const AWS_ACCESS_KEY_ID = process.env.AWS_ACCESS_KEY_ID;
 const AWS_SECRET_ACCESS_KEY = process.env.AWS_SECRET_ACCESS_KEY;
 
 aws.config.update({
-  secretAccessKey: AWS_ACCESS_KEY_ID,
-  accessKeyId: AWS_SECRET_ACCESS_KEY,
+  secretAccessKey: AWS_SECRET_ACCESS_KEY ,
+  accessKeyId: AWS_ACCESS_KEY_ID,
   region: 'us-east-1'
 });
 // arn:aws:iam::256293732345:user/Esteban
