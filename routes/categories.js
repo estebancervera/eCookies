@@ -71,12 +71,12 @@ const deleteS3 = function (params) {
 const Category = require("../models/category");
 
 router.get("/", ensureAuthenticated, function (req, res) {
-    Category.find({}, function (err, products) {
+    Category.find({}, function (err, categories) {
     if (err) {
       console.log("ERROR: F : " + err);
     } else {
       //console.log(";successfull find");
-      res.render("categories/categories", { products: products });
+      res.render("categories/categories", { categories: categories });
     }
   });
 });

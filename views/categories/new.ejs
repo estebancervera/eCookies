@@ -1,9 +1,9 @@
-<%- include("partials/header") %>
+<%- include("../partials/header") %>
 
 <link rel="stylesheet" href="/new.css">
 
 
-<%- include("partials/navbar") %>
+<%- include("../partials/navbar") %>
 
 <div class="container">
      
@@ -15,33 +15,39 @@
           </div>
           <div class="custom-file">
             <input type="file" class="custom-file-input" name="file"id="inputGroupFile01" required aria-describedby="inputGroupFileAddon01">
-            <label class="custom-file-label" for="inputGroupFile01">Choose a photo</label>
+            <label class="custom-file-label" for="inputGroupFile01">Escoge una foto</label>
           </div>
         </div>
 
         
           <div class="form-group  ">
-             <label for="FormControlInput1">Product Name</label>
+             <label for="FormControlInput1">Nombre</label>
             <input type="text" name="category[name]" class="form-control" id="FormControlInput1"  required placeholder="">
           </div>
 
           <div class="form-group">
-            <label for="FormControlTextarea1">Description</label>
-            <textarea class="form-control" name="category[description]" id="FormControlTextarea1" rows="3" required></textarea>
-          </div>
+            <input type="checkbox"  name="category[qtyRestricted]" class="form-check-input" id="Check1" >
+            <label class="form-check-label"    for="Check1">Requiere un minimo por paquete</label>
+      </div>
+
+      <div class="form-group">
+        <label for="exampleFormControlSelect2">Tamaños de los paquetes. (puedes escoger varios, presionando Ctrl o Cmd y seleccionando multiples opciones.</label>
+        <label for="exampleFormControlSelect2">Ej. Mis galletas se venden en paquetes de 12 o de 24.</label>
+        <select multiple class="form-control"  name="category[sizes]" id="exampleFormControlSelect2">
+          <% for( var i = 1; i <= 50; i ++) { %>
+            <option><%= i %></option>
+         <% } %>
+        </select>
+      </div>
 
           <div class="form-group">
-             <label for="FormControlInputNumber">Product Price</label>
-            <input type="number"  name="category[price]"  class="form-control" id="FormControlInputNumber" placeholder="" required>
+             <label for="FormControlInputNumber"> Tiempo que se requiere para entregarlo (en dias)</label>
+            <input type="number"  name="category[timeRequired]"  class="form-control" id="FormControlInputNumber" placeholder="" required>
           </div>
 
-          <div class="form-group">
-              <input type="checkbox"  name="category[available]" class="form-check-input" id="Check1" >
-              <label class="form-check-label"    for="Check1">Available</label>
-        </div>
 	
 		 <div class="form-group">
-             <button type="submit button"  class="btn btn-danger">ADD CATEGORY</button>
+             <button type="submit button"  class="btn btn-danger">Agregar Categoria</button>
         </div>
 		
 
@@ -53,8 +59,8 @@
 
 
 
-<%- include("partials/framejs") %>
+<%- include("../partials/framejs") %>
 <script type="text/javascript" src="/navbar.js"></script>
 <script type="text/javascript" src="/new.js"></script>
 
-<%- include("partials/footer") %>
+<%- include("../partials/footer") %>
