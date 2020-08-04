@@ -6,6 +6,7 @@ const Packet = require("./packet");
 var orderSchema = new mongoose.Schema({
     user: {
         type: mongoose.Schema.Types.ObjectId ,
+        ref: "User",
         required: true
     },
 	orderDate: {
@@ -18,6 +19,11 @@ var orderSchema = new mongoose.Schema({
 	},
 	deliveryDate: {
         type: Date,
+        required: true
+    },
+    business: {
+        type: mongoose.Schema.Types.ObjectId ,
+        ref: "Business",
         required: true
     }
 	

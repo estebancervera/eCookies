@@ -48,7 +48,7 @@ app.use(methodOverride("_method"));
 
 
 // ROUTES
-
+app.use('/categories', require('./routes/categories'));
 app.use('/products', require('./routes/products'));
 app.use('/users', require('./routes/users'));
 app.use('/orders', require('./routes/orders'));

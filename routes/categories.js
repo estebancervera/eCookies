@@ -68,92 +68,39 @@ const deleteS3 = function (params) {
 };
 
 // Product Model
-const Product = require("../models/product");
+const Category = require("../models/category");
 
 router.get("/", ensureAuthenticated, function (req, res) {
-  Product.find({}, function (err, products) {
+    Category.find({}, function (err, products) {
     if (err) {
       console.log("ERROR: F : " + err);
     } else {
       //console.log(";successfull find");
-      res.render("products/products", { products: products });
+      res.render("categories/categories", { products: products });
     }
   });
 });
 
 router.get("/new", ensureAuthenticated, function (req, res) {
-  res.render("products/new");
+  res.render("categories/new");
 });
 
 //EDIT
 
 router.get("/:id/edit", ensureAuthenticated, function (req, res) {
-  Product.findById(req.params.id, function (err, foundProduct) {
-    if (err) {
-      res.redirect("/");
-    } else {
-      res.render("products/edit", { product: foundProduct });
-    }
-  });
+  
 });
 
 //CREATE
 
 router.post("/", ensureAuthenticated, upload.array('file', 1), function (req, res) {
-  var isAvailable = req.body.product.available;
 
-  if (isAvailable === "on") {
-    req.body.product.available = true;
-  } else {
-    req.body.product.available = false;
-  }
-
-  console.log(req.files[0].key);
-
-  const product = new Product({
-    name: req.body.product.name,
-    description: req.body.product.description,
-    price: req.body.product.price,
-    available: req.body.product.available,
-    image: req.files[0].key
-  });
-
-  //req.body.product.description = req.sanitize(req.body.product.description);
-
-  Product.create(product, function (err) {
-    if (err) {
-      console.log("ERROR: " + err);
-      res.render("products/new");
-    } else {
-      res.redirect("/products");
-    }
-  });
 });
 
 //UPDATE ROUTE
 
 router.put("/:id", ensureAuthenticated, function (req, res) {
-  var isAvailable = req.body.product.available;
 
-  if (isAvailable === "on") {
-    req.body.product.available = true;
-  } else {
-    req.body.product.available = false;
-  }
-
-
- 
-
-  Product.findByIdAndUpdate(req.params.id, req.body.product, function (
-    err,
-    updatedProduct
-  ) {
-    if (err) {
-      res.redirect("/products");
-    } else {
-      res.redirect("/products");
-    }
-  });
 });
 
 //DELETE ROUTE
@@ -162,27 +109,6 @@ router.delete("/:id", ensureAuthenticated, function (req, res) {
 
 
   
-
-  Product.findOne({_id: req.params.id}, (err, product) => {
-     const imageFilename = product.image
-     const params = {
-       Bucket: S3_BUCKET,
-       Key: imageFilename
-     };
-   
-     deleteS3(params);
-  });
-
- 
-
-
-  Product.findByIdAndRemove(req.params.id, function (err) {
-    if (err) {
-      res.redirect("/products");
-    } else {
-      res.redirect("/products");
-    }
-  });
 });
 
 
