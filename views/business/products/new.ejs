@@ -1,13 +1,13 @@
-<%- include("../partials/header") %>
+<%- include("../../partials/header") %>
 
 <link rel="stylesheet" href="/new.css">
 
 
-<%- include("../partials/navbar") %>
+<%- include("../../partials/navbarBusiness") %>
 
 <div class="container">
      
-<form action="/products" method="POST"  enctype="multipart/form-data" >
+<form action="/business/products" method="POST"  enctype="multipart/form-data" >
 
           <div class="input-group mb-3">
           <div class="input-group-prepend">
@@ -15,23 +15,23 @@
           </div>
           <div class="custom-file">
             <input type="file" class="custom-file-input" name="file"id="inputGroupFile01" required aria-describedby="inputGroupFileAddon01">
-            <label class="custom-file-label" for="inputGroupFile01">Choose a photo</label>
+            <label class="custom-file-label" for="inputGroupFile01">Escoge una foto</label>
           </div>
         </div>
 
         
           <div class="form-group  ">
-             <label for="FormControlInput1">Product Name</label>
+             <label for="FormControlInput1">Nombre del producto</label>
             <input type="text" name="product[name]" class="form-control" id="FormControlInput1"  required placeholder="">
           </div>
 
           <div class="form-group">
-            <label for="FormControlTextarea1">Description</label>
+            <label for="FormControlTextarea1">Descripcion</label>
             <textarea class="form-control" name="product[description]" id="FormControlTextarea1" rows="3" required></textarea>
           </div>
 
           <div class="form-group">
-             <label for="FormControlInputNumber">Product Price</label>
+             <label for="FormControlInputNumber">Precio del producto</label>
             <input type="number"  name="product[price]"  class="form-control" id="FormControlInputNumber" placeholder="" required>
           </div>
 
@@ -47,11 +47,11 @@
 
           <div class="form-group">
               <input type="checkbox"  name="product[available]" class="form-check-input" id="Check1" >
-              <label class="form-check-label"    for="Check1">Available</label>
+              <label class="form-check-label"    for="Check1">Esta disponible?</label>
         </div>
 	
 		 <div class="form-group">
-             <button type="submit button"  class="btn btn-danger">ADD PRODUCT</button>
+             <button type="submit button"  class="btn btn-danger">AGREGAR PRODUCTO</button>
         </div>
 		
 
@@ -63,9 +63,8 @@
 
 
 
-<%- include("../partials/framejs") %>
-<script type="text/javascript" src="/navbar.js"></script>
+<%- include("../../partials/framejs") %>
 <script type="text/javascript" src="/new.js"></script>
 <script type="text/javascript" src="/chosen.js"></script>
 
-<%- include("../partials/footer") %>
+<%- include("../../partials/footer") %>

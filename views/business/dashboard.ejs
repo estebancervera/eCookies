@@ -1,0 +1,115 @@
+<%- include("../partials/header") %>
+
+<link rel="stylesheet" href="/dashboard.css">
+
+
+<%- include("../partials/navbarBusiness") %>
+
+<div class="row text-center justify-content-center">
+
+  <div class="col-sm-3 rounded ">
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">Ordenes Hoy</h5>
+        <h1><%= data.ordersToday%></h1>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-sm-3 rounded ">
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">Ordenes para entregar Hoy</h5>
+        <h1><%= data.deliveriesToday%></h1>
+ 
+      </div>
+    </div>
+  </div>
+
+  <div class="col-sm-3 rounded ">
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">Ordenes para mañana</h5>
+        <h1><%= data.deliveriesTommorow%></h1>
+      </div>
+    </div>
+  </div>
+
+  
+
+</div>
+<div id="mydiv" data-test=<%= data.graph %>></div>
+
+<div class="row justify-content-center rounded">
+    <div class="col-lg-6">
+      <div class="card" id="graphCard">
+      <canvas id="myChart" width="400" height="400"></canvas>
+      <script>
+        var ctx = document.getElementById('myChart').getContext('2d');
+
+const now = new Date();
+const today = new  Date(now.getFullYear() , now.getMonth() , now.getDate());
+today.setHours(0, 0, 0);
+const yesterday = new Date(today);
+yesterday.setDate(yesterday.getDate() - 1);
+const twoDaysP = new Date(yesterday);
+twoDaysP.setDate(twoDaysP.getDate() - 1);
+const ThreeDaysP = new Date(twoDaysP);
+ThreeDaysP.setDate(ThreeDaysP.getDate() - 1);
+const FourDaysP = new Date(ThreeDaysP);
+FourDaysP.setDate(FourDaysP.getDate() - 1);
+
+var dataS = "<%- data.graph %>";
+
+var data = dataS.split(',').map(function(item) {
+    return parseInt(item, 10);
+});
+
+
+var myChart = new Chart(ctx, {
+type: 'line',
+data: {
+    labels: [FourDaysP.toLocaleDateString("en-US"), ThreeDaysP.toLocaleDateString("en-US"), twoDaysP.toLocaleDateString("en-US"), yesterday.toLocaleDateString("en-US"), today.toLocaleDateString("en-US"), ],
+    datasets: [{
+        label: '# of Orders',
+        data: data  ,
+        backgroundColor: [
+            'rgba(255, 99, 132, 0.2)',
+            'rgba(54, 162, 235, 0.2)',
+            'rgba(255, 206, 86, 0.2)',
+            'rgba(75, 192, 192, 0.2)',
+            'rgba(153, 102, 255, 0.2)'
+            
+        ],
+        borderColor: [
+            'rgba(255, 99, 132, 1)',
+            'rgba(54, 162, 235, 1)',
+            'rgba(255, 206, 86, 1)',
+            'rgba(75, 192, 192, 1)',
+            'rgba(153, 102, 255, 1)'
+            
+        ],
+        borderWidth: 1
+    }]
+},
+options: {
+    scales: {
+        yAxes: [{
+            ticks: {
+                beginAtZero: true
+            }
+        }]
+    }
+}
+});
+
+      </script>
+    </div>
+    </div>
+</div>
+
+
+<%- include("../partials/framejs") %>
+
+
+<%- include("../partials/footer") %>

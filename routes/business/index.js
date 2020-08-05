@@ -1,14 +1,13 @@
 const express  = require('express');
 const router = express.Router();
-const {ensureAuthenticated } = require('../config/auth');
-const Order = require('../models/order');
+const { ensureAuthenticated } = require("../../config/auth");
+const Order = require('../../models/order');
 
 
 
 //ROUTES
-
 router.get("/", ensureAuthenticated, function(req, res){
-	res.redirect("/business'/dashboard");
+	res.redirect("/business/dashboard");
 });
 
 router.get("/dashboard", ensureAuthenticated, function(req, res){
@@ -92,7 +91,7 @@ router.get("/dashboard", ensureAuthenticated, function(req, res){
 														
 															//console.log(data);
 														
-															res.render("dashboard", {data: data});
+															res.render("business/dashboard", {data: data});
 						
 															
 														}
@@ -118,10 +117,6 @@ router.get("/dashboard", ensureAuthenticated, function(req, res){
 });
 
 
-
-router.get("*", ensureAuthenticated, function(req, res){
-	res.redirect("/business/dashboard");
-});
 
 
 

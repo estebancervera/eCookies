@@ -6,6 +6,7 @@ const bcrypt = require('bcryptjs');
 // Load User model
 const User = require('../models/user');
 const Admin = require('../models/admin');
+const Manager = require('../models/manager');
 
 function SessionConstructor(userId, userGroup, details) {
     this.userId = userId;
@@ -57,6 +58,27 @@ module.exports = function(passport){
         .catch(err => console.log(err));
         })
     );
+
+    passport.use('local-manager-signup', new LocalStrategy({ 
+        usernameField: 'email'}, (email, password, done) => {
+        Manager.findOne({email: email})
+        .then(user => {
+            if(!user){
+                return done(null, false, {message: 'That email is not registered'});
+            }
+            
+            bcrypt.compare(password, user.password, (err, isMatch) => {
+                if (err) throw err;
+                if(isMatch){
+                    return done(null, user);
+                }
+            });
+
+
+        })
+        .catch(err => console.log(err));
+        })
+    );
     
 
 
@@ -69,6 +91,8 @@ module.exports = function(passport){
             userGroup = "admin";
         }else if (userPrototype === User.prototype){
             userGroup = "user";
+        }else if (userPrototype === Manager.prototype){
+            userGroup = "manager";
         }
 
         let sessionConstructor = new SessionConstructor(userObject.id, userGroup, '');
@@ -88,6 +112,15 @@ module.exports = function(passport){
         }else if (sessionConstructor.userGroup == "user"){
 
             User.findOne({
+                _id: sessionConstructor.userId
+            }, '-localStrategy.password', (err, user) => {
+                done(err, user);
+
+            });
+
+        }else if (sessionConstructor.userGroup == "manager"){
+
+            Manager.findOne({
                 _id: sessionConstructor.userId
             }, '-localStrategy.password', (err, user) => {
                 done(err, user);

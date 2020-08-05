@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const { ensureAuthenticated } = require("../config/auth");
+const { ensureAuthenticated } = require("../../config/auth");
 const mongoose = require("mongoose");
 const path = require('path');
 const crypto = require("crypto");
@@ -68,30 +68,36 @@ const deleteS3 = function (params) {
 };
 
 // Product Model
-const Product = require("../models/product");
-const Category = require("../models/category");
+const Product = require("../../models/product");
+const Category = require("../../models/category");
 
 router.get("/", ensureAuthenticated, function (req, res) {
-  Product.find({}, function (err, products) {
+  Category.find({business: req.user.business}).populate('products').exec(function (err, categories) {
     if (err) {
       console.log("ERROR: F : " + err);
     } else {
-      //console.log(";successfull find");
-      res.render("products/products", { products: products });
+     
+      var productsArrays = categories.map(function(x){
+        return x.products;
+      })
+      
+      productsArrays = productsArrays.flat();
+
+      res.render("business/products/products", { products: productsArrays });
     }
   });
 });
 
 router.get("/new", ensureAuthenticated, function (req, res) {
 
-Category.find({}, (err, categories) => {
+Category.find({business: req.user.business}, (err, categories) => {
   if(err){
     console.log(err);
-    res.render("/products/products")
+    res.render("business/products/products")
 
   }else{
 
-    res.render("products/new", { categories: categories });
+    res.render("business/products/new", { categories: categories });
 
   }
 });
@@ -106,7 +112,7 @@ router.get("/:id/edit", ensureAuthenticated, function (req, res) {
   Category.find({}, (err, categories) => {
     if(err){
       console.log(err);
-      res.redirect("/products/")
+      res.redirect("/business/products/")
   
     }else{
   
@@ -119,7 +125,7 @@ router.get("/:id/edit", ensureAuthenticated, function (req, res) {
             categories: categories
           }
 
-          res.render("products/edit", { data: data });
+          res.render("business/products/edit", { data: data });
         }
       });
   
@@ -156,9 +162,19 @@ router.post("/", ensureAuthenticated, upload.array('file', 1), function (req, re
   Product.create(product, function (err) {
     if (err) {
       console.log("ERROR: " + err);
-      res.render("products/new");
+      res.render("business/products/new");
     } else {
-      res.redirect("/products");
+
+      Category.findOneAndUpdate({ _id: req.body.product.category}, {$push: {products: product}}, (err, result) =>{
+        if(err){
+            console.log(err);
+        }else{
+          res.redirect("/business/products");
+            
+        }
+    });
+
+     
     }
   });
 });
@@ -177,16 +193,48 @@ router.put("/:id", ensureAuthenticated, function (req, res) {
 
  
 
-  Product.findByIdAndUpdate(req.params.id, req.body.product, function (
-    err,
-    updatedProduct
-  ) {
-    if (err) {
-      res.redirect("/products");
-    } else {
-      res.redirect("/products");
+
+ Product.findByIdAndUpdate(req.params.id, req.body.product, function (
+  err,
+  updatedProduct
+) {
+  if (err) {
+    console.log(err);
+  } else {
+    console.log(updatedProduct);
+    console.log(req.body.product);
+    Category.findOneAndUpdate({ _id: req.body.product.category}, {$push: {products: updatedProduct}}, (err, result) =>{
+      if(err){
+          console.log(err);
+      }else{
+        res.redirect("/business/products");
+          
+      }
+  });
+
+
+  Category.findById( updatedProduct.category, (err, category)=>{
+    if(err){
+      console.log(err);
+ 
+    }else{
+      
+     console.log(category)
+      const index = category.products.indexOf(req.body.product.id);
+      category.products.splice(index, 1);
+      category.save();
+      console.log(category)
+ 
+ 
     }
   });
+a 
+
+   
+  }
+});
+
+ 
 });
 
 //DELETE ROUTE
@@ -211,9 +259,9 @@ router.delete("/:id", ensureAuthenticated, function (req, res) {
 
   Product.findByIdAndRemove(req.params.id, function (err) {
     if (err) {
-      res.redirect("/products");
+      res.redirect("/business/products");
     } else {
-      res.redirect("/products");
+      res.redirect("/business/products");
     }
   });
 });

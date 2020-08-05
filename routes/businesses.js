@@ -6,6 +6,8 @@ const path = require('path');
 const crypto = require("crypto");
 const fs = require('fs');
 const {promisify } = require('util');
+const bcrypt = require('bcryptjs');
+const passport = require('passport');
 
 const directoryPath = path.join(__dirname, 'uploads');
 const aws = require("aws-sdk");
@@ -68,32 +70,33 @@ const deleteS3 = function (params) {
 };
 
 // Category Model
-const Category = require("../models/category");
+const Business = require("../models/business");
+const Manager = require("../models/manager");
 
 router.get("/", ensureAuthenticated, function (req, res) {
-    Category.find({}, function (err, categories) {
+    Business.find({}, function (err, business) {
     if (err) {
       console.log("ERROR: F : " + err);
     } else {
       //console.log(";successfull find");
-      res.render("categories/categories", { categories: categories });
+      res.render("businesses/businesses", { business: business });
     }
   });
 });
 
 router.get("/new", ensureAuthenticated, function (req, res) {
-  res.render("categories/new");
+  res.render("businesses/new");
 });
 
 //EDIT
 
 router.get("/:id/edit", ensureAuthenticated, function (req, res) {
-  Category.findById(req.params.id, function (err, foundCategory) {
+  Business.findById(req.params.id, function (err, foundBusiness) {
     if (err) {
       res.redirect("/");
     } else {
       
-      res.render("categories/edit", { category: foundCategory });
+      res.render("businesses/edit", { business: foundBusiness });
     }
   });
 });
@@ -101,62 +104,107 @@ router.get("/:id/edit", ensureAuthenticated, function (req, res) {
 //CREATE
 
 router.post("/", ensureAuthenticated, upload.array('file', 1), function (req, res) {
-  var qtyRestricted = req.body.category.qtyRestricted;
+  var available = req.body.business.available;
 
-  if (qtyRestricted === "on") {
-    req.body.category.qtyRestricted = true;
+  if (available === "on") {
+    req.body.business.available = true;
   } else {
-    req.body.category.qtyRestricted = false;
+    req.body.business.available = false;
   }
 
-  //console.log(req.body.category);
 
-  const category = new Category({
-    name: req.body.category.name,
+  const { email, password } = req.body.manager;
+
+  const business = new Business({
+    name: req.body.business.name,
     image: req.files[0].key,
-    qtyRestricted: req.body.category.qtyRestricted,
-    packageSizes: req.body.category.sizes,
-    timeRequired: req.body.category.timeRequired
+    available: req.body.business.available,
+    lon: req.body.business.lon,
+    lat: req.body.business.lat
   });
+
+  Business.create(business, function (err, newBusiness) {
+    if (err) {
+      console.log("ERROR: " + err);
+      res.render("businesses/new");
+    } else {
+        
+
+        Manager.findOne({email: email})
+        .then(user => {
+            if(user){
+                Business.deleteOne({_id: newBusiness.id}, (err) =>{
+                    if(err){
+                      console.log(err);
+                    }else{
+                      res.redirect("/businesses/new");
+                    }
+                });
+               
+            }else{
+                const newAdmin = new Manager({
+                    
+                    email: email,
+                    password: password,
+                    business: newBusiness.id
+                
+                });
+
+                bcrypt.genSalt(10, (err, salt) =>
+                    bcrypt.hash(newAdmin.password, salt, (err, hash) =>{
+                        if(err) throw err;
+                        newAdmin.password = hash;
+
+                        newAdmin.save()
+                            .then(user => {
+                                res.redirect("/businesses");
+                            })
+                            .catch(err => console.log(err));
+
+                     }));
+            }
+        });
+
+
+      
+    }
+  });
+
+    
+  //console.log(req.body.business);
+
+
+  
 
   //req.body.product.description = req.sanitize(req.body.product.description);
 
-  Category.create(category, function (err) {
-    if (err) {
-      console.log("ERROR: " + err);
-      res.render("categories/new");
-    } else {
-      res.redirect("/categories");
-    }
-  });
+ 
 });
 
 //UPDATE ROUTE
 
 router.put("/:id", ensureAuthenticated, function (req, res) {
 
-  var qtyRestricted = req.body.category.qtyRestricted;
+    var available = req.body.business.available;
 
-  //console.log(req.body.category.packageSizes)
-
-  if (qtyRestricted === "on") {
-   req.body.category.qtyRestricted = true;
- } else {
-   req.body.category.qtyRestricted = false;
-  }
+    if (available === "on") {
+      req.body.business.available = true;
+    } else {
+      req.body.business.available = false;
+    }
 
   
 
-  Category.findByIdAndUpdate(req.params.id, req.body.category, function (
+  Business.findByIdAndUpdate(req.params.id, req.body.business, function (
     err,
-    updatedCategory
+    updatedBusiness
   ) {
     if (err) {
       console.log(err);
-      res.redirect("/categories");
+      res.redirect("/businesses");
     } else {
      
-      res.redirect("/categories");
+      res.redirect("/businesses");
     }
   });
 
@@ -166,8 +214,8 @@ router.put("/:id", ensureAuthenticated, function (req, res) {
 
 router.delete("/:id", ensureAuthenticated, function (req, res) {
 
-  Category.findOne({_id: req.params.id}, (err, category) => {
-    const imageFilename = category.image
+  Business.findOne({_id: req.params.id}, (err, business) => {
+    const imageFilename = business.image
     const params = {
       Bucket: S3_BUCKET,
       Key: imageFilename
@@ -175,12 +223,11 @@ router.delete("/:id", ensureAuthenticated, function (req, res) {
   
     deleteS3(params);
 
-    category.remove();
-
-    res.redirect("/categories");
-
+    business.remove();
+    res.redirect("/businesses");
   });
 
+ 
   
 });
 

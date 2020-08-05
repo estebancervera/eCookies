@@ -1,0 +1,55 @@
+<%- include("../../partials/header") %>
+
+<link rel="stylesheet" href="/new.css">
+
+
+<%- include("../../partials/navbarBusiness") %>
+
+<div class="container">
+    <h2><b>Mi Negocio</b> </h2> 
+<div class = "container">
+    <h4><%= business.name %></h4>
+
+</div>
+<div class = "container">
+    <h4> <b>Coordenadas del sitio donde se realizaran las entregas</b></h4>
+<div class = "container">
+    <h5><b>Longitud:</b> </h5>
+    <h6><%= business.lon %></h6>
+
+</div>
+<div class = "container">
+    <h5><b>Latitud:</b> </h5>
+    <h6><%= business.lat %></h6>
+
+</div>
+</div>
+
+<div class = "container">
+    <h4><b>Estado del negocio</b></h4>
+    <% if (business.available){ %>
+        <h5>El negocio se encuentra habilitado para ordenes de los usuarios</h5>
+    <%}else { %>
+        <h5>El negocio <b>NO</b> se encuentra habilitado para ordenes de los usuarios</h5>
+    <%}%>
+
+</div>
+<div class = "container">
+    <form action="/business/mybusiness/<%= business.id%>/edit" method="GET">
+    <button class= "btn btn-warning">EDITAR</button>
+    </form>
+
+</div>
+</div>   
+
+
+
+
+
+
+<%- include("../../partials/framejs") %>
+
+<script type="text/javascript" src="/new.js"></script>
+
+
+<%- include("../../partials/footer") %>

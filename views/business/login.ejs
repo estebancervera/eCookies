@@ -1,15 +1,15 @@
-<%- include("partials/header") %>
+<%- include("../partials/header") %>
 
 <link rel="stylesheet" href="/new.css">
 
 <div class="container">
   
-  <form  action="/business/login" method="GET">
-    <button class="btn btn-danger"> Negocios</button>
+  <form  action="/admin/login" method="GET">
+    <button class="btn btn-danger"> Admin</button>
   </form>
 
      
-    <form action="/admin/login" method="POST">
+    <form action="/business/login" method="POST">
             
               <div class="form-group">
                  <label for="FormControlInput1">Username</label>
@@ -31,6 +31,6 @@
     
     </div>   
 
-    <%- include("partials/framejs") %>
+    <%- include("../partials/framejs") %>
 
-    <%- include("partials/footer") %>
+    <%- include("../partials/footer") %>

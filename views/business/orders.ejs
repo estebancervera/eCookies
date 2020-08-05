@@ -1,0 +1,48 @@
+<%- include("../partials/header") %>
+
+<link rel="stylesheet" href="/orders.css">
+
+
+<%- include("../partials/navbarBusiness") %>
+
+<% var options = {hour: 'numeric', minute: 'numeric', weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }; %>
+
+<div class="container border border-dark rounded-lg">
+    <table data-toggle="table">
+        <thead>
+          <tr>
+            
+            <th>Order Date</th>
+            <th>Number of Cookies</th>
+            <th>Number of Packets</th>
+            <th>Delivery Date</th>
+            <th>Show Details</th>
+          </tr>
+        </thead>
+        <tbody>
+        <% orders.forEach(function(order){ %>
+
+      
+
+
+                <% var numCookies = 0; %>
+                   <%  order.packets.forEach((packet) => { numCookies += packet.quantity;}) %>
+          
+          <tr>
+            
+            <td><%= order.orderDate.toLocaleString() %></td>
+            <td><%= numCookies %></td>
+            <td><%= order.packets.length %></td>
+            <td><%= order.deliveryDate.toLocaleString() %></td>
+            <td><a href="/business/orders/<%= order._id %>/show">SHOW</a></td>
+          </tr>
+        
+          <% });  %>
+          
+        </tbody>
+      </table>
+</div>
+<%- include("../partials/framejs") %>
+
+
+<%- include("../partials/footer") %>

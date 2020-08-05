@@ -1,0 +1,80 @@
+<%- include("../partials/header") %>
+
+<link rel="stylesheet" href="/new.css">
+
+
+<%- include("../partials/navbar") %>
+
+<div class="container">
+     
+<form action="/businesses" method="POST"  enctype="multipart/form-data" >
+
+          <div class="input-group mb-3">
+          <div class="input-group-prepend">
+            <span class="input-group-text" id="inputGroupFileAddon01">Upload</span>
+          </div>
+          <div class="custom-file">
+            <input type="file" class="custom-file-input" name="file"id="inputGroupFile01" required aria-describedby="inputGroupFileAddon01">
+            <label class="custom-file-label" for="inputGroupFile01">Escoge una foto</label>
+          </div>
+        </div>
+
+        
+          <div class="form-group  ">
+             <label for="FormControlInput1">Nombre</label>
+            <input type="text" name="business[name]" class="form-control" id="FormControlInput1"  required placeholder="">
+          </div>
+
+        
+   
+
+          <div class="form-group">
+             <label for="FormControlInputNumber"> Longitud del lugar donde los clintes van a recoger </label>
+            <input type="number"  name="business[lon]" step=".00001" class="form-control" id="FormControlInputNumber" placeholder="" required>
+          </div>
+
+          <div class="form-group">
+            <label for="FormControlInputNumber"> Latitud del lugar donde los clintes van a recoger </label>
+           <input type="number"  name="business[lat]" step=".00001" class="form-control" id="FormControlInputNumber" placeholder="" required>
+         </div>
+
+         <div class="form-group">
+            <input type="checkbox"  name="business[available]" class="form-check-input" id="Check1" >
+            <label class="form-check-label"    for="Check1">Esta disponible?</label>
+        </div>
+
+
+
+        <div class="form-group">
+            <label for="FormControlInput1">Email</label>
+           <input type="text" name="manager[email]" class="form-control" id="FormControlInput1"  required placeholder="">
+         </div>
+
+         <div class="form-group">
+           <label for="FormControlInput1">Password</label>
+          <input type="text" name="manager[password]" class="form-control" id="FormControlInput1"  required placeholder="">
+        </div>
+
+	
+		 <div class="form-group">
+             <button type="submit button"  class="btn btn-danger">Agregar Negocio</button>
+        </div>
+        
+        
+     
+
+
+</form>
+</div>   
+
+
+
+
+
+
+<%- include("../partials/framejs") %>
+<script type="text/javascript" src="/navbar.js"></script>
+<script type="text/javascript" src="/new.js"></script>
+<script type="text/javascript" src="/chosen.js"></script>
+
+<%- include("../partials/footer") %>

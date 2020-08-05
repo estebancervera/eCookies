@@ -48,6 +48,7 @@ app.use(methodOverride("_method"));
 
 
 // ROUTES
+app.use('/businesses', require('./routes/businesses'));
 app.use('/categories', require('./routes/categories'));
 app.use('/products', require('./routes/products'));
 app.use('/users', require('./routes/users'));
@@ -56,6 +57,16 @@ app.use('/admin', require('./routes/admin'));
 app.use('/api', require('./routes/api/orders'));
 app.use('/api', require('./routes/api/products'));
 
+//ROUTES BUSINESS
+
+app.use('/business', require('./routes/business/login'));
+app.use('/business/mybusiness', require('./routes/business/business'));
+
+app.use('/business/orders', require('./routes/business/orders'));
+app.use('/business/categories', require('./routes/business/categories'));
+app.use('/business/products', require('./routes/business/products'));
+
+app.use('/business', require('./routes/business/index'));
 app.use('/', require('./routes/index'));
 
 

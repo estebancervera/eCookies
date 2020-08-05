@@ -19,10 +19,6 @@ var businessSchema = new mongoose.Schema({
         type: Boolean,
         required: true
     },
-    image: {
-        type: String,
-        required: true
-    },
     lon:{
         type: Number,
         required: true
@@ -36,6 +32,15 @@ var businessSchema = new mongoose.Schema({
         ref: "Manager"
     }
 
+});
+
+businessSchema.pre('remove', function(next) {
+    // 'this' is the client being removed. Provide callbacks here if you want
+    // to be notified of the calls' result.w
+    
+    Category.remove({business: this._id}).exec();
+   
+    next();
 });
 
 module.exports = mongoose.model("Business", businessSchema);

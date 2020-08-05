@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const { ensureAuthenticated } = require("../config/auth");
+const { ensureAuthenticated } = require("../../config/auth");
 const mongoose = require("mongoose");
 const path = require('path');
 const crypto = require("crypto");
@@ -68,21 +68,22 @@ const deleteS3 = function (params) {
 };
 
 // Category Model
-const Category = require("../models/category");
+const Category = require("../../models/category");
+const Business = require("../../models/business");
 
 router.get("/", ensureAuthenticated, function (req, res) {
-    Category.find({}, function (err, categories) {
+    Category.find({business: req.user.business}, function (err, categories) {
     if (err) {
       console.log("ERROR: F : " + err);
     } else {
       //console.log(";successfull find");
-      res.render("categories/categories", { categories: categories });
+      res.render("business/categories/categories", { categories: categories });
     }
   });
 });
 
 router.get("/new", ensureAuthenticated, function (req, res) {
-  res.render("categories/new");
+  res.render("business/categories/new");
 });
 
 //EDIT
@@ -90,10 +91,10 @@ router.get("/new", ensureAuthenticated, function (req, res) {
 router.get("/:id/edit", ensureAuthenticated, function (req, res) {
   Category.findById(req.params.id, function (err, foundCategory) {
     if (err) {
-      res.redirect("/");
+      res.redirect("/business/categories/");
     } else {
       
-      res.render("categories/edit", { category: foundCategory });
+      res.render("business/categories/edit", { category: foundCategory });
     }
   });
 });
@@ -116,7 +117,8 @@ router.post("/", ensureAuthenticated, upload.array('file', 1), function (req, re
     image: req.files[0].key,
     qtyRestricted: req.body.category.qtyRestricted,
     packageSizes: req.body.category.sizes,
-    timeRequired: req.body.category.timeRequired
+    timeRequired: req.body.category.timeRequired,
+    business: req.user.business
   });
 
   //req.body.product.description = req.sanitize(req.body.product.description);
@@ -124,9 +126,18 @@ router.post("/", ensureAuthenticated, upload.array('file', 1), function (req, re
   Category.create(category, function (err) {
     if (err) {
       console.log("ERROR: " + err);
-      res.render("categories/new");
+      res.render("business/categories/new");
     } else {
-      res.redirect("/categories");
+
+      Business.findOneAndUpdate({ _id: req.user.business}, {$push: {categories: category}}, (err, result) =>{
+        if(err){
+            console.log(err);
+        }else{
+          res.redirect("/business/categories");
+            
+        }
+    });
+     
     }
   });
 });
@@ -153,10 +164,10 @@ router.put("/:id", ensureAuthenticated, function (req, res) {
   ) {
     if (err) {
       console.log(err);
-      res.redirect("/categories");
+      res.redirect("/business/categories");
     } else {
      
-      res.redirect("/categories");
+      res.redirect("/business/categories");
     }
   });
 
@@ -173,11 +184,19 @@ router.delete("/:id", ensureAuthenticated, function (req, res) {
       Key: imageFilename
     };
   
+
+    Business.findById(req.user.business, (err, business)=> {
+
+      const index = business.categories.indexOf(category.id);
+      business.categories.splice(index, 1);
+      business.save();
+    });
+
     deleteS3(params);
 
     category.remove();
 
-    res.redirect("/categories");
+    res.redirect("/business/categories");
 
   });
 

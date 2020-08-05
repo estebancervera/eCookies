@@ -5,7 +5,7 @@ module.exports = {
         if(req.isAuthenticated()){
             return next();
         }
-        res.redirect('/admin/login');
+        res.redirect('/business/login');
     },
 
     authenticateToken:(req, res, next) => {
