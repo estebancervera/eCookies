@@ -12,6 +12,10 @@ var packetSchema = new mongoose.Schema({
     cookies: {
         type: [Cookie.schema],
         required: true
+    },
+    timeRequired: {
+        type: Number,
+        required: true
     }
 });
 
