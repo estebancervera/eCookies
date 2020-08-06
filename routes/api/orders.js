@@ -35,7 +35,9 @@ router.post("/orders", authenticateToken,(req, res) => {
    const order = new Order({
        user: req.user.id,
        packets: req.body.packets,
-       deliveryDate: req.body.deliveryDate * 1000
+       deliveryDate: req.body.deliveryDate * 1000,
+       business: req.body.business
+
    });
 
    Order.create(order, (err, order) => {
