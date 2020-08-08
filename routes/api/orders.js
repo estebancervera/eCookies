@@ -46,7 +46,7 @@ router.post("/orders", authenticateToken,(req, res) => {
             console.log(err);
         }
         else{
-        User.findOneAndUpdate({_id: req.user.id}, {$push: {orders: order}}, (err, result) =>{
+        User.findOneAndUpdate({_id: req.user.id}, {$push: {orders: order}}).populate("business").exec((err, result) =>{
             if(err){
                 res.json({isError: true, message: "Hubo un error con la orden"})
             }else{
