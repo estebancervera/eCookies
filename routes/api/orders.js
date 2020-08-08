@@ -9,7 +9,7 @@ const User = require('../../models/user');
 
 router.get("/orders", authenticateToken,(req, res) => {
     console.log(req.user);
-    Order.find({user: req.user.id})
+    Order.find({user: req.user.id}).populate("business")
     .then(orders => {
         if(!orders){
             console.log(user);
@@ -46,7 +46,7 @@ router.post("/orders", authenticateToken,(req, res) => {
             console.log(err);
         }
         else{
-        User.findOneAndUpdate({_id: req.user.id}, {$push: {orders: order}}).populate("business").exec((err, result) =>{
+        User.findOneAndUpdate({_id: req.user.id}, {$push: {orders: order}}).exec((err, result) =>{
             if(err){
                 res.json({isError: true, message: "Hubo un error con la orden"})
             }else{
