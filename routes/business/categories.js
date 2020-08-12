@@ -144,7 +144,7 @@ router.post("/", ensureAuthenticated, upload.array('file', 1), function (req, re
 
 //UPDATE ROUTE
 
-router.put("/:id", ensureAuthenticated, function (req, res) {
+router.put("/:id", ensureAuthenticated, upload.array('file', 1), function (req, res) {
 
   var qtyRestricted = req.body.category.qtyRestricted;
 
@@ -155,8 +155,8 @@ router.put("/:id", ensureAuthenticated, function (req, res) {
  } else {
    req.body.category.qtyRestricted = false;
   }
-
   
+
 
   Category.findByIdAndUpdate(req.params.id, req.body.category, function (
     err,
@@ -166,10 +166,12 @@ router.put("/:id", ensureAuthenticated, function (req, res) {
       console.log(err);
       res.redirect("/business/categories");
     } else {
-     
+     console.log(updatedCategory)
       res.redirect("/business/categories");
     }
   });
+
+
 
 });
 

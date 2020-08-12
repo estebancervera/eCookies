@@ -7,9 +7,9 @@
 
 <% var options = {hour: 'numeric', minute: 'numeric', weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }; %>
 <div class="container border border-dark rounded-lg" id="mainDiv">
-  <h2><b>User:</b> </h2>
+  <h2><b>Usuario:</b> </h2>
   <h2 class="important"><%= data.user.firstname%> <%= data.user.lastname %></h2>
-  <h3><b>Delivery Date:</b> </h3>
+  <h3><b>Fecha de Entrega:</b> </h3>
   <h4 class="important"><%= data.order.deliveryDate.toLocaleString("en-US", options) %></h4>
   <% var x = 0; var total = 0; %>
 
@@ -19,12 +19,12 @@
     <% x++; %>
 
     <table data-toggle="table">
-      <h3 class="moreMargin"><b>Packet <%= x %></b></h3>
+      <h3 class="moreMargin"><b>Paquete <%= x %></b></h3>
       <thead>
         <tr>
-          <th>Quantity</th>
-          <th>Cookie</th>
-          <th>Price</th>
+          <th>Cantidad</th>
+          <th>Producto</th>
+          <th>Precio</th>
           <th>Total</th>
         </tr>
       </thead>
@@ -46,7 +46,7 @@
     <h1 class= "verticalMargin">Total: <span class= "important"><%= total%> $</span></h1>
     <div class = "container moreMargin">
       
-    <h4><b>Phone:   </b><%= data.user.phone %></h4>
+    <h4><b>Telephono:   </b><%= data.user.phone %></h4>
     <h4><b>Email: </b><%= data.user.email %></h4>
     </div>
   </div>
