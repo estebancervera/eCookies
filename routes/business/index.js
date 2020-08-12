@@ -40,42 +40,42 @@ router.get("/dashboard", ensureAuthenticated, function(req, res){
 	var numtwo = 0;
 	var numOne = 0;
 
-	Order.find({orderDate: {$gte: today}}, (err, orders) => {
+	Order.find({orderDate: {$gte: today}, business: req.user.business}, (err, orders) => {
 		if(err){
 			console.log(err);
 		}else{
 			ordersToday = orders.length;
-			Order.find({ $and: [{deliveryDate: {$gte: today}},{deliveryDate: {$lt: tomorrow}}]}, (err, orders) => {
+			Order.find({ $and: [{deliveryDate: {$gte: today}},{deliveryDate: {$lt: tomorrow}},{business:req.user.business}]}, (err, orders) => {
 				if(err){
 					console.log(err);
 				}else{
 					deliveriesToday = orders.length;
 
-					Order.find({ $and: [{deliveryDate: {$gte: tomorrow}},{deliveryDate: {$lt: twoDays}}]}, (err, orders) => {
+					Order.find({ $and: [{deliveryDate: {$gte: tomorrow}},{deliveryDate: {$lt: twoDays}},{business:req.user.business}]}, (err, orders) => {
 						if(err){
 							console.log(err);
 						}else{
 							deliveriesTommorow = orders.length;
-							Order.find({ $and: [{orderDate: {$gte: yesterday}},{orderDate: {$lt: today}}]}, (err, orders) => {
+							Order.find({ $and: [{orderDate: {$gte: yesterday}},{orderDate: {$lt: today}},{business:req.user.business}]}, (err, orders) => {
 								if(err){
 									console.log(err);
 								}else{
 									
 									numOne = orders.length;
 									
-									Order.find({ $and: [{orderDate: {$gte: twoDaysP}},{orderDate: {$lt: yesterday}}]}, (err, orders) => {
+									Order.find({ $and: [{orderDate: {$gte: twoDaysP}},{orderDate: {$lt: yesterday}},{business:req.user.business}]}, (err, orders) => {
 										if(err){
 											console.log(err);
 										}else{
 											numtwo = orders.length;
 											
-											Order.find({ $and: [{orderDate: {$gte: ThreeDaysP}},{orderDate: {$lt: twoDaysP}}]}, (err, orders) => {
+											Order.find({ $and: [{orderDate: {$gte: ThreeDaysP}},{orderDate: {$lt: twoDaysP}},{business:req.user.business}]}, (err, orders) => {
 												if(err){
 													console.log(err);
 												}else{
 													numThree = orders.length;
 				
-													Order.find({ $and: [{orderDate: {$gte: FourDaysP}},{orderDate: {$lt: ThreeDaysP}}]}, (err, orders) => {
+													Order.find({ $and: [{orderDate: {$gte: FourDaysP}},{orderDate: {$lt: ThreeDaysP}},{business:req.user.business}]}, (err, orders) => {
 														if(err){
 															console.log(err);
 														}else{
