@@ -33,8 +33,8 @@ router.get("/:id/show",ensureAuthenticated, function(req, res){
 			console.log("failed show");
 			res.redirect("business/orders");
 		}else{
-			console.log("-----------------")
-			console.log(user);
+			//console.log("-----------------")
+			//console.log(user);
 
 			Order.findById(req.params.id, (err, order) =>{
 				if(err){
@@ -55,5 +55,53 @@ router.get("/:id/show",ensureAuthenticated, function(req, res){
 	
 });
 
+router.get("/:id/status/rejected",ensureAuthenticated, function(req, res){
+	
+	Order.findById(req.params.id, (err, order) => {
+		if(err){
+			console.log(err)
+		}else{
+			if(order){
+				if(order.business.equals(req.user.business)){
+					
+					if(order.status === "pending"){
+						
+						order.status = "rejected";
+						order.save();
+					}
+					
+				}
+				res.redirect(`/business/orders/${req.params.id}/show`);
+				
+			}
+			
+		}
+	});
+
+});
+router.get("/:id/status/accepted",ensureAuthenticated, function(req, res){
+	
+	Order.findById(req.params.id, (err, order) => {
+		if(err){
+			console.log(err)
+		}else{
+			if(order){
+				if(order.business.equals(req.user.business)){
+					
+					if(order.status === "pending"){
+						
+						order.status = "accepted";
+						order.save();
+					}
+					
+				}
+				res.redirect(`/business/orders/${req.params.id}/show`);
+				
+			}
+			
+		}
+	});
+
+});
 
 module.exports = router;

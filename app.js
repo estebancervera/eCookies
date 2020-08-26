@@ -6,6 +6,7 @@ const methodOverride 	= require("method-override");
 const passport 			= require('passport');
 const session 			= require('express-session');
 const	app 			= express();
+const flash				= require('connect-flash');
 
 require('./config/passport')(passport);
 	 
@@ -38,6 +39,18 @@ app.use(session({
 	resave: true,
 	saveUninitialized: true
 }));
+
+//flash
+
+app.use(flash());
+
+//Global vars
+app.use((req, res, next)=>{
+	res.locals.success_msg = req.flash('success_msg');
+	res.locals.error_msg = req.flash('error_msg');
+	res.locals.edit_msg = req.flash('edit_msg');
+	next();
+});
 
 // Passport middleware
 app.use(passport.initialize());

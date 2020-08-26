@@ -12,9 +12,9 @@ const aws = require("aws-sdk");
 const multer = require('multer');
 const multerS3 = require("multer-s3");
 
-const S3_BUCKET = process.env.S3_BUCKET;
-const AWS_ACCESS_KEY_ID = process.env.AWS_ACCESS_KEY_ID;
-const AWS_SECRET_ACCESS_KEY = process.env.AWS_SECRET_ACCESS_KEY;
+const S3_BUCKET = "ecookies-assets";
+const AWS_ACCESS_KEY_ID = "AKIATXLCL774X5K6HWWM";
+const AWS_SECRET_ACCESS_KEY = "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";
 
 aws.config.update({
   secretAccessKey: AWS_SECRET_ACCESS_KEY ,
@@ -126,13 +126,18 @@ router.post("/", ensureAuthenticated, upload.array('file', 1), function (req, re
   Category.create(category, function (err) {
     if (err) {
       console.log("ERROR: " + err);
-      res.render("business/categories/new");
+      req.flash("error_msg", "Error al crear la categoria. Intente mas tarde")
+      res.redirect("/business/categories")
+
     } else {
 
       Business.findOneAndUpdate({ _id: req.user.business}, {$push: {categories: category}}, (err, result) =>{
         if(err){
             console.log(err);
+            req.flash("error_msg", `Error al agregar una categoria.`)
+            res.redirect("/business/categories");
         }else{
+          req.flash("success_msg", "Categoria agregada correctamente")
           res.redirect("/business/categories");
             
         }
@@ -155,8 +160,33 @@ router.put("/:id", ensureAuthenticated, upload.array('file', 1), function (req, 
  } else {
    req.body.category.qtyRestricted = false;
   }
-  
+  console.log(req.files[0]);
+  if(req.files[0]){
+  Category.findById(req.params.id, (err, foundCategory)=>{
+    if (err){
+      console.log(err);
+      req.flash("error_msg", `Error al editar una categoria.`)
+      res.redirect("/business/categories");
+    }else{
+    const imageFilename = foundCategory.image
+    const params = {
+      Bucket: S3_BUCKET,
+      Key: imageFilename
+    };
 
+    deleteS3(params);
+
+    foundCategory.image = req.files[0].key;
+  
+    foundCategory.save();
+    
+  }
+
+  });
+}
+
+  
+  
 
   Category.findByIdAndUpdate(req.params.id, req.body.category, function (
     err,
@@ -164,9 +194,11 @@ router.put("/:id", ensureAuthenticated, upload.array('file', 1), function (req, 
   ) {
     if (err) {
       console.log(err);
+      req.flash("error_msg", `Error al agregar una categoria.`)
       res.redirect("/business/categories");
     } else {
-     console.log(updatedCategory)
+     
+      req.flash("edit_msg", "Categoria editada correctamente")
       res.redirect("/business/categories");
     }
   });
@@ -180,26 +212,43 @@ router.put("/:id", ensureAuthenticated, upload.array('file', 1), function (req, 
 router.delete("/:id", ensureAuthenticated, function (req, res) {
 
   Category.findOne({_id: req.params.id}, (err, category) => {
-    const imageFilename = category.image
-    const params = {
-      Bucket: S3_BUCKET,
-      Key: imageFilename
-    };
+    if(err){
+      req.flash("error_msg", `Error al eliminar una categoria.`)
+      res.redirect("/business/categories");
+    }else {
+      const imageFilename = category.image
+      const params = {
+        Bucket: S3_BUCKET,
+        Key: imageFilename
+      };
+
+      deleteS3(params);
+    }
+    
   
 
     Business.findById(req.user.business, (err, business)=> {
+      if(err){
+        req.flash("error_msg", `Error al eliminar una categoria.`)
+       res.redirect("/business/categories");
+      }else{
+        const index = business.categories.indexOf(category.id);
+        business.categories.splice(index, 1);
+        business.save();
 
-      const index = business.categories.indexOf(category.id);
-      business.categories.splice(index, 1);
-      business.save();
+        
+
+         category.remove();
+
+        req.flash("success_msg", "Categoria eliminada correctamente")
+        res.redirect("/business/categories");
+
+
+        }
+     
     });
 
-    deleteS3(params);
-
-    category.remove();
-
-    res.redirect("/business/categories");
-
+    
   });
 
   

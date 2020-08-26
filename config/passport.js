@@ -29,6 +29,8 @@ module.exports = function(passport){
                     if (err) throw err;
                     if(isMatch){
                         return done(null, user);
+                    }else{
+                        return done(null, false,  {message: 'Contraseña Incorrecta'});
                     }
                 });
 
@@ -43,13 +45,15 @@ module.exports = function(passport){
         Admin.findOne({email: email})
         .then(user => {
             if(!user){
-                return done(null, false, {message: 'That email is not registered'});
+                return done(null, false, {message: 'Ese email no esta registrado'});
             }
             
             bcrypt.compare(password, user.password, (err, isMatch) => {
                 if (err) throw err;
                 if(isMatch){
                     return done(null, user);
+                }else{
+                    return done(null, false,  {message: 'Contraseña Incorrecta'});
                 }
             });
 
@@ -64,13 +68,18 @@ module.exports = function(passport){
         Manager.findOne({email: email})
         .then(user => {
             if(!user){
-                return done(null, false, {message: 'That email is not registered'});
+               // req.flash("error_msg", "Ese email no esta registrado")
+                return done(null, false, {message: 'Ese email no esta registrado'});
             }
             
             bcrypt.compare(password, user.password, (err, isMatch) => {
                 if (err) throw err;
                 if(isMatch){
+            
                     return done(null, user);
+                }else{
+                   // req.flash("error_msg", "Contraseña Incorrecta")
+                    return done(null, false,  {message: 'Contraseña Incorrecta'});
                 }
             });
 

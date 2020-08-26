@@ -1,51 +1,51 @@
 const express  = require('express');
 const router = express.Router();
 const bcrypt = require('bcryptjs');
-const {ensureAuthenticated } = require('../config/auth')
+const {ensureAuthenticated, requireAdmin } = require('../config/auth')
 const passport = require('passport');
 
 // ADMIN MODEL
 const Admin = require("../models/admin");
 
 
-router.get("/register", function(req, res){
-	res.render("register");
-});
+// router.get("/register", function(req, res){
+// 	res.render("register");
+// });
 
 
-router.post("/register",  function(req,res){
-	const { email, password } = req.body;
+// router.post("/register",   function(req,res){
+// 	const { email, password } = req.body;
 
-    Admin.findOne({email: email})
-        .then(user => {
-            if(user){
-                res.send("email already registered")
-            }else{
-                const newAdmin = new Admin({
+//     Admin.findOne({email: email})
+//         .then(user => {
+//             if(user){
+//                 res.send("email already registered")
+//             }else{
+//                 const newAdmin = new Admin({
                     
-                    email,
-                    password
+//                     email,
+//                     password
                 
-                });
+//                 });
 
-                bcrypt.genSalt(10, (err, salt) =>
-                    bcrypt.hash(newAdmin.password, salt, (err, hash) =>{
-                        if(err) throw err;
-                        newAdmin.password = hash;
+//                 bcrypt.genSalt(10, (err, salt) =>
+//                     bcrypt.hash(newAdmin.password, salt, (err, hash) =>{
+//                         if(err) throw err;
+//                         newAdmin.password = hash;
 
-                        newAdmin.save()
-                            .then(user => {
-                                res.redirect("/admin/login")
-                            })
-                            .catch(err => console.log(err));
+//                         newAdmin.save()
+//                             .then(user => {
+//                                 res.redirect("/admin/login")
+//                             })
+//                             .catch(err => console.log(err));
 
-                     }));
-            }
-        });
-});
+//                      }));
+//             }
+//         });
+// });
     
 
-router.get("/login", function(req, res){
+router.get("/login",  function(req, res){
 
 	res.render("login");
 });
@@ -59,7 +59,7 @@ router.post('/login', (req, res, next) => {
 
 
 
-router.get("/logout", ensureAuthenticated, function(req , res){
+router.get("/logout", ensureAuthenticated, requireAdmin, function(req , res){
 	req.logout();
 	res.redirect("/admin/login");
 });

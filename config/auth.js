@@ -1,4 +1,5 @@
 const jwt = require('jsonwebtoken');
+const User = require('../models/user')
 
 module.exports = {
     ensureAuthenticated: function(req, res, next){
@@ -11,7 +12,7 @@ module.exports = {
     authenticateToken:(req, res, next) => {
         const authHeader = req.headers['authorization'];
         const token = authHeader && authHeader.split(' ')[1];
-        if(token ==- null) return res.sendStatus(401);
+        if(token == null) return res.sendStatus(401);
 
         jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) =>{
             if(err) return res.sendStatus(403);
@@ -20,6 +21,27 @@ module.exports = {
 
             next()
         });
+    },
+
+    authenticateEmailUser:(req, res, next) => {
+        
+        const token = req.params.token;
+        if(token == null) return res.sendStatus(401);
+        
+        jwt.verify(token, process.env.SIGNUP_TOKEN_SECRET, (err, user) =>{
+            if(err) return res.sendStatus(403);
+            
+          req.user = user
+            
+            next()
+        });
+    },
+     requireAdmin : (req, res, next) => {
+        if (req.user.accessLevel ==='admin') {
+          next();
+        } else {    
+          res.redirect('/business/dashboard');
+        }
     }
     
 }

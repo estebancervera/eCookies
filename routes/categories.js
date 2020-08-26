@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const { ensureAuthenticated } = require("../config/auth");
+const { ensureAuthenticated, requireAdmin } = require("../config/auth");
 const mongoose = require("mongoose");
 const path = require('path');
 const crypto = require("crypto");
@@ -70,7 +70,7 @@ const deleteS3 = function (params) {
 // Category Model
 const Category = require("../models/category");
 
-router.get("/", ensureAuthenticated, function (req, res) {
+router.get("/", ensureAuthenticated, requireAdmin, function (req, res) {
     Category.find({}, function (err, categories) {
     if (err) {
       console.log("ERROR: F : " + err);
@@ -81,13 +81,13 @@ router.get("/", ensureAuthenticated, function (req, res) {
   });
 });
 
-router.get("/new", ensureAuthenticated, function (req, res) {
+router.get("/new", ensureAuthenticated, requireAdmin, function (req, res) {
   res.render("categories/new");
 });
 
 //EDIT
 
-router.get("/:id/edit", ensureAuthenticated, function (req, res) {
+router.get("/:id/edit", ensureAuthenticated, requireAdmin, function (req, res) {
   Category.findById(req.params.id, function (err, foundCategory) {
     if (err) {
       res.redirect("/");
@@ -100,7 +100,7 @@ router.get("/:id/edit", ensureAuthenticated, function (req, res) {
 
 //CREATE
 
-router.post("/", ensureAuthenticated, upload.array('file', 1), function (req, res) {
+router.post("/", ensureAuthenticated,requireAdmin, upload.array('file', 1), function (req, res) {
   var qtyRestricted = req.body.category.qtyRestricted;
 
   if (qtyRestricted === "on") {
@@ -133,7 +133,7 @@ router.post("/", ensureAuthenticated, upload.array('file', 1), function (req, re
 
 //UPDATE ROUTE
 
-router.put("/:id", ensureAuthenticated, function (req, res) {
+router.put("/:id", ensureAuthenticated, upload.array('file', 1), function (req, res) {
 
   var qtyRestricted = req.body.category.qtyRestricted;
 
@@ -145,7 +145,26 @@ router.put("/:id", ensureAuthenticated, function (req, res) {
    req.body.category.qtyRestricted = false;
   }
 
+  if(req.files[0]){
+    Category.findById(req.params.id, (err, found)=>{
+      if (err){
+        console.log(err);
+      }else{
+      const imageFilename = found.image
+      const params = {
+        Bucket: S3_BUCKET,
+        Key: imageFilename
+      };
+     
+      deleteS3(params);
   
+      found.image = req.files[0].key;
+
+      found.save();
+    }
+  
+    });
+  }
 
   Category.findByIdAndUpdate(req.params.id, req.body.category, function (
     err,
@@ -164,7 +183,7 @@ router.put("/:id", ensureAuthenticated, function (req, res) {
 
 //DELETE ROUTE
 
-router.delete("/:id", ensureAuthenticated, function (req, res) {
+router.delete("/:id", ensureAuthenticated,requireAdmin, function (req, res) {
 
   Category.findOne({_id: req.params.id}, (err, category) => {
     const imageFilename = category.image

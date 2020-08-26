@@ -14,9 +14,9 @@ const aws = require("aws-sdk");
 const multer = require('multer');
 const multerS3 = require("multer-s3");
 
-const S3_BUCKET = process.env.S3_BUCKET;
-const AWS_ACCESS_KEY_ID = process.env.AWS_ACCESS_KEY_ID;
-const AWS_SECRET_ACCESS_KEY = process.env.AWS_SECRET_ACCESS_KEY;
+const S3_BUCKET = "ecookies-assets";
+const AWS_ACCESS_KEY_ID = "AKIATXLCL774X5K6HWWM";
+const AWS_SECRET_ACCESS_KEY = "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";
 
 aws.config.update({
   secretAccessKey: AWS_SECRET_ACCESS_KEY ,
@@ -100,7 +100,7 @@ router.get("/:id/edit", ensureAuthenticated, function (req, res) {
 
 //UPDATE ROUTE
 
-router.put("/:id", ensureAuthenticated, function (req, res) {
+router.put("/:id", ensureAuthenticated,upload.array('file', 1), function (req, res) {
 
     var available = req.body.business.available;
 
@@ -110,6 +110,29 @@ router.put("/:id", ensureAuthenticated, function (req, res) {
       req.body.business.available = false;
     }
 
+    if(req.files[0]){
+      Business.findById(req.params.id, (err, found)=>{
+        if (err){
+          console.log(err);
+          req.flash("error_msg", "Error al editar el negocio. Intente mas tarde")
+          res.redirect("/business/mybusiness")
+        }else{
+        const imageFilename = found.image
+        const params = {
+          Bucket: S3_BUCKET,
+          Key: imageFilename
+        };
+       
+        deleteS3(params);
+    
+        found.image = req.files[0].key;
+ 
+        found.save();
+      }
+    
+      });
+    }
+    
   
 
   Business.findByIdAndUpdate(req.user.business, req.body.business, function (
@@ -118,10 +141,12 @@ router.put("/:id", ensureAuthenticated, function (req, res) {
   ) {
     if (err) {
       console.log(err);
-      res.redirect("/business/mybusiness");
+      req.flash("error_msg", "Error al editar el negocio. Intente mas tarde")
+      res.redirect("/business/mybusiness")
     } else {
      
-      res.redirect("/business/mybusiness");
+      req.flash("edit_msg", "Negocio editado exitosamente")
+      res.redirect("/business/mybusiness")
     }
   });
 

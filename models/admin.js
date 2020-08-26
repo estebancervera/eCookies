@@ -9,6 +9,10 @@ var adminSchema = new mongoose.Schema({
     password:  {
         type: String,
         required: true
+    },
+    accessLevel: {
+        type: String,
+        default: "admin"
     }
 
 

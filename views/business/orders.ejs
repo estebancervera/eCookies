@@ -17,6 +17,7 @@
             <th>Numero de Paquetes</th>
             <th>Fecha de Entrega</th>
             <th>Ver Detalles</th>
+            <th>Estado</th>
           </tr>
         </thead>
         <tbody>
@@ -35,6 +36,7 @@
             <td><%= order.packets.length %></td>
             <td><%= order.deliveryDate.toLocaleString() %></td>
             <td><a href="/business/orders/<%= order._id %>/show">MOSTRAR</a></td>
+            <td><%= order.status %></td>
           </tr>
         
           <% });  %>

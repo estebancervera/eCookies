@@ -5,28 +5,31 @@
 <div class="container">
   
   <form  action="/admin/login" method="GET">
-    <button class="btn btn-danger"> Admin</button>
+    <button class="btn btn-danger"> Admin Login</button>
   </form>
 
+
+  <div class="row">
+    
+    <div style="width: 30%; margin: 25px auto;">
+      <h1 style="text-align: center">Login</h1>
+      <%- include("../partials/messages") %>
+        <form action="/business/login" method="POST">
+            <div class="form-group">
+                <input class="form-control" type="text" name="email" placeholder="Email">
+            </div>
+            <div class="form-group">
+                <input class="form-control" type="password" name="password" placeholder="Contraseña">
+            </div>
+            <div class="form-group">
+                <button class="btn btn-lg btn-primary btn-block">Login</button>
+            </div>
+        </form>
+        <a href="/business/forgot">Forgot password?</a>
+    </div>
+</div>
      
-    <form action="/business/login" method="POST">
-            
-              <div class="form-group">
-                 <label for="FormControlInput1">Username</label>
-                <input type="text" name="email" class="form-control" id="FormControlInput1"  required placeholder="">
-              </div>
-    
-              <div class="form-group">
-                <label for="FormControlInput1">Password</label>
-               <input type="text" name="password" class="form-control" id="FormControlInput1"  required placeholder="">
-             </div>
-            
-             <div class="form-group">
-                <button type="submit button"  class="btn btn-primary">Login</button>
-           </div>
-           
-    
-    </form>
+   
     
     
     </div>   

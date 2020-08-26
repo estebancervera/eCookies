@@ -13,9 +13,18 @@ var managerSchema = new mongoose.Schema({
     business: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Business"
+    },
+    resetPasswordToken: String,
+    resetPasswordExpires: Date,
+    accessLevel: {
+        type: String,
+        default: "manager"
     }
 
 
 });
+
+
+managerSchema.plugin(passportLocalMongoose)
 
 module.exports = mongoose.model("Manager", managerSchema);

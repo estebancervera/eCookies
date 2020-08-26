@@ -7,12 +7,40 @@
 
 <% var options = {hour: 'numeric', minute: 'numeric', weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }; %>
 <div class="container border border-dark rounded-lg" id="mainDiv">
+  <%- include("../partials/messages") %>
+  <div class = "row" style="margin-top: 20px">
+    <div class="col-md-4">
   <h2><b>Usuario:</b> </h2>
   <h2 class="important"><%= data.user.firstname%> <%= data.user.lastname %></h2>
+  </div>
+ 
+  <div class="col-md-4"></div>
+    <% if(data.order.status == "pending"){  %>
+  <div class="col-md-2">
+    <form action="/business/orders/<%=data.order._id%>/status/accepted" method="GET">
+    <button class = "btn btn-primary">Aceptar Orden</button>
+    </form>
+  </div>
+  <div class="col-md-2">
+    <form  action="/business/orders/<%=data.order._id%>/status/rejected" method="GET">
+    <button class = "btn btn-danger">Rechazar Orden</button>
+    </form>
+  </div>
+  <% }%>
+  <% if(data.order.status == "rejected"){ %>
+    <h5>Orden Rechazada</h5>
+  <% }else if (data.order.status == "accepted"){ %>
+    <h5>Orden Aceptada</h5>
+ <% } %> 
+    
+
+
+  
+</div>
   <h3><b>Fecha de Entrega:</b> </h3>
   <h4 class="important"><%= data.order.deliveryDate.toLocaleString("en-US", options) %></h4>
   <% var x = 0; var total = 0; %>
-
+    
   <div class="container">
     <% data.order.packets.forEach((packet) => { %>
       <% var precioPaquete = 0 %>

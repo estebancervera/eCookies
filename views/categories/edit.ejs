@@ -9,7 +9,7 @@
   <h1>
     Editar <%= category.name  %>
     </h1>
-<form action="/categories/<%= category._id %>?_method=PUT" method="POST"  >
+<form action="/categories/<%= category._id %>?_method=PUT" method="POST" enctype="multipart/form-data" >
 
           <div class="input-group mb-3">
           <div class="input-group-prepend">

@@ -2,12 +2,12 @@ const express  = require('express');
 const router = express.Router();
 
 
-const {ensureAuthenticated } = require('../config/auth');
+const {ensureAuthenticated, requireAdmin } = require('../config/auth');
 
 const Order = require("../models/order");
 const User = require("../models/user");
 
-router.get("/",ensureAuthenticated, function(req, res){
+router.get("/",ensureAuthenticated,requireAdmin, function(req, res){
 	Order.find({
 		deliveryDate: {$gte : Date.now()} 
 
@@ -22,7 +22,7 @@ router.get("/",ensureAuthenticated, function(req, res){
 	
 });
 
-router.get("/:id/show",ensureAuthenticated, function(req, res){
+router.get("/:id/show",ensureAuthenticated,requireAdmin, function(req, res){
 
 	
 	

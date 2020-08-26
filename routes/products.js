@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const { ensureAuthenticated } = require("../config/auth");
+const { ensureAuthenticated, requireAdmin } = require("../config/auth");
 const mongoose = require("mongoose");
 const path = require('path');
 const crypto = require("crypto");
@@ -71,7 +71,7 @@ const deleteS3 = function (params) {
 const Product = require("../models/product");
 const Category = require("../models/category");
 
-router.get("/", ensureAuthenticated, function (req, res) {
+router.get("/", ensureAuthenticated,requireAdmin, function (req, res) {
   Product.find({}, function (err, products) {
     if (err) {
       console.log("ERROR: F : " + err);
@@ -82,7 +82,7 @@ router.get("/", ensureAuthenticated, function (req, res) {
   });
 });
 
-router.get("/new", ensureAuthenticated, function (req, res) {
+router.get("/new", ensureAuthenticated,requireAdmin, function (req, res) {
 
 Category.find({}, (err, categories) => {
   if(err){
@@ -100,7 +100,7 @@ Category.find({}, (err, categories) => {
 
 //EDIT
 
-router.get("/:id/edit", ensureAuthenticated, function (req, res) {
+router.get("/:id/edit", ensureAuthenticated,requireAdmin, function (req, res) {
 
 
   Category.find({}, (err, categories) => {
@@ -131,7 +131,7 @@ router.get("/:id/edit", ensureAuthenticated, function (req, res) {
 
 //CREATE
 
-router.post("/", ensureAuthenticated, upload.array('file', 1), function (req, res) {
+router.post("/", ensureAuthenticated,requireAdmin, upload.array('file', 1), function (req, res) {
   var isAvailable = req.body.product.available;
 
   if (isAvailable === "on") {
@@ -165,7 +165,7 @@ router.post("/", ensureAuthenticated, upload.array('file', 1), function (req, re
 
 //UPDATE ROUTE
 
-router.put("/:id", ensureAuthenticated, function (req, res) {
+router.put("/:id", ensureAuthenticated,requireAdmin,upload.array('file', 1), function (req, res) {
   var isAvailable = req.body.product.available;
 
   if (isAvailable === "on") {
@@ -174,7 +174,26 @@ router.put("/:id", ensureAuthenticated, function (req, res) {
     req.body.product.available = false;
   }
 
+  if(req.files[0]){
+    Product.findById(req.params.id, (err, found)=>{
+      if (err){
+        console.log(err);
+      }else{
+      const imageFilename = found.image
+      const params = {
+        Bucket: S3_BUCKET,
+        Key: imageFilename
+      };
+     
+      deleteS3(params);
+  
+      found.image = req.files[0].key;
 
+      found.save();
+    }
+  
+    });
+  }
  
 
   Product.findByIdAndUpdate(req.params.id, req.body.product, function (
@@ -191,7 +210,7 @@ router.put("/:id", ensureAuthenticated, function (req, res) {
 
 //DELETE ROUTE
 
-router.delete("/:id", ensureAuthenticated, function (req, res) {
+router.delete("/:id", ensureAuthenticated,requireAdmin, function (req, res) {
 
 
   

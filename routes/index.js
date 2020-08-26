@@ -1,17 +1,17 @@
 const express  = require('express');
 const router = express.Router();
-const {ensureAuthenticated } = require('../config/auth');
+const {ensureAuthenticated, requireAdmin } = require('../config/auth');
 const Order = require('../models/order');
 
 
 
 //ROUTES
 
-router.get("/", ensureAuthenticated, function(req, res){
-	res.redirect("/business'/dashboard");
+router.get("/", ensureAuthenticated,requireAdmin, function(req, res){
+	res.redirect("/dashboard");
 });
 
-router.get("/dashboard", ensureAuthenticated, function(req, res){
+router.get("/dashboard", ensureAuthenticated, requireAdmin, function(req, res){
 	const now = new Date();
 	const today = new  Date(now.getFullYear() , now.getMonth() , now.getDate());
 	today.setHours(0, 0, 0);
@@ -118,10 +118,13 @@ router.get("/dashboard", ensureAuthenticated, function(req, res){
 });
 
 
-
-router.get("*", ensureAuthenticated, function(req, res){
-	res.redirect("/business/dashboard");
+router.get('/logout', ensureAuthenticated, requireAdmin, (req, res) => {
+    req.logout();
+    res.redirect('/business/login')
 });
+
+
+
 
 
 

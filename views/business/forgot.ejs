@@ -1,0 +1,27 @@
+
+<%- include("../partials/header") %>
+<link rel="stylesheet" href="/new.css">
+
+
+<div class ="container">
+<div class="row">
+	<div class="col-md-12">
+		<%- include("../partials/messages") %>
+		<form action="/business/forgot" method="POST">
+			<legend>Forgot Password</legend>
+			<div class="form-group">
+				<label for="email">Email</label>
+				<input type="email" name="email" autofocus class="form-control">
+			</div>
+			<div class="form-group">
+				<input type="submit" class="btn btn-primary" value="Reset Password">
+			</div>
+		</form>
+	</div>
+</div>
+</div>
+
+<%- include("../partials/framejs") %>
+
+
+<%- include("../partials/footer") %>

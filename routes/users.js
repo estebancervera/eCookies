@@ -3,9 +3,12 @@
 const express  = require('express');
 const router = express.Router();
 const bcrypt = require('bcryptjs');
-const {ensureAuthenticated } = require('../config/auth');
+const {ensureAuthenticated, authenticateEmailUser } = require('../config/auth');
 const passport = require('passport');
 const jwt = require('jsonwebtoken');
+const nodemailer = require('nodemailer');
+var async = require("async");
+var crypto = require("crypto");
                                                                                         
 
 
@@ -22,8 +25,19 @@ router.post('/register', (req, res) => {
     User.findOne({email: email})
         .then(user => {
             if(user){
-                console.log("user already registered");
-                res.json({isError: true, message: "El Email ya esta usado."});
+
+                if(user.verified){
+                  console.log("user already registered");
+                  res.json({isError: true, message: "Ya existe un usuario registrado con ese email."});
+                }else{
+                  console.log("user isn't registered")
+                  User.findByIdAndRemove(user._id , (err) =>{
+                    if(err){
+                      res.json({isError: true, message: "Existia un usuario con este email pero no estaba verificado, este ya fue eliminado. Vuelva a intentar."});
+                    }
+                  })
+                }
+                
             }else{
                 const newUser = new User({
                     firstname,
@@ -49,6 +63,39 @@ router.post('/register', (req, res) => {
                             .catch(err => console.log(err));
 
                      }));
+
+                     //SEND EMAIL FOR CONF
+                     const emailVerification = {
+                      id: newUser.id,
+                      email: newUser.email
+                    }
+                    const verificationToken = jwt.sign(emailVerification, process.env.SIGNUP_TOKEN_SECRET);
+
+                    var transporter = nodemailer.createTransport({
+                      service: 'gmail',
+                      auth: {
+                        user: 'noreply.ecookies@gmail.com',
+                        pass: 'dabingPenguin2205'
+                      }
+                    });
+
+                    var mailOptions = {
+                      from: 'noreply.ecookies@gmail.com',
+                      to: email,
+                      subject: 'Verificación de Correo',
+                      html: ` 
+                      <h2> Haga click en el link para verificar su correo <h2> 
+                      <a>http://localhost:3000/users/verification/${verificationToken}<a>`
+                    };
+
+                    transporter.sendMail(mailOptions, (err, info) => {
+                      if (err){
+                        console.log(err);
+                      }else{
+                        console.log('Email sent: ' + info.response);
+                      }
+                    });
+                     
             }
         });
 
@@ -62,7 +109,11 @@ router.post('/login', (req, res, next) => {
       }
   
       if (!user) {
-        return  res.json({isError: true, message: "Usuario no encontrado"});
+        return  res.json({isError: true, message: "Usuario no encontrado!"});
+      }
+
+      if (!user.verified) {
+        return  res.json({isError: true, message: "Usuario no esta verificado!"});
       }
 
   
@@ -84,12 +135,20 @@ router.post('/login', (req, res, next) => {
     })(req, res, next);
   });
 
-
-
-router.get('/logout', (req, res) => {
-    req.logout();
-    res.send("LogOut");
+router.get('/verification/:token',authenticateEmailUser,(req,res) => {
+  const {id, email} = req.user
+  User.findById(id, (err, found)=> {
+      found.verified = true;
+      found.save();
+      res.send("Usario Verificado!");
+  });
 });
+
+
+
+
+
+
 
 
 module.exports = router;

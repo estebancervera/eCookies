@@ -168,7 +168,10 @@ router.post("/", ensureAuthenticated, upload.array('file', 1), function (req, re
       Category.findOneAndUpdate({ _id: req.body.product.category}, {$push: {products: product}}, (err, result) =>{
         if(err){
             console.log(err);
+            req.flash("error_msg", "No se pudo agregar el producto. Intente mas tarde")
+            res.redirect("/business/products");
         }else{
+          req.flash("success_msg", `${product.name} fue agregado correctamente.`)
           res.redirect("/business/products");
             
         }
@@ -181,7 +184,7 @@ router.post("/", ensureAuthenticated, upload.array('file', 1), function (req, re
 
 //UPDATE ROUTE
 
-router.put("/:id", ensureAuthenticated, function (req, res) {
+router.put("/:id", ensureAuthenticated,upload.array('file', 1), function (req, res) {
   var isAvailable = req.body.product.available;
 
   if (isAvailable === "on") {
@@ -190,7 +193,28 @@ router.put("/:id", ensureAuthenticated, function (req, res) {
     req.body.product.available = false;
   }
 
+  if(req.files[0]){
+    Product.findById(req.params.id, (err, found)=>{
+      if (err){
+        console.log(err);
+        req.flash("error_msg", "No se pudo agregar la categoria. Intente mas tarde")
+        res.redirect("/business/products");
+      }else{
+      const imageFilename = found.image
+      const params = {
+        Bucket: S3_BUCKET,
+        Key: imageFilename
+      };
+     
+      deleteS3(params);
+  
+      found.image = req.files[0].key;
 
+      found.save();
+    }
+  
+    });
+  }
  
 
 
@@ -205,8 +229,12 @@ router.put("/:id", ensureAuthenticated, function (req, res) {
     console.log(req.body.product);
     Category.findOneAndUpdate({ _id: req.body.product.category}, {$push: {products: updatedProduct}}, (err, result) =>{
       if(err){
-          console.log(err);
+        console.log(err);
+        req.flash("error_msg", "No se pudo actualizar el producto. Intente mas tarde")
+        res.redirect("/business/products");
+          
       }else{
+        req.flash("edit_msg", "Se actualizó el producto correctamente")
         res.redirect("/business/products");
           
       }
@@ -259,8 +287,10 @@ router.delete("/:id", ensureAuthenticated, function (req, res) {
 
   Product.findByIdAndRemove(req.params.id, function (err) {
     if (err) {
+      req.flash("error_msg", "No se pudo eliminar el producto")
       res.redirect("/business/products");
     } else {
+      req.flash("success_msg", "Producto eliminado correctamente")
       res.redirect("/business/products");
     }
   });

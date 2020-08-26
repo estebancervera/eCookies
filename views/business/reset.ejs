@@ -1,0 +1,30 @@
+
+<%- include("../partials/header") %>
+
+<link rel="stylesheet" href="/new.css">
+<div class= "container" style="width: 50%; margin: 35px auto;">
+<div class="row">
+	<div class="col-md-12">
+		<%- include("../partials/messages") %>
+		<form action="/business/reset/<%= token %>" method="POST">
+		  <legend>Cambiar Contraseña</legend>
+		  <div class="form-group">
+		    <label for="password">Nueva Contraseña</label>
+		    <input type="password" name="password" value="" placeholder="Nueva Contraseña" autofocus="autofocus" class="form-control"/>
+		  </div>
+		  <div class="form-group">
+		    <label for="confirm">Confirmar Contraseña</label>
+		    <input type="password" name="confirm" value="" placeholder="Confirmar Contraseña" class="form-control"/>
+		  </div>
+		  <div class="form-group">
+		    <button type="submit" class="btn btn-primary">Cambiar Contraseña</button>
+		  </div>
+		</form>
+	</div>
+</div>
+</div>
+
+<%- include("../partials/framejs") %>
+
+
+<%- include("../partials/footer") %>

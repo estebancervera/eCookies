@@ -21,6 +21,11 @@ var orderSchema = new mongoose.Schema({
         type: Date,
         required: true
     },
+    status: {
+        type: String,
+        required: true,
+        default: "Pendiente"
+    },
     business: {
         type: mongoose.Schema.Types.ObjectId ,
         ref: "Business",
