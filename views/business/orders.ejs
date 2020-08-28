@@ -37,10 +37,10 @@
           
           <tr>
             
-            <td><%= `${oD} - ${oM} - ${oY}, a las ${oH}:${oMi}` %></td>
+            <td><%= orderDate.toLocaleDateString(options) %></td>
             <td><%= numCookies %></td>
             <td><%= order.packets.length %></td>
-            <td><%= order.deliveryDate.toLocaleDateString('es-ES', options) %></td>
+            <td><%= deliveryDate.toLocaleDateString(options) %></td>
             <td><a href="/business/orders/<%= order._id %>/show">MOSTRAR</a></td>
             <td><%= order.status %></td>
           </tr>
