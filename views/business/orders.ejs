@@ -6,6 +6,7 @@
 <%- include("../partials/navbarBusiness") %>
 
 <% var options = {hour: 'numeric', minute: 'numeric', weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }; %>
+<%  const dateTimeFormat = new Intl.DateTimeFormat('es', {hour: 'numeric', minute: 'numeric', weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }) %>
 
 <div class="container border border-dark rounded-lg">
     <table data-toggle="table">
@@ -23,7 +24,7 @@
         <tbody>
         <% orders.forEach(function(order){ %>
 
-      
+          <% const [{ value: month },,{ value: day },,{ value: year },,{value: hour},,{value: minute}] = dateTimeFormat .formatToParts(order.deliveryDate)  %>
 
 
                 <% var numCookies = 0; %>
@@ -31,7 +32,7 @@
           
           <tr>
             
-            <td><%= order.orderDate.toLocaleString() %></td>
+            <td><%= `${day} - ${month} - ${year}, a las ${hour}:${minute}` %></td>
             <td><%= numCookies %></td>
             <td><%= order.packets.length %></td>
             <td><%= order.deliveryDate.toLocaleString() %></td>
