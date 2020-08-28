@@ -24,8 +24,8 @@
         </thead>
         <tbody>
         <% orders.forEach(function(order){ %>
-          <% const deliveryDate = new Date(order.deliveryDate)
-           <% const orderDate = new Date(order.orderDate)
+          <% const deliveryDate = new Date(order.deliveryDate) %>
+           <% const orderDate = new Date(order.orderDate) %>
           <%  const oY = new Intl.DateTimeFormat('es', { year: 'numeric' }).format(d) %>
           <%  const oM = new Intl.DateTimeFormat('es', { month: 'long' }).format(d) %>
           <%  const oD = new Intl.DateTimeFormat('es', { day: '2-digit' }).format(d)  %>
