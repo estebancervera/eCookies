@@ -31,10 +31,10 @@
           
           <tr>
             
-            <td><%= moment(order.orderDate).tz("America/Merida").format() %></td>
+            <td><%= moment(order.orderDate).tz("America/Merida").format("llll") %></td>
             <td><%= numCookies %></td>
             <td><%= order.packets.length %></td>
-            <td><%= moment(order.deliveryDate).tz("America/Merida").format() %></td>
+            <td><%= moment(order.deliveryDate).tz("America/Merida").format("llll") %></td>
             <td><a href="/business/orders/<%= order._id %>/show">MOSTRAR</a></td>
             <td><%= order.status %></td>
           </tr>
