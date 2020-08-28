@@ -31,10 +31,10 @@
           
           <tr>
             
-            <td><%= moment.utc(order.orderDate).format('llll').local() %></td>
+            <td><%= moment.utc(order.orderDate).local() %></td>
             <td><%= numCookies %></td>
             <td><%= order.packets.length %></td>
-            <td><%= moment.utc(order.deliveryDate).format('llll').local() %></td>
+            <td><%= moment.utc(order.deliveryDate).local() %></td>
             <td><a href="/business/orders/<%= order._id %>/show">MOSTRAR</a></td>
             <td><%= order.status %></td>
           </tr>
