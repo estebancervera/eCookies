@@ -40,7 +40,7 @@ router.post("/orders", authenticateToken,(req, res) => {
 
    });
 
-   console.log(req.body.deliveryDate)
+   console.log(order)
    Order.create(order, (err, order) => {
         if (err){
             res.json({isError: true, message: "No se pudo crear la orden."});
