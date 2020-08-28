@@ -24,7 +24,7 @@ var orderSchema = new mongoose.Schema({
     status: {
         type: String,
         required: true,
-        default: "Pendiente"
+        default: "pending"
     },
     business: {
         type: mongoose.Schema.Types.ObjectId ,
