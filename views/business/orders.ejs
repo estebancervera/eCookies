@@ -6,8 +6,7 @@
 <%- include("../partials/navbarBusiness") %>
 
 <% var options = { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' , hour: 'numeric', minute: 'numeric' }; %>
-<% options.timeZone = 'UTC' %>
-<% options.timeZoneName = 'short' %>
+
 
 <div class="container border border-dark rounded-lg">
     <table data-toggle="table">
@@ -26,11 +25,11 @@
         <% orders.forEach(function(order){ %>
           <% const deliveryDate = new Date(order.deliveryDate) %>
            <% const orderDate = new Date(order.orderDate) %>
-          <%  const oY = new Intl.DateTimeFormat('es', { year: 'numeric' }).format(orderDate) %>
-          <%  const oM = new Intl.DateTimeFormat('es', { month: 'long' }).format(orderDate) %>
-          <%  const oD = new Intl.DateTimeFormat('es', { day: '2-digit' }).format(orderDate)  %>
-          <%  const oH = new Intl.DateTimeFormat('es', { hour: 'numeric' }).format(orderDate)  %>
-          <%  const oMi = new Intl.DateTimeFormat('es', { minute: 'numeric' }).format(orderDate)  %>
+          <%  const oY = new Intl.DateTimeFormat('es-ES', { year: 'numeric' }).format(orderDate) %>
+          <%  const oM = new Intl.DateTimeFormat('es-ES', { month: 'long' }).format(orderDate) %>
+          <%  const oD = new Intl.DateTimeFormat('es-ES', { day: '2-digit' }).format(orderDate)  %>
+          <%  const oH = new Intl.DateTimeFormat('es-ES', { hour: 'numeric' }).format(orderDate)  %>
+          <%  const oMi = new Intl.DateTimeFormat('es-ES', { minute: 'numeric' }).format(orderDate)  %>
 
 
                 <% var numCookies = 0; %>
@@ -41,7 +40,7 @@
             <td><%= `${oD} - ${oM} - ${oY}, a las ${oH}:${oMi}` %></td>
             <td><%= numCookies %></td>
             <td><%= order.packets.length %></td>
-            <td><%= order.deliveryDate.toLocaleString('es-MX', options) %></td>
+            <td><%= order.deliveryDate.toLocaleString('es-ES', options) %></td>
             <td><a href="/business/orders/<%= order._id %>/show">MOSTRAR</a></td>
             <td><%= order.status %></td>
           </tr>
