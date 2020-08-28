@@ -5,8 +5,9 @@
 
 <%- include("../partials/navbarBusiness") %>
 
-<% var options = {hour: 'numeric', minute: 'numeric', weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }; %>
-<%  const dateTimeFormat = new Intl.DateTimeFormat('es', {hour: 'numeric', minute: 'numeric', weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }) %>
+<% var options = { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' , hour: 'numeric', minute: 'numeric' }; %>
+<% options.timeZone = 'UTC' %>
+<% options.timeZoneName = 'short' %>
 
 <div class="container border border-dark rounded-lg">
     <table data-toggle="table">
@@ -23,8 +24,13 @@
         </thead>
         <tbody>
         <% orders.forEach(function(order){ %>
-
-          <% const [{ value: hour },,{ value: minute },,{ value: weekday },,{value: year},,{value: month},,{value: day}] = dateTimeFormat .formatToParts(order.deliveryDate)  %>
+          <% const deliveryDate = new Date(order.deliveryDate)
+           <% const orderDate = new Date(order.orderDate)
+          <%  const oY = new Intl.DateTimeFormat('es', { year: 'numeric' }).format(d) %>
+          <%  const oM = new Intl.DateTimeFormat('es', { month: 'long' }).format(d) %>
+          <%  const oD = new Intl.DateTimeFormat('es', { day: '2-digit' }).format(d)  %>
+          <%  const oH = new Intl.DateTimeFormat('es', { hour: 'numeric' }).format(d)  %>
+          <%  const oMi = new Intl.DateTimeFormat('es', { minute: 'numeric' }).format(d)  %>
 
 
                 <% var numCookies = 0; %>
@@ -32,10 +38,10 @@
           
           <tr>
             
-            <td><%= `${day} - ${month} - ${year}, a las ${hour}:${minute}` %></td>
+            <td><%= `${oD} - ${oM} - ${oY}, a las ${oH}:${oMi}` %></td>
             <td><%= numCookies %></td>
             <td><%= order.packets.length %></td>
-            <td><%= order.deliveryDate.toLocaleString() %></td>
+            <td><%= order.deliveryDate.toLocaleString('es-MX', options) %></td>
             <td><a href="/business/orders/<%= order._id %>/show">MOSTRAR</a></td>
             <td><%= order.status %></td>
           </tr>
