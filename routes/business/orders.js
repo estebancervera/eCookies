@@ -1,5 +1,6 @@
 const express  = require('express');
 const router = express.Router();
+const moment = require('moment');
 
 
 const { ensureAuthenticated } = require("../../config/auth");
@@ -16,7 +17,7 @@ router.get("/",ensureAuthenticated, function(req, res){
 		if(err){
 			console.log(err);
 		}else{
-			res.render("business/orders", {orders: orders});
+			res.render("business/orders", {orders: orders, moment: moment});
 		}
 			
 	})

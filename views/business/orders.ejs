@@ -23,19 +23,18 @@
         </thead>
         <tbody>
         <% orders.forEach(function(order){ %>
-          <% const deliveryDate = new Date(order.deliveryDate) %>
-           <% const orderDate = new Date(order.orderDate) %>
-
+       
+          
 
                 <% var numCookies = 0; %>
                    <%  order.packets.forEach((packet) => { numCookies += packet.quantity;}) %>
           
           <tr>
             
-            <td><%= orderDate.toLocaleDateString('es-ES',options) %></td>
+            <td><%= moment(order.orderDate).format('llll') %></td>
             <td><%= numCookies %></td>
             <td><%= order.packets.length %></td>
-            <td><%= deliveryDate.toLocaleDateString('es-ES',options) %></td>
+            <td><%= moment(order.deliveryDate).format('llll') %></td>
             <td><a href="/business/orders/<%= order._id %>/show">MOSTRAR</a></td>
             <td><%= order.status %></td>
           </tr>

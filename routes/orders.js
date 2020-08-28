@@ -1,6 +1,6 @@
 const express  = require('express');
 const router = express.Router();
-
+const moment = require('moment');
 
 const {ensureAuthenticated, requireAdmin } = require('../config/auth');
 
@@ -15,7 +15,7 @@ router.get("/",ensureAuthenticated,requireAdmin, function(req, res){
 
 		//console.log(order);
 
-		res.render("orders", {orders: order});
+		res.render("orders", {orders: order, moment: moment});
 
 	})
 
