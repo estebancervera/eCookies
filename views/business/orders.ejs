@@ -40,7 +40,7 @@
             <td><%= `${oD} - ${oM} - ${oY}, a las ${oH}:${oMi}` %></td>
             <td><%= numCookies %></td>
             <td><%= order.packets.length %></td>
-            <td><%= order.deliveryDate.toLocaleString('es-ES', options) %></td>
+            <td><%= order.deliveryDate.toLocaleDateString('es-ES', options) %></td>
             <td><a href="/business/orders/<%= order._id %>/show">MOSTRAR</a></td>
             <td><%= order.status %></td>
           </tr>
