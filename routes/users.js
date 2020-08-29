@@ -33,6 +33,8 @@ router.post('/register', (req, res) => {
                   console.log("user isn't registered")
                   User.findByIdAndRemove(user._id , (err) =>{
                     if(err){
+                      res.json({isError: true, message: "Hubo un error al registrarte. Intente mas tarde"});
+                    }else{
                       res.json({isError: true, message: "Existia un usuario con este email pero no estaba verificado, este ya fue eliminado. Vuelva a intentar."});
                     }
                   })
