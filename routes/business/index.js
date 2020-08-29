@@ -158,7 +158,7 @@ router.post('/forgot', function(req, res, next) {
 			service: 'gmail',
 			auth: {
 			  user: 'noreply.ecookies@gmail.com',
-			  pass: 'dabingPenguin2205'
+			  pass: process.env.MAIL_PSWD
 			}
 		  });
 
@@ -168,10 +168,10 @@ router.post('/forgot', function(req, res, next) {
 		  subject: 'Cambiar contraseña',
 		  html: ` 
 					  <h4> Estas recibiendo este mensaje porque usted (o alguien mas) pidio un cambio de contraseña para su cuenta de eCookies.\n
-						 Por favor haga click en el siguiente link para cambiarla. <h4> 
+						 Por favor haga click en el siguiente link para cambiarla. </h4> 
 					 
-					  <a>http://localhost:3000/business/reset/${token}<a>
-					  <h6> Si Usted no pidio este cambio, simplemente ignore este mensaje. <h6> `
+					  <a>https://www.ecookies.app/business/reset/${token}</a>
+					  <h6> Si Usted no pidio este cambio, simplemente ignore este mensaje. </h6> `
 		};
 		transporter.sendMail(mailOptions, function(err) {
 		  console.log('mail sent');
@@ -228,7 +228,7 @@ router.post('/reset/:token', function(req, res) {
 			service: 'gmail',
 			auth: {
 			  user: 'noreply.ecookies@gmail.com',
-			  pass: 'dabingPenguin2205'
+			  pass: process.env.MAIL_PSWD
 			}
 		  });
 
@@ -237,7 +237,7 @@ router.post('/reset/:token', function(req, res) {
 		  from: 'noreply.ecookies@gmail.com',
 		  subject: 'Contraseña cambiada!',
 		  html: ` 
-					  <h4> Se ha realizado un cam'''bio de contraseña para tu cuenta de eCookies. <h4> `
+					  <h4> Se ha realizado un cambio de contraseña para tu cuenta de eCookies. <h4> `
 		};
 		transporter.sendMail(mailOptions, function(err) {
 		  console.log('mail sent');

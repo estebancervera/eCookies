@@ -59,7 +59,7 @@ router.post('/register', (req, res) => {
 
                         newUser.save()
                             .then(user => {
-                                res.json({isError: false, message: "Se registro exitosamente al usuario."});
+                                res.json({isError: false, message: "Se registro exitosamente al usuario. Por favor confirme su correo antes de iniciar sessión."});
                                 console.log("user added")
                             })
                             .catch(err => console.log(err));
@@ -86,8 +86,9 @@ router.post('/register', (req, res) => {
                       to: email,
                       subject: 'Verificación de Correo',
                       html: ` 
-                      <h2> Haga click en el link para verificar su correo <h2> 
-                      <a>http://www.ecookies.app/users/verification/${verificationToken}<a>`
+                      <h2> Haga click en el link para verificar su correo </h2> 
+                      <a>https://www.ecookies.app/users/verification/${verificationToken}</a>
+                      `
                     };
 
                     transporter.sendMail(mailOptions, (err, info) => {
