@@ -30,10 +30,10 @@
           
           <tr>
             
-            <td><%= order.orderDate.toLocaleString() %></td>
+            <td><%=  moment(order.orderDate).tz("America/Merida").format("llll") %></td>
             <td><%= numCookies %></td>
             <td><%= order.packets.length %></td>
-            <td><%= order.deliveryDate.toLocaleString() %></td>
+            <td><%=  moment(order.deliveryDate).tz("America/Merida").format("llll") %></td>
             <td><a href="/orders/<%= order._id %>/show">SHOW</a></td>
           </tr>
         

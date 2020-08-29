@@ -75,7 +75,7 @@ router.post('/register', (req, res) => {
                       service: 'gmail',
                       auth: {
                         user: 'noreply.ecookies@gmail.com',
-                        pass: 'dabingPenguin2205'
+                        pass: process.env.MAIL_PSWD
                       }
                     });
 
@@ -85,7 +85,7 @@ router.post('/register', (req, res) => {
                       subject: 'Verificación de Correo',
                       html: ` 
                       <h2> Haga click en el link para verificar su correo <h2> 
-                      <a>http://localhost:3000/users/verification/${verificationToken}<a>`
+                      <a>http://www.ecookies.app/users/verification/${verificationToken}<a>`
                     };
 
                     transporter.sendMail(mailOptions, (err, info) => {
