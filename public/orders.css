@@ -7,3 +7,24 @@
 	margin: 25px;
 }
 
+body {
+	background: #FFFFFF
+}
+
+.orderTable {
+	border: 5px solid;
+	border-color: #121212;
+}
+.header {
+	color:#CF6679 
+}
+.spacing{
+	margin: 5px;
+}
+.tbody {
+	color: #121212; 
+}
+
+tbody:hover {
+	background: #FEFEFE;
+  }

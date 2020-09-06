@@ -26,12 +26,10 @@ router.get("/orders", authenticateToken,(req, res) => {
 
 
 router.post("/orders", authenticateToken,(req, res) => {
-    //console.log(req.user);
-   // console.log(req.body);
-   // console.log(req.body.packets[0]);
-   // console.log(req.body.packets[1]);
-   // console.log(req.body.packets[0].cookies);
-   // console.log(req.body.packets[1].cookies);
+
+
+
+
    const order = new Order({
        user: req.user.id,
        packets: req.body.packets,
@@ -40,23 +38,36 @@ router.post("/orders", authenticateToken,(req, res) => {
 
    });
 
-   console.log(order)
-   Order.create(order, (err, order) => {
-        if (err){
-            res.json({isError: true, message: "No se pudo crear la orden."});
-            console.log(err);
-        }
-        else{
-        User.findOneAndUpdate({_id: req.user.id}, {$push: {orders: order}}).exec((err, result) =>{
-            if(err){
-                res.json({isError: true, message: "Hubo un error con la orden"})
-            }else{
-                res.json({isError: false, message: "Orden agregada exitosamente!"})
+   User.findById(req.user.id, (err, user)=>{
+    if(err){
+        res.json({isError: true, message: "No se pudo crear la orden."});
+        console.log(err);
+    }else{
+        if(user.banned){
+            res.json({isError: true, message: "Tu cuenta ha sido reportada. No podra hacer ninguna nueva order."});
+        }else{
+            Order.create(order, (err, order) => {
+                if (err){
+                    res.json({isError: true, message: "No se pudo crear la orden."});
+                    console.log(err);
+                }
+                else{
+                User.findOneAndUpdate({_id: req.user.id}, {$push: {orders: order}}).exec((err, result) =>{
+                    if(err){
+                        res.json({isError: true, message: "Hubo un error con la orden"})
+                    }else{
+                        res.json({isError: false, message: "Orden agregada exitosamente!"})
+                    }
+                });
             }
-        });
+        
+           });
+        }
     }
 
    });
+
+
     
    
 

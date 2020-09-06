@@ -8,13 +8,13 @@
 <% var options = {hour: 'numeric', minute: 'numeric', weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }; %>
 <div class="container border border-dark rounded-lg" id="mainDiv">
   <h2><b>User:</b> </h2>
-  <h2 class="important"><%= data.user.firstname%> <%= data.user.lastname %></h2>
+  <h2 class="important"><%= order.user.firstname%> <%= order.user.lastname %></h2>
   <h3><b>Delivery Date:</b> </h3>
-  <h4 class="important"><%= data.order.deliveryDate.toLocaleString("en-US", options) %></h4>
+  <h4 class="important"><%= order.deliveryDate.toLocaleString("en-US", options) %></h4>
   <% var x = 0; var total = 0; %>
 
   <div class="container">
-    <% data.order.packets.forEach((packet) => { %>
+    <% order.packets.forEach((packet) => { %>
       <% var precioPaquete = 0 %>
     <% x++; %>
 
@@ -46,8 +46,8 @@
     <h1 class= "verticalMargin">Total: <span class= "important"><%= total%> $</span></h1>
     <div class = "container moreMargin">
       
-    <h4><b>Phone:   </b><%= data.user.phone %></h4>
-    <h4><b>Email: </b><%= data.user.email %></h4>
+    <h4><b>Phone:   </b><%= order.user.phone %></h4>
+    <h4><b>Email: </b><%= order.user.email %></h4>
     </div>
   </div>
 

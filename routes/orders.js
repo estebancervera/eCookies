@@ -11,45 +11,50 @@ router.get("/",ensureAuthenticated,requireAdmin, function(req, res){
 	Order.find({
 		deliveryDate: {$gte : Date.now()} 
 
-	}, (err, order)=> {
-
-		//console.log(order);
-
-		res.render("orders", {orders: order, moment: moment});
-
-	})
+	}).populate("user")
+	.then(orders => {
+		console.log(orders)
+		res.render("orders", {orders: order, moment: moment});  
+    })
+    .catch(err => console.log(err));
 
 	
 });
 
 router.get("/:id/show",ensureAuthenticated,requireAdmin, function(req, res){
 
+	Order.findById(req.params.id).populate("user")
+	.then(order => {
+		console.log(order);
+		res.render("show", {order: order});  
+    })
+	.catch(err => res.redirect("/orders"));
 	
 	
-	User.findOne({ "orders" : req.params.id}, function(err, user){
-		if (err){
-			console.log("failed show");
-			res.redirect("/orders");
-		}else{
-			console.log("-----------------")
-			console.log(user);
+// 	User.findOne({ "orders" : req.params.id}, function(err, user){
+// 		if (err){
+// 			console.log("failed show");
+// 			res.redirect("/orders");
+// 		}else{
+// 			console.log("-----------------")
+// 			console.log(user);
 
-			Order.findById(req.params.id, (err, order) =>{
-				if(err){
-					console.log(err);
-					res.redirect("/orders");
-				}
-				else{
-					const data = {
-						user: user,
-						order: order
-					}
+// 			Order.findById(req.params.id, (err, order) =>{
+// 				if(err){
+// 					console.log(err);
+// 					res.redirect("/orders");
+// 				}
+// 				else{
+// 					const data = {
+// 						user: user,
+// 						order: order
+// 					}
 
-					res.render("show", {data: data})
-				}
-			});
-		}
-});
+// 					res.render("show", {data: data})
+// 				}
+// 			});
+// 		}
+// });
 	
 });
 
