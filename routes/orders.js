@@ -13,8 +13,7 @@ router.get("/",ensureAuthenticated,requireAdmin, function(req, res){
 
 	}).populate("user")
 	.then(orders => {
-		console.log(orders)
-		res.render("orders", {orders: order, moment: moment});  
+		res.render("orders", {orders: orders, moment: moment});  
     })
     .catch(err => console.log(err));
 
@@ -25,7 +24,6 @@ router.get("/:id/show",ensureAuthenticated,requireAdmin, function(req, res){
 
 	Order.findById(req.params.id).populate("user")
 	.then(order => {
-		console.log(order);
 		res.render("show", {order: order});  
     })
 	.catch(err => res.redirect("/orders"));

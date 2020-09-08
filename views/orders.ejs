@@ -7,47 +7,64 @@
 
 <% var options = {hour: 'numeric', minute: 'numeric', weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }; %>
 
-<div class="container border border-dark rounded-lg">
+<div class="container ">
+  <%- include("./partials/messages") %>
     <table class= "orderTable rounded-lg " data-toggle="table">
         <thead class = "header">
           <tr>
-            
-            <th>Order Date</th>
-            <th>Number of Cookies</th>
-            <th>Number of Packets</th>
-            <th>Delivery Date</th>
-            <th>Show Details</th>
-            <th>Status</th>
+            <th>Cliente</th>
+            <th>Fecha de la Orden</th>
+            <th>Numero de Paquetes</th>
+            <th>Fecha de Entrega</th>
+            <th>Telefono</th>
+            <th>Ver Detalles</th>
+            <th>Estado</th>
           </tr>
         </thead>
         <tbody class = "tbody">
         <% orders.forEach(function(order){ %>
-
-      
-
+       
+          
 
                 <% var numCookies = 0; %>
                    <%  order.packets.forEach((packet) => { numCookies += packet.quantity;}) %>
           
           <tr>
-            
-            <td><%=  moment(order.orderDate).tz("America/Merida").format("llll") %></td>
-            <td><%= numCookies %></td>
+            <td><%= order.user.firstname %> <%= order.user.lastname %></td>
+            <td><%= moment(order.orderDate).tz("America/Merida").format("llll") %></td>
             <td><%= order.packets.length %></td>
-            <td><%=  moment(order.deliveryDate).tz("America/Merida").format("llll") %></td>
-            <td><a class = "secondary" href="/orders/<%= order._id %>/show">SHOW</a></td>
+            <td><%= moment(order.deliveryDate).tz("America/Merida").format("llll") %></td>
+            <td><%= order.user.phone %></td>
+            <td><a class="secondary" href="/orders/<%= order._id %>/show">MOSTRAR</a></td>
             <td><% if  (order.status == "accepted"){ %>
-              <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-check-circle-fill" fill="green" xmlns="http://www.w3.org/2000/svg">
-                <path fill-rule="evenodd" d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/>
-              </svg>
+              
+                <h6 class="spacing">Aceptado</h6>
+                <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-check-circle-fill spacing" fill="green" xmlns="http://www.w3.org/2000/svg">
+                  <path fill-rule="evenodd" d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/>
+                </svg>
+              
            <% } else if (order.status == "rejected"){ %>
-            <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-x-circle-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+            
+            <h6 class="spacing" >Rechazado</h6>
+            <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-x-circle-fill spacing" fill="red" xmlns="http://www.w3.org/2000/svg">
               <path fill-rule="evenodd" d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293 5.354 4.646z"/>
             </svg>
+      
+          <% } else if (order.status == "delivered") { %>
+            
+            <h6 class="spacing">Entregado</h6>
+            <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-truck spacing" fill="blue" xmlns="http://www.w3.org/2000/svg">
+              <path fill-rule="evenodd" d="M0 3.5A1.5 1.5 0 0 1 1.5 2h9A1.5 1.5 0 0 1 12 3.5V5h1.02a1.5 1.5 0 0 1 1.17.563l1.481 1.85a1.5 1.5 0 0 1 .329.938V10.5a1.5 1.5 0 0 1-1.5 1.5H14a2 2 0 1 1-4 0H5a2 2 0 1 1-3.998-.085A1.5 1.5 0 0 1 0 10.5v-7zm1.294 7.456A1.999 1.999 0 0 1 4.732 11h5.536a2.01 2.01 0 0 1 .732-.732V3.5a.5.5 0 0 0-.5-.5h-9a.5.5 0 0 0-.5.5v7a.5.5 0 0 0 .294.456zM12 10a2 2 0 0 1 1.732 1h.768a.5.5 0 0 0 .5-.5V8.35a.5.5 0 0 0-.11-.312l-1.48-1.85A.5.5 0 0 0 13.02 6H12v4zm-9 1a1 1 0 1 0 0 2 1 1 0 0 0 0-2zm9 0a1 1 0 1 0 0 2 1 1 0 0 0 0-2z"/>
+            </svg>
+          
+
            <% }else{ %>
-            <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-alarm-fill" fill="yellow" xmlns="http://www.w3.org/2000/svg">
+            
+            <h6 class="spacing">Pendiente</h6>
+            <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-alarm-fill spacing" fill="orange" xmlns="http://www.w3.org/2000/svg">
               <path fill-rule="evenodd" d="M6 .5a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 0 1H9v1.07a7.001 7.001 0 0 1 3.274 12.474l.601.602a.5.5 0 0 1-.707.708l-.746-.746A6.97 6.97 0 0 1 8 16a6.97 6.97 0 0 1-3.422-.892l-.746.746a.5.5 0 0 1-.707-.708l.602-.602A7.001 7.001 0 0 1 7 2.07V1h-.5A.5.5 0 0 1 6 .5zM.86 5.387A2.5 2.5 0 1 1 4.387 1.86 8.035 8.035 0 0 0 .86 5.387zM11.613 1.86a2.5 2.5 0 1 1 3.527 3.527 8.035 8.035 0 0 0-3.527-3.527zM8.5 5.5a.5.5 0 0 0-1 0v3.362l-1.429 2.38a.5.5 0 1 0 .858.515l1.5-2.5A.5.5 0 0 0 8.5 9V5.5z"/>
             </svg>
+          
           <% } %></td>
           </tr>
         

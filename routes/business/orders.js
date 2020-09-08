@@ -138,9 +138,9 @@ router.get("/:id/status/delivered",ensureAuthenticated, function(req, res){
 
 });
 
-router.get("/:id/user/reported",ensureAuthenticated, function(req, res){
+router.get("/:id/user/:userId/reported",ensureAuthenticated, function(req, res){
 	
-	User.findOne({ "orders" : req.params.id}, function(err, user){
+	User.findById(req.params.userId, function(err, user){
 		if (err){
 			console.log("failed report");
 			req.flash("error_msg", "No se pudo reportar al usuario")

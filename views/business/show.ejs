@@ -88,7 +88,7 @@
         </div>
         <div class="col-md-4"></div>
         <div class="col-md-2">
-          <form action="/business/orders/<%=order._id%>/user/reported" method="GET">
+          <form action="/business/orders/<%=order._id%>/user/<%=order.user._id%>/reported" method="GET">
             <button style="color:red" class="btn  btn-outline-danger">Reportar Usuario</button>
           </form>
         </div>

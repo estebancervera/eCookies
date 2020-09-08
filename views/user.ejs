@@ -1,0 +1,46 @@
+<%- include("partials/header") %>
+
+<link rel="stylesheet" href="orders.css">
+
+
+<%- include("partials/navbar") %>
+
+<% var options = {hour: 'numeric', minute: 'numeric', weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }; %>
+
+<div class="container ">
+  <%- include("./partials/messages") %>
+    <table class= "orderTable rounded-lg " data-toggle="table">
+        <thead class = "header">
+          <tr>
+            <th>Name</th>
+            <th>Phone</th>
+            <th>Email</th>
+            <th>Registered Date</th>
+            <th>Reported?</th>
+            <th>Ban</th>
+            <th>UnBan</th>
+          </tr>
+        </thead>
+        <tbody class = "tbody">
+        <% users.forEach(function(user){ %>
+                
+          <tr>
+            <td><%= user.firstname %> <%= user.lastname %></td>
+            <td><%= user.phone %></td>
+            <td><%= user.email %></td>
+            <td><%= moment(user.date).tz("America/Merida").format("llll") %></td>
+            <td><%= user.banned %></td>
+            <td><a class="secondary" href="/users/<%=user._id%>/banned">BAN</a></td>
+            <td><a class="secondary" href="/users/<%=user._id%>/unbanned">UNBAN</a></td>
+
+        
+          <% });  %>
+          
+        </tbody>
+      </table>
+</div>
+<%- include("partials/framejs") %>
+<script type="text/javascript" src="navbar.js"></script>
+<script type="text/javascript" src="orders.js"></script>
+
+<%- include("partials/footer") %>

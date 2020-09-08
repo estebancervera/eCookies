@@ -9,15 +9,31 @@ const jwt = require('jsonwebtoken');
 const nodemailer = require('nodemailer');
 var async = require("async");
 var crypto = require("crypto");
-                                                                                        
+const moment = require('moment-timezone');                                                                               
 
 
 
 // USER MODEl
 const User = require("../models/user");
 
-//REGISTER  POST
 
+router.get('/', (req, res) =>  { 
+
+  User.find({}).sort({date : -1}).exec((err, users)=> {
+
+		if(err){
+			console.log(err);
+		}else{
+			res.render("user", {users: users, moment: moment});
+		}
+			
+	})
+
+
+
+});
+
+//REGISTER  POST
 router.post('/register', (req, res) => {
     const { firstname, lastname, email, password, phone } = req.body;
     console.log( req.body);
@@ -149,6 +165,44 @@ router.get('/verification/:token',authenticateEmailUser,(req,res) => {
 
 
 
+router.get("/:id/banned",ensureAuthenticated, function(req, res){
+	
+	User.findById( req.params.id, function(err, user){
+		if (err){
+			console.log("failed report");
+			req.flash("error_msg", "No se pudo reportar al usuario")
+			res.redirect("/users/");
+			
+		}else{
+			user.banned = true;
+
+			user.save();
+			req.flash("success_msg", "Usuario fue reportado!")
+			res.redirect("/users/")
+		}
+	});
+
+});
+
+
+router.get("/:id/unbanned",ensureAuthenticated, function(req, res){
+	
+	User.findById( req.params.id, function(err, user){
+		if (err){
+			console.log("failed report");
+			req.flash("error_msg", "Error unbanning user")
+			res.redirect("/users/");
+			
+		}else{
+			user.banned = false;
+
+			user.save();
+			req.flash("success_msg", "User was unbanned!")
+			res.redirect("/users/");
+		}
+	});
+
+});
 
 
 
