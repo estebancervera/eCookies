@@ -12,7 +12,7 @@ router.get("/",ensureAuthenticated, function(req, res){
 	Order.find({
 		deliveryDate: {$gte : Date.now()}, business: req.user.business
 
-	}).sort({deliveryDate : -1}).populate("user").exec((err, orders)=> {
+	}).sort({orderDate : -1}).populate("user").exec((err, orders)=> {
 
 		if(err){
 			console.log(err);
