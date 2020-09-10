@@ -11,6 +11,15 @@ router.get("/", ensureAuthenticated,requireAdmin, function(req, res){
 	res.redirect("/dashboard");
 });
 
+router.get("/privacy", ensureAuthenticated,requireAdmin, function(req, res){
+	res.render("privacy");
+});
+
+router.get("/terms", ensureAuthenticated,requireAdmin, function(req, res){
+	res.render("terms");
+});
+
+
 router.get("/dashboard", ensureAuthenticated, requireAdmin, function(req, res){
 	const now = new Date();
 	const today = new  Date(now.getFullYear() , now.getMonth() , now.getDate());
