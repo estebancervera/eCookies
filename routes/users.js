@@ -103,7 +103,7 @@ router.post('/register', (req, res) => {
                       subject: 'Verificación de Correo',
                       html: ` 
                       <h2> Haga click en el link para verificar su correo </h2> 
-                      <a>https://www.ecookies.app/users/verification/${verificationToken}</a>
+                      <a>https://www.ecookies.app/users/verification/${verificationToken}\n</a>
                       `
                     };
 
