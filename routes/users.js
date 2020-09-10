@@ -157,9 +157,14 @@ router.post('/login', (req, res, next) => {
 router.get('/verification/:token',authenticateEmailUser,(req,res) => {
   const {id, email} = req.user
   User.findById(id, (err, found)=> {
+    if (err){
+      res.send("ERROR!")
+    }else {
       found.verified = true;
       found.save();
       res.send("Usario Verificado!");
+    }
+      
   });
 });
 
