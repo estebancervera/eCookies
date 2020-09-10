@@ -44,7 +44,7 @@ router.post("/orders", authenticateToken,(req, res) => {
         console.log(err);
     }else{
         if(user.banned){
-            res.json({isError: true, message: "Tu cuenta ha sido reportada por un negocio. No podra hacer ninguna nueva orden."});
+            res.json({isError: true, message: "Tu cuenta ha sido reportada por un negocio por no recoger un pedido. No podra hacer ninguna nueva orden. Contacte al negocio para más información."});
         }else{
             Order.create(order, (err, order) => {
                 if (err){
