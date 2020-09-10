@@ -11,11 +11,11 @@ router.get("/", ensureAuthenticated,requireAdmin, function(req, res){
 	res.redirect("/dashboard");
 });
 
-router.get("/privacy", ensureAuthenticated,requireAdmin, function(req, res){
+router.get("/privacy", function(req, res){
 	res.render("privacy");
 });
 
-router.get("/terms", ensureAuthenticated,requireAdmin, function(req, res){
+router.get("/terms", function(req, res){
 	res.render("terms");
 });
 
