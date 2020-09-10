@@ -1,5 +1,6 @@
 var mongoose = require("mongoose");
 const Category = require("./category");
+const Manager = require("./manager");
     
 
 
@@ -27,6 +28,10 @@ var businessSchema = new mongoose.Schema({
         type: Number,
         required: true
     },
+    email: {
+        type: String,
+        required: true
+    },
     manager: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Manager"
@@ -39,7 +44,7 @@ businessSchema.pre('remove', function(next) {
     // to be notified of the calls' result.w
     
     Category.remove({business: this._id}).exec();
-   
+    Manager.remove({business: this._id}).exec();
     next();
 });
 

@@ -139,21 +139,31 @@ router.get("/:id/status/delivered",ensureAuthenticated, function(req, res){
 });
 
 router.get("/:id/user/:userId/reported",ensureAuthenticated, function(req, res){
-	
-	User.findById(req.params.userId, function(err, user){
-		if (err){
+	Order.findById(req.params.id, (err, order) => {
+		if(err){
 			console.log("failed report");
 			req.flash("error_msg", "No se pudo reportar al usuario")
 			res.redirect("/business/orders");
-			
 		}else{
-			user.banned = true;
-
-			user.save();
-			req.flash("success_msg", "Usuario fue reportado!")
-			res.redirect("/business/orders")
+			User.findById(req.params.userId, function(err, user){
+				if (err){
+					console.log("failed report");
+					req.flash("error_msg", "No se pudo reportar al usuario")
+					res.redirect("/business/orders");
+					
+				}else{
+					user.banned = true;
+					user.bannedBy = order.business;
+					user.save();
+					req.flash("success_msg", "Usuario fue reportado!")
+					res.redirect("/business/orders")
+				}
+			});
 		}
+
+
 	});
+	
 
 });
 

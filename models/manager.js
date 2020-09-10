@@ -1,5 +1,6 @@
 var mongoose = require("mongoose");
 var passportLocalMongoose = require("passport-local-mongoose");
+const Category = require("./category");
 
 var managerSchema = new mongoose.Schema({
     email:  {
@@ -26,5 +27,6 @@ var managerSchema = new mongoose.Schema({
 
 
 managerSchema.plugin(passportLocalMongoose)
+
 
 module.exports = mongoose.model("Manager", managerSchema);

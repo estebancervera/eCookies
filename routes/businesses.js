@@ -120,7 +120,8 @@ router.post("/", ensureAuthenticated, requireAdmin, upload.array('file', 1), fun
     image: req.files[0].key,
     available: req.body.business.available,
     lon: req.body.business.lon,
-    lat: req.body.business.lat
+    lat: req.body.business.lat,
+    email: email
   });
 
   Business.create(business, function (err, newBusiness) {

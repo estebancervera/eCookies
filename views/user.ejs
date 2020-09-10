@@ -17,6 +17,7 @@
             <th>Email</th>
             <th>Registered Date</th>
             <th>Reported?</th>
+            <th>Reported By</th>
             <th>Ban</th>
             <th>UnBan</th>
           </tr>
@@ -30,6 +31,15 @@
             <td><%= user.email %></td>
             <td><%= moment(user.date).tz("America/Merida").format("llll") %></td>
             <td><%= user.banned %></td>
+            <td><% if (!user.banned){ %>
+
+              "NOT REPORTED"
+
+           <% }else if (user.bannedBy.name != undefined){ %>
+            <%= user.bannedBy.name %>
+           <% }else { %>
+            "ADMIN"
+           <%} %></td>
             <td><a class="secondary" href="/users/<%=user._id%>/banned">BAN</a></td>
             <td><a class="secondary" href="/users/<%=user._id%>/unbanned">UNBAN</a></td>
 

@@ -16,10 +16,10 @@ const moment = require('moment-timezone');
 // USER MODEl
 const User = require("../models/user");
 
-
+//user admin view
 router.get('/', (req, res) =>  { 
 
-  User.find({}).sort({date : -1}).exec((err, users)=> {
+  User.find({}).sort({date : -1}).populate("bannedBy").exec((err, users)=> {
 
 		if(err){
 			console.log(err);
@@ -195,7 +195,7 @@ router.get("/:id/unbanned",ensureAuthenticated, function(req, res){
 			
 		}else{
 			user.banned = false;
-
+      user.bannedBy = undefined;
 			user.save();
 			req.flash("success_msg", "User was unbanned!")
 			res.redirect("/users/");

@@ -37,12 +37,19 @@ var userSchema = new mongoose.Schema({
     banned: {
         type: Boolean,
         default: false
+    },
+    bannedBy: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Business"
     }
 
 
 
 
 });
+
+
+
 
 
 module.exports = mongoose.model("User", userSchema);
