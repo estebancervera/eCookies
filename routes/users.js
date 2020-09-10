@@ -162,7 +162,7 @@ router.get('/verification/:token',authenticateEmailUser,(req,res) => {
     }else {
       found.verified = true;
       found.save();
-      res.send("Usario Verificado!");
+      res.render("verify");
     }
       
   });

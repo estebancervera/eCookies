@@ -19,6 +19,10 @@ router.get("/terms", function(req, res){
 	res.render("terms");
 });
 
+router.get("/support", function(req, res){
+	res.render("support");
+});
+
 
 router.get("/dashboard", ensureAuthenticated, requireAdmin, function(req, res){
 	const now = new Date();
