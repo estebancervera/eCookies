@@ -226,6 +226,7 @@ router.put("/:id", ensureAuthenticated,upload.array('file', 1), function (req, r
     console.log(err);
   } else {
     console.log(updatedProduct);
+    console.log("---------")
     console.log(req.body.product);
     Category.findOneAndUpdate({ _id: req.body.product.category}, {$push: {products: updatedProduct}}, (err, result) =>{
       if(err){
