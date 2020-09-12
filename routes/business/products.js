@@ -25,30 +25,28 @@ aws.config.update({
 const s3 = new aws.S3();
 
 
-
-  const storage = multerS3({
-      s3: s3,
-      bucket: S3_BUCKET,
-      key: function (req, file, cb) {
-          console.log(file);
-          cb(null, Date.now() + crypto.randomBytes(8).toString("hex") + path.extname(file.originalname)); //use Date.now() for unique file keys
-      }
-  });
+const storage = multerS3({
+  s3: s3,
+  bucket: S3_BUCKET,
+  key: function (req, file, cb) {
+      
+      cb(null, Date.now() + crypto.randomBytes(8).toString("hex") + path.extname(file.originalname)); //use Date.now() for unique file keys
+  }
+});
 
 
 const filefilter = (req, file,cb) => {
-  if(file.mimetype === 'image/jpeg' || file.mimetype === 'image/png'){
-    cb(null, true);
-  }else{
-    cb(null, false);
-  }
+if(file.mimetype === 'image/jpeg' || file.mimetype === 'image/png'){
+cb(null, true);
+}else{
+cb(null, false);
+}
 }
 
 const upload = multer({
-  storage: storage,
-  fileFilter: filefilter
+storage: storage,
+fileFilter: filefilter
 });
-
 
 const deleteS3 = function (params) {
   return new Promise((resolve, reject) => {
@@ -77,11 +75,17 @@ router.get("/", ensureAuthenticated, function (req, res) {
       console.log("ERROR: F : " + err);
     } else {
      
+      console.log("CATEGORIES: " + categories)
+
       var productsArrays = categories.map(function(x){
         return x.products;
       })
       
+      console.log("ProductsArrayBeforeFlat: " + productsArrays)
+
       productsArrays = productsArrays.flat();
+
+      console.log("ProductsArray: " + productsArrays)
 
       res.render("business/products/products", { products: productsArrays });
     }
@@ -109,7 +113,7 @@ Category.find({business: req.user.business}, (err, categories) => {
 router.get("/:id/edit", ensureAuthenticated, function (req, res) {
 
 
-  Category.find({}, (err, categories) => {
+  Category.find({business: req.user.business}, (err, categories) => {
     if(err){
       console.log(err);
       res.redirect("/business/products/")
@@ -184,7 +188,7 @@ router.post("/", ensureAuthenticated, upload.array('file', 1), function (req, re
 
 //UPDATE ROUTE
 
-router.put("/:id", ensureAuthenticated,upload.array('file', 1), function (req, res) {
+router.put("/:id", ensureAuthenticated, upload.array('file', 1), function (req, res) {
   var isAvailable = req.body.product.available;
 
   if (isAvailable === "on") {
@@ -193,11 +197,16 @@ router.put("/:id", ensureAuthenticated,upload.array('file', 1), function (req, r
     req.body.product.available = false;
   }
 
+
+  console.log(req)
+  console.log("req files: " + req.files[0])
+
+
   if(req.files[0]){
     Product.findById(req.params.id, (err, found)=>{
       if (err){
         console.log(err);
-        req.flash("error_msg", "No se pudo agregar la categoria. Intente mas tarde")
+        req.flash("error_msg", "No se pudo agregar la imagen. Intente mas tarde")
         res.redirect("/business/products");
       }else{
       const imageFilename = found.image
@@ -209,54 +218,58 @@ router.put("/:id", ensureAuthenticated,upload.array('file', 1), function (req, r
       deleteS3(params);
   
       found.image = req.files[0].key;
-
+      console.log("found.image: " + req.files[0].key)
       found.save();
     }
   
     });
   }
- 
+  console.log(req.body.product)
 
-
- Product.findByIdAndUpdate(req.params.id, req.body.product, function (
-  err,
-  updatedProduct
-) {
+ Product.findByIdAndUpdate(req.params.id, req.body.product, function (err,updatedProduct) {
   if (err) {
     console.log(err);
   } else {
-    console.log(updatedProduct);
-    console.log("---------")
-    console.log(req.body.product);
-    Category.findOneAndUpdate({ _id: req.body.product.category}, {$push: {products: updatedProduct}}, (err, result) =>{
-      if(err){
-        console.log(err);
-        req.flash("error_msg", "No se pudo actualizar el producto. Intente mas tarde")
-        res.redirect("/business/products");
-          
-      }else{
-        req.flash("edit_msg", "Se actualizó el producto correctamente")
-        res.redirect("/business/products");
-          
-      }
-  });
+    console.log("Updated product: " + updatedProduct);
 
+    if(!(updatedProduct.category.equals(req.body.product.category))){
 
-  Category.findById( updatedProduct.category, (err, category)=>{
-    if(err){
-      console.log(err);
- 
+        Category.findOneAndUpdate({ _id: req.body.product.category}, {$push: {products: updatedProduct}}, (err, result) =>{
+          if(err){
+            console.log(err);
+            req.flash("error_msg", "No se pudo actualizar el producto. Intente mas tarde")
+            res.redirect("/business/products");
+              
+          }else{
+            console.log("updatedproduct category: " + updatedProduct.category)
+            console.log("req.product category: " + req.body.product.category)
+    
+          Category.findById( updatedProduct.category, (err, category)=>{
+            if(err){
+              console.log(err);
+              req.flash("error_msg", "No se pudo actualizar el producto. Intente mas tarde")
+              res.redirect("/business/products");
+            }else{
+            console.log("updated product.category: " + category)
+              const index = category.products.indexOf(req.body.product.id);
+              category.products.splice(index, 1);
+              category.save();
+              console.log("final category: " + category)
+              req.flash("edit_msg", "Se actualizó el producto correctamente")
+              res.redirect("/business/products");
+        
+            }
+          });
+            
+              
+          }
+        });
+
+       
     }else{
-      
-     console.log(category)
-      const index = category.products.indexOf(req.body.product.id);
-      category.products.splice(index, 1);
-      category.save();
-      console.log(category)
- 
- 
+      req.flash("edit_msg", "Se actualizó el producto correctamente")
+      res.redirect("/business/products");
     }
-  });
 
 
    

@@ -7,6 +7,7 @@
 
 
 
+
 <div class="container">
      <h1>
 	Edit <%= data.product.name  %>
@@ -18,7 +19,7 @@
             <span class="input-group-text" id="inputGroupFileAddon01">Upload</span>
           </div>
           <div class="custom-file">
-            <input type="file" class="custom-file-input" id="inputGroupFile01" aria-describedby="inputGroupFileAddon01">
+            <input type="file" class="custom-file-input" name = "file" id="inputGroupFile01" aria-describedby="inputGroupFileAddon01">
             <label class="custom-file-label" for="inputGroupFile01">Escoge una foto</label>
           </div>
         </div>
@@ -42,9 +43,9 @@
 
           <div class="form-group">
             <label for="exampleFormControlSelect2">Selecciona una categoria</label>
-            <select  id ="category" class="form-control chosen-select"  name="product[category]" id="exampleFormControlSelect2" required>
-              <%  data.categories.forEach((category) =>  { %>
-                <option value= "<%= category.id %>"><%= category.name %></option>
+            <select multiple id="cat" class="form-control chosen-select-1 "  name="product[category]" id="exampleFormControlSelect2">
+              <% data.categories.forEach(function(category) { %>
+                <option value= "<%= category._id %>"><%= category.name %></option>
              <% }); %>
             </select>
           </div>
@@ -74,16 +75,32 @@
 
 <%- include("../../partials/framejs") %>
 <script type="text/javascript" src="/new.js"></script>
-
+<script type="text/javascript" src="/chosen.js"></script>
 <script>
-  var category = "<%- data.product.category %>";
+var num = "<%- data.product.category._id %>";
 
-  
-      $("#category option[value='" + category + "']").attr("selected", 1);
+ // detect array length
+// looping over array
 
-  $("#category").trigger("chosen:updated");
-  
-  </script>
+
+    // $("#secondary_group option[value='" + valArr[i] + "']")
+    // select the option with value match with the valArr
+    // from the select with id=secondary_group and if match found
+    // .attr("selected", 1);  make that option as default selected
+
+    $("#cat option[value='" + num + "']").attr("selected", 1);
+
+
+// after selecting the options
+// refresh the select using below code
+// And this code should belong outside of
+// above loop, because
+// refreshing within loop will only 
+// select last matched element
+// not all matched
+$("#cat").trigger("chosen:updated");
+
+</script>
 
 
 <%- include("../../partials/footer") %>
