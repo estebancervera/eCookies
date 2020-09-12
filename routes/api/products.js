@@ -7,7 +7,7 @@ const Business = require('../../models/business');
 
 //PRODUCTS API
 
-router.get("/business", authenticateToken,(req, res) => {
+router.get("/business",(req, res) => {
 
 	Business.find({}).populate({path: 'categories', populate : {path: 'products'}}).exec( function(err, data){
 		if(err){
