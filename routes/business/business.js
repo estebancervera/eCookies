@@ -14,9 +14,9 @@ const aws = require("aws-sdk");
 const multer = require('multer');
 const multerS3 = require("multer-s3");
 
-const S3_BUCKET = "ecookies-assets";
-const AWS_ACCESS_KEY_ID = "AKIATXLCL774X5K6HWWM";
-const AWS_SECRET_ACCESS_KEY = "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";
+const S3_BUCKET = process.env.S3_BUCKET;
+const AWS_ACCESS_KEY_ID = process.env.AWS_ACCESS_KEY_ID;
+const AWS_SECRET_ACCESS_KEY = process.env.AWS_SECRET_ACCESS_KEY;
 
 aws.config.update({
   secretAccessKey: AWS_SECRET_ACCESS_KEY ,
