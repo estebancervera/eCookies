@@ -1,63 +1,96 @@
 <%- include("../../partials/header") %>
 
-<link rel="stylesheet" href="/new.css">
-
+<link rel="stylesheet" href="/new.css" />
 
 <%- include("../../partials/navbarBusiness") %>
 
 <div class="container">
-     
-<form action="/business/categories" method="POST"  enctype="multipart/form-data" >
-
-          <div class="input-group mb-3">
-          <div class="input-group-prepend">
-            <span class="input-group-text" id="inputGroupFileAddon01">Upload</span>
-          </div>
-          <div class="custom-file">
-            <input type="file" class="custom-file-input" name="file"id="inputGroupFile01" required aria-describedby="inputGroupFileAddon01">
-            <label class="custom-file-label" for="inputGroupFile01">Escoge una foto</label>
-          </div>
-        </div>
-
-        
-          <div class="form-group  ">
-             <label for="FormControlInput1">Nombre</label>
-            <input type="text" name="category[name]" class="form-control" id="FormControlInput1"  required placeholder="">
-          </div>
-
-          <div class="form-group">
-            <input type="checkbox"  name="category[qtyRestricted]" class="form-check-input" id="Check1" >
-            <label class="form-check-label"    for="Check1">Requiere un minimo por paquete</label>
+  <form
+    action="/business/categories"
+    method="POST"
+    enctype="multipart/form-data"
+  >
+    <div class="input-group mb-3">
+      <div class="input-group-prepend">
+        <span class="input-group-text" id="inputGroupFileAddon01">Upload</span>
       </div>
-
-      <div class="form-group">
-        <label for="exampleFormControlSelect2">Tamaños de los paquetes. (puedes escoger varios, presionando Ctrl o Cmd y seleccionando multiples opciones.</label>
-        <label for="exampleFormControlSelect2">Ej. Mis galletas se venden en paquetes de 12 o de 24.</label>
-        <select multiple class="form-control chosen-select"  name="category[sizes]" id="exampleFormControlSelect2">
-          <% for( var i = 1; i <= 50; i ++) { %>
-            <option value= "<%= i %>"><%= i %></option>
-         <% } %>
-        </select>
+      <div class="custom-file">
+        <input
+          type="file"
+          class="custom-file-input"
+          name="file"
+          id="inputGroupFile01"
+          required
+          aria-describedby="inputGroupFileAddon01"
+        />
+        <label class="custom-file-label" for="inputGroupFile01"
+          >Escoge una foto</label
+        >
       </div>
+    </div>
 
-          <div class="form-group">
-             <label for="FormControlInputNumber"> Tiempo que se requiere para entregarlo (en dias)</label>
-            <input type="number"  name="category[timeRequired]"  class="form-control" id="FormControlInputNumber" placeholder="" required>
-          </div>
+    <div class="form-group">
+      <label for="FormControlInput1">Nombre</label>
+      <input
+        type="text"
+        name="category[name]"
+        class="form-control"
+        id="FormControlInput1"
+        required
+        placeholder=""
+      />
+    </div>
 
-	
-		 <div class="form-group">
-             <button type="submit button"  class="btn btn-danger">Agregar Categoria</button>
-        </div>
-		
+    <div class="form-group">
+      <input
+        type="checkbox"
+        name="category[qtyRestricted]"
+        class="form-check-input"
+        id="Check1"
+      />
+      <label class="form-check-label" for="Check1"
+        >Requiere un minimo por paquete</label
+      >
+    </div>
 
-</form>
-</div>   
+    <div class="form-group">
+      <label for="exampleFormControlSelect2">Tamaños de los paquetes. </label>
+      <label for="exampleFormControlSelect2"
+        >Ej. Mis galletas se venden en paquetes de 12 o de 24.</label
+      >
+      <select
+        multiple
+        class="form-control chosen-select"
+        name="category[sizes]"
+        id="exampleFormControlSelect2"
+      >
+        <% for( var i = 1; i <= 50; i ++) { %>
+        <option value="<%= i %>"><%= i %></option>
+        <% } %>
+      </select>
+    </div>
 
+    <div class="form-group">
+      <label for="FormControlInputNumber">
+        Tiempo que se requiere para entregarlo (en dias)</label
+      >
+      <input
+        type="number"
+        name="category[timeRequired]"
+        class="form-control"
+        id="FormControlInputNumber"
+        placeholder=""
+        required
+      />
+    </div>
 
-
-
-
+    <div class="form-group">
+      <button type="submit button" class="btn btn-danger">
+        Agregar Categoria
+      </button>
+    </div>
+  </form>
+</div>
 
 <%- include("../../partials/framejs") %>
 

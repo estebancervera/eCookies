@@ -1,98 +1,128 @@
 <%- include("../../partials/header") %>
 
-<link rel="stylesheet" href="/new.css">
-
+<link rel="stylesheet" href="/new.css" />
 
 <%- include("../../partials/navbarBusiness") %>
 
 <div class="container">
-  <h1>
-    Editar <%= category.name  %>
-    </h1>
-<form action="/business/categories/<%= category._id %>?_method=PUT" method="POST"  enctype="multipart/form-data" >
-
-          <div class="input-group mb-3">
-          <div class="input-group-prepend">
-            <span class="input-group-text" id="inputGroupFileAddon01">Upload</span>
-          </div>
-          <div class="custom-file">
-            <input type="file" class="custom-file-input" name="file"id="inputGroupFile01"  aria-describedby="inputGroupFileAddon01">
-            <label class="custom-file-label" for="inputGroupFile01">Escoge una foto</label>
-          </div>
-        </div>
-
-        
-          <div class="form-group ">
-             <label for="FormControlInput1">Nombre</label>
-            <input type="text" name="category[name]" class="form-control" id="FormControlInput1"  required placeholder="" value = "<%= category.name %>">
-          </div>
-
-          <div class="form-group">
-            <input type="checkbox"  name="category[qtyRestricted]" class="form-check-input" id="Check1" 	<% if(category.qtyRestricted){ %>
-					 
-              checked				 
-                 
-              <% }%> >
-            <label class="form-check-label"    for="Check1">Requiere un minimo por paquete</label>
+  <h1>Editar <%= category.name %></h1>
+  <form
+    action="/business/categories/<%= category._id %>?_method=PUT"
+    method="POST"
+    enctype="multipart/form-data"
+  >
+    <div class="input-group mb-3">
+      <div class="input-group-prepend">
+        <span class="input-group-text" id="inputGroupFileAddon01">Upload</span>
       </div>
-
-      <div class="form-group">
-        <label for="exampleFormControlSelect2">Tamaños de los paquetes. (puedes escoger varios, presionando Ctrl o Cmd y seleccionando multiples opciones.</label>
-        <label for="exampleFormControlSelect2">Ej. Mis galletas se venden en paquetes de 12 o de 24.</label>
-        <select multiple  id="sizes"class="form-control chosen-select "  name="category[packageSizes]" id="exampleFormControlSelect2">
-          <% for( var i = 1; i <= 50; i ++) { %>
-            <option value= "<%= i %>"><%= i %></option>
-         <% } %>
-        </select>
+      <div class="custom-file">
+        <input
+          type="file"
+          class="custom-file-input"
+          name="file"
+          id="inputGroupFile01"
+          aria-describedby="inputGroupFileAddon01"
+        />
+        <label class="custom-file-label" for="inputGroupFile01"
+          >Escoge una foto</label
+        >
       </div>
+    </div>
 
-          <div class="form-group">
-             <label for="FormControlInputNumber"> Tiempo que se requiere para entregarlo (en dias)</label>
-            <input type="number"  name="category[timeRequired]"  class="form-control" id="FormControlInputNumber" placeholder="" required value = "<%= category.timeRequired %>">
-          </div>
+    <div class="form-group">
+      <label for="FormControlInput1">Nombre</label>
+      <input
+        type="text"
+        name="category[name]"
+        class="form-control"
+        id="FormControlInput1"
+        required
+        placeholder=""
+        value="<%= category.name %>"
+      />
+    </div>
 
-	
-		 <div class="form-group">
-             <button type="submit button"  class="btn btn-danger">Editar Categoria</button>
-        </div>
-		
+    <div class="form-group">
+      <input
+        type="checkbox"
+        name="category[qtyRestricted]"
+        class="form-check-input"
+        id="Check1"
+        <%
+        if(category.qtyRestricted){
+        %
+      />
 
-</form>
-</div>   
+      checked <% }%> >
+      <label class="form-check-label" for="Check1"
+        >Requiere un minimo por paquete</label
+      >
+    </div>
 
+    <div class="form-group">
+      <label for="exampleFormControlSelect2">Tamaños de los paquetes. </label>
+      <label for="exampleFormControlSelect2"></label>
+      <select
+        multiple
+        id="sizes"
+        class="form-control chosen-select"
+        name="category[packageSizes]"
+        id="exampleFormControlSelect2"
+      >
+        <% for( var i = 1; i <= 50; i ++) { %>
+        <option value="<%= i %>"><%= i %></option>
+        <% } %>
+      </select>
+    </div>
 
+    <div class="form-group">
+      <label for="FormControlInputNumber">
+        Tiempo que se requiere para entregarlo (en dias)</label
+      >
+      <input
+        type="number"
+        name="category[timeRequired]"
+        class="form-control"
+        id="FormControlInputNumber"
+        placeholder=""
+        required
+        value="<%= category.timeRequired %>"
+      />
+    </div>
 
-
-
+    <div class="form-group">
+      <button type="submit button" class="btn btn-danger">
+        Editar Categoria
+      </button>
+    </div>
+  </form>
+</div>
 
 <%- include("../../partials/framejs") %>
 <script type="text/javascript" src="/new.js"></script>
 <script type="text/javascript" src="/chosen.js"></script>
 <script>
-var num = "<%- category.packageSizes %>";
+  var num = "<%- category.packageSizes %>";
 
-size = num.length; // detect array length
-// looping over array
-for (i = 0; i < size; i++) {
-
+  size = num.length; // detect array length
+  // looping over array
+  for (i = 0; i < size; i++) {
     // $("#secondary_group option[value='" + valArr[i] + "']")
     // select the option with value match with the valArr
     // from the select with id=secondary_group and if match found
     // .attr("selected", 1);  make that option as default selected
 
-    $("#sizes option[value='" + num[i] + "']")
-                                            .attr("selected", 1);
-}
+    $("#sizes option[value='" + num[i] + "']").attr("selected", 1);
+  }
 
-// after selecting the options
-// refresh the select using below code
-// And this code should belong outside of
-// above loop, because
-// refreshing within loop will only 
-// select last matched element
-// not all matched
-$("#sizes").trigger("chosen:updated");
-
+  // after selecting the options
+  // refresh the select using below code
+  // And this code should belong outside of
+  // above loop, because
+  // refreshing within loop will only
+  // select last matched element
+  // not all matched
+  $("#sizes").trigger("chosen:updated");
 </script>
 
 <%- include("../../partials/footer") %>
