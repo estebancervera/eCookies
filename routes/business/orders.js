@@ -63,7 +63,7 @@ router.get("/:id/show", ensureAuthenticated, function (req, res) {
   // });
 });
 
-router.get("/:id/status/rejected", ensureAuthenticated,async function (req, res) {
+router.get("/:id/status/rejected", ensureAuthenticated, async function (req, res) {
   Order.findById(req.params.id, (err, order) => {
     if (err) {
       console.log(err);
@@ -74,7 +74,7 @@ router.get("/:id/status/rejected", ensureAuthenticated,async function (req, res)
 			order.status = "rejected";
 			order.save();
 			
-			await User.findById(order.user).populate("devices").then((user) => {
+			User.findById(order.user).populate("devices").then((user) => {
 			const registrationIds = [];
 			user.devices.forEach(device => {
 				registrationIds.push(device);
