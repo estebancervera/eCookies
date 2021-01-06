@@ -41,6 +41,10 @@ var userSchema = new mongoose.Schema({
     type: Boolean,
     default: false,
   },
+  devices: {
+    type: [mongoose.Schema.Types.ObjectId],
+    ref: "Token",
+  },
   bannedBy: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Business",

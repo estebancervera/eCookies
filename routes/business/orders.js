@@ -2,6 +2,9 @@ const express = require("express");
 const router = express.Router();
 const moment = require("moment-timezone");
 
+const push = require("../../config/notifications");
+
+const data = require("../../config/data");
 
 const { ensureAuthenticated } = require("../../config/auth");
 
@@ -60,7 +63,7 @@ router.get("/:id/show", ensureAuthenticated, function (req, res) {
   // });
 });
 
-router.get("/:id/status/rejected", ensureAuthenticated, function (req, res) {
+router.get("/:id/status/rejected", ensureAuthenticated,async function (req, res) {
   Order.findById(req.params.id, (err, order) => {
     if (err) {
       console.log(err);
@@ -68,8 +71,26 @@ router.get("/:id/status/rejected", ensureAuthenticated, function (req, res) {
       if (order) {
         if (order.business.equals(req.user.business)) {
           if (order.status === "pending") {
-            order.status = "rejected";
-            order.save();
+			order.status = "rejected";
+			order.save();
+			
+			await User.findById(order.user).populate("devices").then((user) => {
+			const registrationIds = [];
+			user.devices.forEach(device => {
+				registrationIds.push(device);
+			});
+
+            push
+              .send(registrationIds, data)
+              .then((results) => {
+                console.log(results);
+              })
+              .catch((err) => {
+                console.log(err);
+              });
+			}).catch((err) => {console.log(err);})
+			
+			
           }
         }
         res.redirect(`/business/orders/${req.params.id}/show`);
