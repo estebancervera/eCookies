@@ -1,78 +1,92 @@
-const express  = require('express');
+const express = require("express");
 const router = express.Router();
-const {authenticateToken } = require('../../config/auth')
+const { authenticateToken } = require("../../config/auth");
 
-const Order = require('../../models/order');
-const User = require('../../models/user');
+const Order = require("../../models/order");
+const User = require("../../models/user");
 
 //PRODUCTS API
 
-router.get("/", authenticateToken,(req, res) => {
-    console.log(req.user);
-    Order.find({user: req.user.id}).populate("business")
-    .then(orders => {
-        if(!orders){
-            console.log(user);
-            res.json({message: 'Token invalid, no User with that token'});
-        }else{
-            res.json(orders);
-        }
-
-       
+router.get("/", authenticateToken, (req, res) => {
+  console.log(req.user);
+  Order.find({ user: req.user.id })
+    .populate("business")
+    .then((orders) => {
+      if (!orders) {
+        console.log(user);
+        res.json({ message: "Token invalid, no User with that token" });
+      } else {
+        res.json(orders);
+      }
     })
-    .catch(err => console.log(err));
-
+    .catch((err) => console.log(err));
 });
 
+router.post("/", authenticateToken, (req, res) => {
+  const order = new Order({
+    user: req.user.id,
+    packets: req.body.packets,
+    deliveryDate: req.body.deliveryDate * 1000,
+    business: req.body.business,
+  });
 
-router.post("/", authenticateToken,(req, res) => {
-
-
-
-
-   const order = new Order({
-       user: req.user.id,
-       packets: req.body.packets,
-       deliveryDate: req.body.deliveryDate * 1000,
-       business: req.body.business
-
-   });
-
-   User.findById(req.user.id, (err, user)=>{
-    if(err){
-        res.json({isError: true, message: "No se pudo crear la orden."});
-        console.log(err);
-    }else{
-        if(user.banned){
-            res.json({isError: true, message: "Tu cuenta ha sido reportada por un negocio por no recoger un pedido. No podra hacer ninguna nueva orden. Contacte al negocio para más información."});
-        }else{
-            Order.create(order, (err, order) => {
-                if (err){
-                    res.json({isError: true, message: "No se pudo crear la orden."});
-                    console.log(err);
-                }
-                else{
-                User.findOneAndUpdate({_id: req.user.id}, {$push: {orders: order}}).exec((err, result) =>{
-                    if(err){
-                        res.json({isError: true, message: "Hubo un error con la orden"})
-                    }else{
-                        res.json({isError: false, message: "Orden agregada exitosamente!"})
-                    }
+  User.findById(req.user.id, (err, user) => {
+    if (err) {
+      res.json({ isError: true, message: "No se pudo crear la orden." });
+      console.log(err);
+    } else {
+      if (user.banned) {
+        res.json({
+          isError: true,
+          message:
+            "Tu cuenta ha sido reportada por un negocio por no recoger un pedido. No podra hacer ninguna nueva orden. Contacte al negocio para más información.",
+        });
+      } else {
+        Order.create(order, (err, order) => {
+          if (err) {
+            res.json({ isError: true, message: "No se pudo crear la orden." });
+            console.log(err);
+          } else {
+            User.findOneAndUpdate(
+              { _id: req.user.id },
+              { $push: { orders: order } }
+            ).exec((err, user) => {
+              if (err) {
+                res.json({
+                  isError: true,
+                  message: "Hubo un error con la orden",
                 });
-            }
-        
-           });
-        }
+              } else {
+                res.json({
+                  isError: false,
+                  message: "Orden agregada exitosamente!",
+                });
+
+                const registrationIds = [];
+                user.devices.forEach((device) => {
+                  registrationIds.push(device);
+                });
+
+                const data = require("../../config/data")(
+                  "Orden Pendiente",
+                  "Su orden ha sido creada y esta pendiente para su aprobación por el negocio."
+                );
+
+                push
+                  .send(registrationIds, data)
+                  .then((results) => {
+                    console.log(results);
+                  })
+                  .catch((err) => {
+                    console.log(err);
+                  });
+              }
+            });
+          }
+        });
+      }
     }
-
-   });
-
-
-    
-   
-
+  });
 });
-
 
 module.exports = router;
-
