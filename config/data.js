@@ -49,4 +49,8 @@ const data = {
   consolidationKey: "my notification", // ADM
 };
 
-module.exports = data;
+module.exports = function (title, message) {
+  data.alert.title = title;
+  data.alert.body = message;
+  return data;
+};

@@ -25,8 +25,16 @@ router.get("/user/:token", authenticateToken, async (req, res) => {
   //console.log(token);
   if (req.params.token) {
     const user = await User.findById(req.user.id);
-    user.devices.push(req.params.token);
-    user.save();
+    const repeated = false;
+    user.devices.forEach((device) => {
+      if (req.params.token.equals(device)) {
+        repeated = true;
+      }
+    });
+    if (!repeated) {
+      user.devices.push(req.params.token);
+      user.save();
+    }
   }
 });
 
