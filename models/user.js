@@ -42,8 +42,7 @@ var userSchema = new mongoose.Schema({
     default: false,
   },
   devices: {
-    type: [mongoose.Schema.Types.ObjectId],
-    ref: "Token",
+    type: [String],
   },
   bannedBy: {
     type: mongoose.Schema.Types.ObjectId,
