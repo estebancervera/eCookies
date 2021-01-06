@@ -21,11 +21,11 @@ router.get("/add/:token", async (req, res) => {
 });
 
 router.get("/user/:token", authenticateToken, async (req, res) => {
-  const token = await Token.find({ deviceToken: req.params.token });
-  console.log(token);
-  if (token) {
+  //const token = await Token.find({ deviceToken: req.params.token });
+  //console.log(token);
+  if (req.params.token) {
     const user = await User.findById(req.user.id);
-    user.devices.push(token.id);
+    user.devices.push(req.params.token);
     user.save();
   }
 });

@@ -63,41 +63,47 @@ router.get("/:id/show", ensureAuthenticated, function (req, res) {
   // });
 });
 
-router.get("/:id/status/rejected", ensureAuthenticated, async function (req, res) {
-  Order.findById(req.params.id, (err, order) => {
-    if (err) {
-      console.log(err);
-    } else {
-      if (order) {
-        if (order.business.equals(req.user.business)) {
-          if (order.status === "pending") {
-			order.status = "rejected";
-			order.save();
-			
-			User.findById(order.user).populate("devices").then((user) => {
-			const registrationIds = [];
-			user.devices.forEach(device => {
-				registrationIds.push(device);
-			});
+router.get(
+  "/:id/status/rejected",
+  ensureAuthenticated,
+  async function (req, res) {
+    Order.findById(req.params.id, (err, order) => {
+      if (err) {
+        console.log(err);
+      } else {
+        if (order) {
+          if (order.business.equals(req.user.business)) {
+            if (order.status === "pending") {
+              order.status = "rejected";
+              order.save();
 
-            push
-              .send(registrationIds, data)
-              .then((results) => {
-                console.log(results);
-              })
-              .catch((err) => {
-                console.log(err);
-              });
-			}).catch((err) => {console.log(err);})
-			
-			
+              User.findById(order.user)
+                .then((user) => {
+                  const registrationIds = [];
+                  user.devices.forEach((device) => {
+                    registrationIds.push(device);
+                  });
+
+                  push
+                    .send(registrationIds, data)
+                    .then((results) => {
+                      console.log(results);
+                    })
+                    .catch((err) => {
+                      console.log(err);
+                    });
+                })
+                .catch((err) => {
+                  console.log(err);
+                });
+            }
           }
+          res.redirect(`/business/orders/${req.params.id}/show`);
         }
-        res.redirect(`/business/orders/${req.params.id}/show`);
       }
-    }
-  });
-});
+    });
+  }
+);
 router.get("/:id/status/accepted", ensureAuthenticated, function (req, res) {
   Order.findById(req.params.id, (err, order) => {
     if (err) {
