@@ -18,13 +18,11 @@ router.get("/add/:token", async (req, res) => {
     deviceToken,
   });
   await newToken.save();
-
-
 });
 
 router.get("/user/:token", authenticateToken, async (req, res) => {
   const token = await Token.find({ deviceToken: req.params.token });
-
+  console.log(token);
   if (token) {
     const user = await User.findById(req.user.id);
     user.devices.push(token.id);
@@ -33,8 +31,3 @@ router.get("/user/:token", authenticateToken, async (req, res) => {
 });
 
 module.exports = router;
-
-
-
-
-  
