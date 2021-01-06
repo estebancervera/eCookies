@@ -26,7 +26,7 @@ router.get("/user/:token", authenticateToken, async (req, res) => {
   if (token) {
     const user = await User.findById(req.user.id);
     user.devices.push(token.id);
-    await user.save();
+    user.save();
   }
 });
 
