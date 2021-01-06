@@ -7,7 +7,7 @@ const User = require('../../models/user');
 
 //PRODUCTS API
 
-router.get("/orders", authenticateToken,(req, res) => {
+router.get("/", authenticateToken,(req, res) => {
     console.log(req.user);
     Order.find({user: req.user.id}).populate("business")
     .then(orders => {
@@ -25,7 +25,7 @@ router.get("/orders", authenticateToken,(req, res) => {
 });
 
 
-router.post("/orders", authenticateToken,(req, res) => {
+router.post("/", authenticateToken,(req, res) => {
 
 
 
