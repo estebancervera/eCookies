@@ -30,7 +30,7 @@ router.post("/user/", authenticateToken, async (req, res) => {
     const user = await User.findById(req.user.id);
     const repeated = false;
     user.devices.forEach((device) => {
-      if (deviceToken.equals(device)) {
+      if (deviceToken === device) {
         repeated = true;
       }
     });
