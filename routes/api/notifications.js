@@ -12,10 +12,11 @@ const push = require("../../config/notifications");
 //NOTIFICATION API
 
 router.get("/add/", async (req, res) => {
+  console.log(req.body);
   const deviceToken = req.body.token;
   console.log(deviceToken);
   const newToken = new Token({
-    deviceToken, 
+    deviceToken,
   });
   await newToken.save();
 });
@@ -23,6 +24,7 @@ router.get("/add/", async (req, res) => {
 router.get("/user/", authenticateToken, async (req, res) => {
   //const token = await Token.find({ deviceToken: req.params.token });
   //console.log(token);
+  console.log(req.body);
   const deviceToken = req.body.token;
   if (deviceToken) {
     const user = await User.findById(req.user.id);
