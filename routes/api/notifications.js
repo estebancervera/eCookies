@@ -11,28 +11,29 @@ const push = require("../../config/notifications");
 
 //NOTIFICATION API
 
-router.get("/add/:token", async (req, res) => {
-  const deviceToken = req.params.token;
+router.get("/add/", async (req, res) => {
+  const deviceToken = req.body.token;
   console.log(deviceToken);
   const newToken = new Token({
-    deviceToken,
+    deviceToken, 
   });
   await newToken.save();
 });
 
-router.get("/user/:token", authenticateToken, async (req, res) => {
+router.get("/user/", authenticateToken, async (req, res) => {
   //const token = await Token.find({ deviceToken: req.params.token });
   //console.log(token);
-  if (req.params.token) {
+  const deviceToken = req.body.token;
+  if (deviceToken) {
     const user = await User.findById(req.user.id);
     const repeated = false;
     user.devices.forEach((device) => {
-      if (req.params.token.equals(device)) {
+      if (deviceToken.equals(device)) {
         repeated = true;
       }
     });
     if (!repeated) {
-      user.devices.push(req.params.token);
+      user.devices.push(deviceToken);
       user.save();
     }
   }
