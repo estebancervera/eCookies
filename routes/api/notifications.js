@@ -11,7 +11,7 @@ const push = require("../../config/notifications");
 
 //NOTIFICATION API
 
-router.get("/add/", async (req, res) => {
+router.post("/add/", async (req, res) => {
   console.log(req.body);
   const deviceToken = req.body.token;
   console.log(deviceToken);
@@ -21,7 +21,7 @@ router.get("/add/", async (req, res) => {
   await newToken.save();
 });
 
-router.get("/user/", authenticateToken, async (req, res) => {
+router.post("/user/", authenticateToken, async (req, res) => {
   //const token = await Token.find({ deviceToken: req.params.token });
   //console.log(token);
   console.log(req.body);
