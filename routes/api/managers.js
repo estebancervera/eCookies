@@ -1,11 +1,10 @@
 const express = require("express");
 const router = express.Router();
 const bcrypt = require("bcryptjs");
-const { authenticateTokenManager } = require("../config/auth");
+const { authenticateTokenManager } = require("../../config/auth");
 const passport = require("passport");
 const jwt = require("jsonwebtoken");
 var crypto = require("crypto");
-const moment = require("moment-timezone");
 
 const Order = require("../../models/order");
 
