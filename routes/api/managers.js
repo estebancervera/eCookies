@@ -43,6 +43,9 @@ router.post("/login", (req, res, next) => {
 });
 
 router.get("/orders", authenticateTokenManager, function (req, res) {
+  console.log("-------------------");
+  console.log(req.manager);
+  console.log("-------------------");
   Order.find({
     deliveryDate: { $gte: Date.now() },
     business: req.manager.business,
