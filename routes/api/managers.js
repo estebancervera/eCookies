@@ -5,8 +5,9 @@ const { authenticateTokenManager } = require("../../config/auth");
 const passport = require("passport");
 const jwt = require("jsonwebtoken");
 var crypto = require("crypto");
-
+var async = require("async");
 const Order = require("../../models/order");
+const Manager = require("../../models/manager");
 
 //Managers API
 
@@ -43,12 +44,13 @@ router.post("/login", (req, res, next) => {
 });
 
 router.get("/orders", authenticateTokenManager, function (req, res) {
-  console.log("-------------------");
-  console.log(req.manager);
-  console.log("-------------------");
-  Order.find({
+  const manager;
+  await Manager.findById(req.manager.id)
+  .then((man) => manager = man)
+  .catch((err) => console.log(err));
+  await Order.find({
     deliveryDate: { $gte: Date.now() },
-    business: req.manager.business,
+    business: manager.business,
   })
     .sort({ orderDate: -1 })
     .populate("user")
