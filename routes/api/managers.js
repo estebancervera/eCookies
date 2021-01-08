@@ -56,7 +56,7 @@ router.get("/orders", authenticateTokenManager, function (req, res) {
           if (err) {
             console.log(err);
           } else {
-            res.json({ orders: orders });
+            res.json( orders );
           }
         });
     })
