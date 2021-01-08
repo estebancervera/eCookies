@@ -44,23 +44,23 @@ router.post("/login", (req, res, next) => {
 });
 
 router.get("/orders", authenticateTokenManager, function (req, res) {
-  const manager;
-  await Manager.findById(req.manager.id)
-  .then((man) => manager = man)
-  .catch((err) => console.log(err));
-  await Order.find({
-    deliveryDate: { $gte: Date.now() },
-    business: manager.business,
-  })
-    .sort({ orderDate: -1 })
-    .populate("user")
-    .exec((err, orders) => {
-      if (err) {
-        console.log(err);
-      } else {
-        res.json({ orders: orders });
-      }
-    });
+  Manager.findById(req.manager.id)
+    .then((manager) => {
+      Order.find({
+        deliveryDate: { $gte: Date.now() },
+        business: manager.business,
+      })
+        .sort({ orderDate: -1 })
+        .populate("user")
+        .exec((err, orders) => {
+          if (err) {
+            console.log(err);
+          } else {
+            res.json({ orders: orders });
+          }
+        });
+    })
+    .catch((err) => console.log(err));
 });
 
 module.exports = router;
