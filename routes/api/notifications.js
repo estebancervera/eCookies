@@ -33,7 +33,7 @@ router.post("/user/", authenticateToken, async (req, res) => {
       if (deviceToken === device) {
         repeated = true;
       }
-    });
+    });   
     if (!repeated) {
       user.devices.push(deviceToken);
       user.save();

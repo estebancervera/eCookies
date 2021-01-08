@@ -75,6 +75,7 @@ app.use("/admin", require("./routes/admin"));
 app.use("/api/token", require("./routes/api/notifications"));
 app.use("/api/orders", require("./routes/api/orders"));
 app.use("/api/business", require("./routes/api/products"));
+app.use("/api/manager", require("./routes/api/managers"));
 
 //ROUTES BUSINESS
 
