@@ -34,10 +34,7 @@ router.post("/login", (req, res, next) => {
         id: manager._id,
         email: manager.email,
       };
-      const accessToken = jwt.sign(
-        userTokenObject,
-        process.env.ACCESS_TOKEN_SECRET_MANAGER
-      );
+      const accessToken = jwt.sign(userTokenObject, process.env.ACCESS_TOKEN_SECRET_MANAGER);
       res.json({ accessToken: accessToken });
     });
   })(req, res, next);
@@ -47,7 +44,7 @@ router.get("/orders", authenticateTokenManager, function (req, res) {
   Manager.findById(req.manager.id)
     .then((manager) => {
       Order.find({
-        deliveryDate: { $gte: Date.now() },
+        //deliveryDate: { $gte: Date.now() },
         business: manager.business,
       })
         .sort({ orderDate: -1 })
@@ -56,7 +53,7 @@ router.get("/orders", authenticateTokenManager, function (req, res) {
           if (err) {
             console.log(err);
           } else {
-            res.json( orders );
+            res.json(orders);
           }
         });
     })
