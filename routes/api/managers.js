@@ -18,13 +18,13 @@ router.get("/", authenticateTokenManager, function (req, res) {
     .catch((err) => console.log(err));
 });
 
-router.get("/business/toggle", authenticateTokenManager, async function (req, res) {
+router.get("/business/toggle", authenticateTokenManager,  function (req, res) {
   Business.find({ manager: req.manager._id }, (err, business) => {
     if (err) {
       console.log(err);
     } else {
       business.available = !business.available;
-      await business.save();
+      business.save();
       res.json({
         isError: false,
         message: business.available
