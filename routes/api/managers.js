@@ -19,7 +19,7 @@ router.get("/", authenticateTokenManager, function (req, res) {
 });
 
 router.get("/business/toggle", authenticateTokenManager, function (req, res) {
-  Business.find({ manager: manager }, (err, business) => {
+  Business.find({ manager: req.manager }, (err, business) => {
     if (err) {
       console.log(err);
     } else {
