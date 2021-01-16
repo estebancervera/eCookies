@@ -10,6 +10,12 @@ const Order = require("../../models/order");
 const Manager = require("../../models/manager");
 
 //Managers API
+router.get("/", authenticateTokenManager, function (req, res) {
+  Manager.findById(req.manager.id)
+    .populate("business")
+    .then((manager) => res.json(manager))
+    .catch((err) => console.log(err));
+});
 
 router.post("/login", (req, res, next) => {
   passport.authenticate("local-manager-signup", (err, manager, info) => {
