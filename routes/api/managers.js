@@ -51,28 +51,6 @@ router.get("/business/:lat/:lon", authenticateTokenManager, function (req, res) 
   });
 });
 
-router.get("/business/:lat/:lon", authenticateTokenManager, function (req, res) {
-  Business.find({ manager: manager }, (err, business) => {
-    if (err) {
-      console.log(err);
-    } else {
-      business.lon = req.params.lon;
-      business.lat = req.params.lat;
-      business.save();
-      res.json({
-        isError: false,
-        message: "Se cambio la ubicacion del negocio.",
-      });
-    }
-  });
-});
-
-router.get("/", authenticateTokenManager, function (req, res) {
-  Manager.findById(req.manager.id)
-    .populate("business")
-    .then((manager) => res.json({ email: manager.email, business: manager.business }))
-    .catch((err) => console.log(err));
-});
 
 router.post("/login", (req, res, next) => {
   passport.authenticate("local-manager-signup", (err, manager, info) => {
