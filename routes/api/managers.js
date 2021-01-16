@@ -13,7 +13,7 @@ const Manager = require("../../models/manager");
 router.get("/", authenticateTokenManager, function (req, res) {
   Manager.findById(req.manager.id)
     .populate("business")
-    .then((manager) => res.json(manager))
+    .then((manager) => res.json({email: manager.email, business: manager.business}))
     .catch((err) => console.log(err));
 });
 
