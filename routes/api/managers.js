@@ -9,6 +9,7 @@ var async = require("async");
 const Order = require("../../models/order");
 const Manager = require("../../models/manager");
 const Business = require("../../models/business");
+const business = require("../../models/business");
 
 //Managers API
 router.get("/", authenticateTokenManager, function (req, res) {
@@ -18,11 +19,9 @@ router.get("/", authenticateTokenManager, function (req, res) {
     .catch((err) => console.log(err));
 });
 
-router.get("/business/toggle", authenticateTokenManager,  function (req, res) {
-  Business.find({ manager: req.manager._id }, (err, business) => {
-    if (err) {
-      console.log(err);
-    } else {
+router.get("/business/toggle", authenticateTokenManager, async (req, res) => {
+  Business.find({ manager: req.manager._id })
+    .then((business) => {
       business.available = !business.available;
       business.save();
       res.json({
@@ -31,8 +30,8 @@ router.get("/business/toggle", authenticateTokenManager,  function (req, res) {
           ? "Se cambio el estado del negocio a disponible"
           : "Se cambio el estado del negocio a no disponible",
       });
-    }
-  });
+    })
+    .catch((err) => console.log(err));
 });
 
 router.get("/business/:lat/:lon", authenticateTokenManager, function (req, res) {
@@ -50,7 +49,6 @@ router.get("/business/:lat/:lon", authenticateTokenManager, function (req, res) 
     }
   });
 });
-
 
 router.post("/login", (req, res, next) => {
   passport.authenticate("local-manager-signup", (err, manager, info) => {
