@@ -23,7 +23,8 @@ router.get("/business/toggle", authenticateTokenManager, async (req, res) => {
   Business.find({ manager: req.manager._id })
     .then((business) => {
       business.available = !business.available;
-      business.save();
+      console.log(business);
+      //business.save();
       res.json({
         isError: false,
         message: business.available
