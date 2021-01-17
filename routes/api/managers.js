@@ -124,14 +124,16 @@ router.get("/order/:id/rejected", authenticateTokenManager, async function (req,
   Order.findById(req.params.id)
     .then((order) => {
       console.log("1");
-     // if (order.business.equals(req.manager.business)) {
-        console.log("2");
-        if (order.status === "pending") {
-          console.log("3");
-          order.status = "rejected";
-          order.save();
-          console.log("4");
-        }
+      // if (order.business.equals(req.manager.business)) {
+      console.log(req.manager);
+      console.log("2");
+      if (order.status === "pending") {
+        console.log("3");
+        order.status = "rejected";
+        order.save();
+        console.log("4");
+        res.status(200);
+      }
       //}
     })
     .catch((err) => console.log(err));
@@ -141,14 +143,16 @@ router.get("/order/:id/accepted", authenticateTokenManager, function (req, res) 
     .then((order) => {
       console.log("1");
       //if (order.business.equals(req.manager.business)) {
-        console.log("2");
-        if (order.status === "pending") {
-          console.log("3");
-          order.status = "accepted";
-          order.save();
-          console.log("4");
-        }
-     // }
+      console.log(req.manager);
+      console.log("2");
+      if (order.status === "pending") {
+        console.log("3");
+        order.status = "accepted";
+        order.save();
+        console.log("4");
+        res.status(200);
+      }
+      // }
     })
     .catch((err) => console.log(err));
 });
@@ -158,13 +162,15 @@ router.get("/order/:id/delivered", authenticateTokenManager, function (req, res)
   Order.findById(req.params.id)
     .then((order) => {
       //if (order.business.equals(req.manager.business)) {
-        console.log("2");
-        if (order.status === "accepted") {
-          console.log("3");
-          order.status = "delivered";
-          order.save();
-          console.log("4");
-        }
+      console.log(req.manager);
+      console.log("2");
+      if (order.status === "accepted") {
+        console.log("3");
+        order.status = "delivered";
+        order.save();
+        console.log("4");
+        res.status(200);
+      }
       //}
     })
     .catch((err) => console.log(err));
