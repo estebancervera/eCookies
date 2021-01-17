@@ -121,53 +121,41 @@ router.get("/orders", authenticateTokenManager, function (req, res) {
 });
 
 router.get("/order/:id/rejected", authenticateTokenManager, async function (req, res) {
-  Order.findById(req.params.id, (err, order) => {
-    if (err) {
-      console.log(err);
-    } else {
-      if (order) {
-        if (order.business.equals(req.manager.business)) {
-          if (order.status === "pending") {
-            order.status = "rejected";
-            order.save();
-          }
+  Order.findById(req.params.id)
+    .then((order) => {
+      if (order.business.equals(req.manager.business)) {
+        if (order.status === "pending") {
+          order.status = "rejected";
+          order.save();
         }
       }
-    }
-  });
+    })
+    .catch((err) => console.log(err));
 });
 router.get("/order/:id/accepted", authenticateTokenManager, function (req, res) {
-  Order.findById(req.params.id, (err, order) => {
-    if (err) {
-      console.log(err);
-    } else {
-      if (order) {
-        if (order.business.equals(req.manager.business)) {
-          if (order.status === "pending") {
-            order.status = "accepted";
-            order.save();
-          }
+  Order.findById(req.params.id)
+    .then((order) => {
+      if (order.business.equals(req.manager.business)) {
+        if (order.status === "pending") {
+          order.status = "accepted";
+          order.save();
         }
       }
-    }
-  });
+    })
+    .catch((err) => console.log(err));
 });
 
 router.get("/order/:id/delivered", authenticateTokenManager, function (req, res) {
-  Order.findById(req.params.id, (err, order) => {
-    if (err) {
-      console.log(err);
-    } else {
-      if (order) {
-        if (order.business.equals(req.manager.business)) {
-          if (order.status === "accepted") {
-            order.status = "delivered";
-            order.save();
-          }
+  Order.findById(req.params.id)
+    .then((order) => {
+      if (order.business.equals(req.manager.business)) {
+        if (order.status === "accepted") {
+          order.status = "delivered";
+          order.save();
         }
       }
-    }
-  });
+    })
+    .catch((err) => console.log(err));
 });
 
 module.exports = router;
