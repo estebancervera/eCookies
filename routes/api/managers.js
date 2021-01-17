@@ -124,7 +124,7 @@ router.get("/order/:id/rejected", authenticateTokenManager, async function (req,
   Order.findById(req.params.id)
     .then((order) => {
       console.log("1");
-      if (order.business.equals(req.manager.business)) {
+     // if (order.business.equals(req.manager.business)) {
         console.log("2");
         if (order.status === "pending") {
           console.log("3");
@@ -132,7 +132,7 @@ router.get("/order/:id/rejected", authenticateTokenManager, async function (req,
           order.save();
           console.log("4");
         }
-      }
+      //}
     })
     .catch((err) => console.log(err));
 });
@@ -140,7 +140,7 @@ router.get("/order/:id/accepted", authenticateTokenManager, function (req, res) 
   Order.findById(req.params.id)
     .then((order) => {
       console.log("1");
-      if (order.business.equals(req.manager.business)) {
+      //if (order.business.equals(req.manager.business)) {
         console.log("2");
         if (order.status === "pending") {
           console.log("3");
@@ -148,7 +148,7 @@ router.get("/order/:id/accepted", authenticateTokenManager, function (req, res) 
           order.save();
           console.log("4");
         }
-      }
+     // }
     })
     .catch((err) => console.log(err));
 });
@@ -157,7 +157,7 @@ router.get("/order/:id/delivered", authenticateTokenManager, function (req, res)
   console.log("1");
   Order.findById(req.params.id)
     .then((order) => {
-      if (order.business.equals(req.manager.business)) {
+      //if (order.business.equals(req.manager.business)) {
         console.log("2");
         if (order.status === "accepted") {
           console.log("3");
@@ -165,7 +165,7 @@ router.get("/order/:id/delivered", authenticateTokenManager, function (req, res)
           order.save();
           console.log("4");
         }
-      }
+      //}
     })
     .catch((err) => console.log(err));
 });
