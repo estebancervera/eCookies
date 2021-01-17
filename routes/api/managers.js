@@ -132,9 +132,10 @@ router.get("/order/:id/rejected", authenticateTokenManager, async function (req,
         order.status = "rejected";
         order.save();
         console.log("4");
-        res.status(200);
+        res.json({ order: order._id, status: order.status });
       }
       //}
+      res.status(200);
     })
     .catch((err) => console.log(err));
 });
@@ -150,9 +151,10 @@ router.get("/order/:id/accepted", authenticateTokenManager, function (req, res) 
         order.status = "accepted";
         order.save();
         console.log("4");
-        res.status(200);
+        res.json({ order: order._id, status: order.status });
       }
       // }
+      res.status(200);
     })
     .catch((err) => console.log(err));
 });
@@ -169,9 +171,10 @@ router.get("/order/:id/delivered", authenticateTokenManager, function (req, res)
         order.status = "delivered";
         order.save();
         console.log("4");
-        res.status(200);
+        res.json({order: order._id, status: order.status});
       }
       //}
+      res.status(200);
     })
     .catch((err) => console.log(err));
 });
