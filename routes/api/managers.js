@@ -120,7 +120,7 @@ router.get("/orders", authenticateTokenManager, function (req, res) {
     .catch((err) => console.log(err));
 });
 
-router.get("order/:id/rejected", authenticateTokenManager, async function (req, res) {
+router.get("/order/:id/rejected", authenticateTokenManager, async function (req, res) {
   Order.findById(req.params.id, (err, order) => {
     if (err) {
       console.log(err);
@@ -136,7 +136,7 @@ router.get("order/:id/rejected", authenticateTokenManager, async function (req, 
     }
   });
 });
-router.get("order/:id/accepted", authenticateTokenManager, function (req, res) {
+router.get("/order/:id/accepted", authenticateTokenManager, function (req, res) {
   Order.findById(req.params.id, (err, order) => {
     if (err) {
       console.log(err);
@@ -153,7 +153,7 @@ router.get("order/:id/accepted", authenticateTokenManager, function (req, res) {
   });
 });
 
-router.get("order/:id/delivered", authenticateTokenManager, function (req, res) {
+router.get("/order/:id/delivered", authenticateTokenManager, function (req, res) {
   Order.findById(req.params.id, (err, order) => {
     if (err) {
       console.log(err);
