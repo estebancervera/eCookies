@@ -36,19 +36,39 @@ router.get("/business/toggle", authenticateTokenManager, async (req, res) => {
 });
 
 router.get("/business/:lat/:lon", authenticateTokenManager, function (req, res) {
-  Business.find({ manager: req.manager._id }, (err, business) => {
-    if (err) {
-      console.log(err);
-    } else {
-      business.lon = req.params.lon;
+  Business.findOne({ manager: req.manager._id })
+    .then((business) => {
       business.lat = req.params.lat;
+      business.lon = req.params.lon;
+      console.log(business);
       business.save();
       res.json({
         isError: false,
-        message: "Se cambio la ubicacion del negocio.",
+        message: "Se cambio la ubicación del negocio correctamente",
       });
-    }
-  });
+    })
+    .catch((err) => {
+      console.log(err);
+      res.json({
+        isError: true,
+        message:
+          "Lo sentimos hubo un error al intentar cambiar la ubicación del negocio. Intente mas tarde o contacte a soporte.",
+      });
+    });
+
+  // Business.find({ manager: req.manager._id }, (err, business) => {
+  //   if (err) {
+  //     console.log(err);
+  //   } else {
+  //     business.lon = req.params.lon;
+  //     business.lat = req.params.lat;
+  //     business.save();
+  //     res.json({
+  //       isError: false,
+  //       message: "Se cambio la ubicacion del negocio.",
+  //     });
+  //   }
+  // });
 });
 
 router.post("/login", (req, res, next) => {
