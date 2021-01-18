@@ -5,7 +5,7 @@ var mongoose = require("mongoose");
 
 const Order = require("../../models/order");
 const User = require("../../models/user");
-const Manager = require("../../models/user");
+const Manager = require("../../models/manager");
 
 const push = require("../../config/notifications");
 
@@ -29,7 +29,7 @@ router.get("/", authenticateToken, (req, res) => {
 router.post("/", authenticateToken, async (req, res) => {
   var id = mongoose.Types.ObjectId(req.body.business);
 
-  var manager = await Manager.findOne({}).catch((err) => console.log(err));
+  var manager = await Manager.findOne({ business: id }).catch((err) => console.log(err));
   console.log("-----------------");
   console.log(manager);
   console.log("-----------------");
