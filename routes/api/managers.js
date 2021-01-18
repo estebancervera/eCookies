@@ -162,7 +162,7 @@ router.get("/order/:id/rejected", authenticateTokenManager, async function (req,
     .catch((err) => console.log(err));
 });
 
-router.get("/order/:id/accepted", authenticateTokenManager, function (req, res) {
+router.get("/order/:id/accepted", authenticateTokenManager, async function (req, res) {
 
   var manager = await Manager.findById(req.manager.id).catch((err) => console.log(err));
 
@@ -205,7 +205,7 @@ router.get("/order/:id/accepted", authenticateTokenManager, function (req, res) 
     .catch((err) => console.log(err));
 });
 
-router.get("/order/:id/delivered", authenticateTokenManager, function (req, res) {
+router.get("/order/:id/delivered", authenticateTokenManager, async function (req, res) {
 
   var manager = await Manager.findById(req.manager.id).catch((err) => console.log(err));
 
