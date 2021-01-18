@@ -29,7 +29,7 @@ router.post("/user/", authenticateToken, async (req, res) => {
   const deviceToken = req.body.token;
   if (deviceToken) {
     const user = await User.findById(req.user.id);
-    const repeated = false;
+    var repeated = false;
     user.devices.forEach((device) => {
       if (deviceToken === device) {
         repeated = true;
@@ -49,7 +49,7 @@ router.post("/manager/", authenticateTokenManager, async (req, res) => {
   const deviceToken = req.body.token;
   if (deviceToken) {
     const manager = await Manager.findById(req.manager.id);
-    const repeated = false;
+    var repeated = false;
     manager.devices.forEach((device) => {
       if (deviceToken === device) {
         repeated = true;

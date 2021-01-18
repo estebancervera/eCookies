@@ -135,7 +135,7 @@ router.get("/order/:id/rejected", authenticateTokenManager, async function (req,
           order.save();
 
           const registrationIds = [];
-          user.devices.forEach((device) => {
+          manager.devices.forEach((device) => {
             registrationIds.push(device);
           });
 
@@ -178,7 +178,7 @@ router.get("/order/:id/accepted", authenticateTokenManager, async function (req,
         order.save();
 
         const registrationIds = [];
-        user.devices.forEach((device) => {
+        manager.devices.forEach((device) => {
           registrationIds.push(device);
         });
 
