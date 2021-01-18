@@ -26,7 +26,8 @@ router.get("/", authenticateToken, (req, res) => {
 });
 
 router.post("/", authenticateToken, async (req, res) => {
-  var manager = await Manager.find({ business: req.body.business }).catch((err) => console.log(err));
+  var manager = await Manager.findOne({ business: req.body.business }).catch((err) => console.log(err));
+
   console.log(manager);
   console.log(req.body.business);
   const order = new Order({
