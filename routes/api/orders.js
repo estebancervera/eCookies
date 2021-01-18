@@ -27,8 +27,10 @@ router.get("/", authenticateToken, (req, res) => {
 });
 
 router.post("/", authenticateToken, async (req, res) => {
-  var businessId = mongoose.Types.ObjectId(req.body.business);
-  var manager = await Manager.findOne({ business: ObjectId(req.body.business) }).catch((err) => console.log(err));
+  var id = mongoose.Types.ObjectId(req.body.business);
+  console.log(id);
+  console.log(typeof id);
+  var manager = await Manager.findOne({ business: id }).catch((err) => console.log(err));
 
   console.log(manager);
   console.log(req.body.business);
