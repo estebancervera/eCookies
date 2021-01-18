@@ -38,6 +38,9 @@ router.post("/user/", authenticateToken, async (req, res) => {
     if (!repeated) {
       user.devices.push(deviceToken);
       user.save();
+      res.status(200);
+    } else {
+      res.status(204);
     }
   }
 });
@@ -58,6 +61,9 @@ router.post("/manager/", authenticateTokenManager, async (req, res) => {
     if (!repeated) {
       manager.devices.push(deviceToken);
       manager.save();
+      res.status(200);
+    } else {
+      res.status(204);
     }
   }
 });
