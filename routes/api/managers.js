@@ -134,24 +134,24 @@ router.get("/order/:id/rejected", authenticateTokenManager, async function (req,
           order.status = "rejected";
           order.save();
 
-          // const registrationIds = [];
-          // user.devices.forEach((device) => {
-          //   registrationIds.push(device);
-          // });
+          const registrationIds = [];
+          user.devices.forEach((device) => {
+            registrationIds.push(device);
+          });
 
-          // const data = require("../../config/data")(
-          //   "Cuenta Reportada",
-          //   "Usted ha sido reportado por un negocio por no cumplir con una de sus ordenes. Contacte al negocio si desea volver a poder hacer pedidos."
-          // );
+          const data = require("../../config/data")(
+                    "Orden Rechazada",
+                    "Su orden ha sido rechazada por el negocio."
+                  );
 
-          // push
-          //   .send(registrationIds, data)
-          //   .then((results) => {
-          //     console.log(results);
-          //   })
-          //   .catch((err) => {
-          //     console.log(err);
-          //   });
+          push
+            .send(registrationIds, data)
+            .then((results) => {
+              console.log(results);
+            })
+            .catch((err) => {
+              console.log(err);
+            });
 
           console.log("4");
           res.json({ order: order._id, status: order.status });
@@ -163,10 +163,13 @@ router.get("/order/:id/rejected", authenticateTokenManager, async function (req,
 });
 
 router.get("/order/:id/accepted", authenticateTokenManager, function (req, res) {
+
+  var manager = await Manager.findById(req.manager.id).catch((err) => console.log(err));
+
   Order.findById(req.params.id)
     .then((order) => {
       console.log("1");
-      //if (order.business.equals(req.manager.business)) {
+      if (order.business.equals(manager.business)) {
       console.log(req.manager);
       console.log("2");
       if (order.status === "pending") {
@@ -174,39 +177,42 @@ router.get("/order/:id/accepted", authenticateTokenManager, function (req, res) 
         order.status = "accepted";
         order.save();
 
-        // const registrationIds = [];
-        // user.devices.forEach((device) => {
-        //   registrationIds.push(device);
-        // });
+        const registrationIds = [];
+        user.devices.forEach((device) => {
+          registrationIds.push(device);
+        });
 
-        // const data = require("../../config/data")(
-        //   "Cuenta Reportada",
-        //   "Usted ha sido reportado por un negocio por no cumplir con una de sus ordenes. Contacte al negocio si desea volver a poder hacer pedidos."
-        // );
+        const data = require("../../config/data")(
+                  "Orden Acceptada",
+                  "Su orden ha sido acceptada por el negocio!"
+                );
 
-        // push
-        //   .send(registrationIds, data)
-        //   .then((results) => {
-        //     console.log(results);
-        //   })
-        //   .catch((err) => {
-        //     console.log(err);
-        //   });
+        push
+          .send(registrationIds, data)
+          .then((results) => {
+            console.log(results);
+          })
+          .catch((err) => {
+            console.log(err);
+          });
 
         console.log("4");
         res.json({ order: order._id, status: order.status });
       }
-      // }
+       }
       res.status(200);
     })
     .catch((err) => console.log(err));
 });
 
 router.get("/order/:id/delivered", authenticateTokenManager, function (req, res) {
+
+  var manager = await Manager.findById(req.manager.id).catch((err) => console.log(err));
+
   console.log("1");
   Order.findById(req.params.id)
     .then((order) => {
-      //if (order.business.equals(req.manager.business)) {
+      if (order.business.equals(manager.business)) {
       console.log(req.manager);
       console.log("2");
       if (order.status === "accepted") {
@@ -215,28 +221,28 @@ router.get("/order/:id/delivered", authenticateTokenManager, function (req, res)
         order.save();
         console.log("4");
 
-        // const registrationIds = [];
-        // user.devices.forEach((device) => {
-        //   registrationIds.push(device);
-        // });
+        const registrationIds = [];
+        manager.devices.forEach((device) => {
+          registrationIds.push(device);
+        });
 
-        // const data = require("../../config/data")(
-        //   "Cuenta Reportada",
-        //   "Usted ha sido reportado por un negocio por no cumplir con una de sus ordenes. Contacte al negocio si desea volver a poder hacer pedidos."
-        // );
+       const data = require("../../config/data")(
+                  "Orden Entregada",
+                  "Su orden ha sido entregada!"
+                );
 
-        // push
-        //   .send(registrationIds, data)
-        //   .then((results) => {
-        //     console.log(results);
-        //   })
-        //   .catch((err) => {
-        //     console.log(err);
-        //   });
+        push
+          .send(registrationIds, data)
+          .then((results) => {
+            console.log(results);
+          })
+          .catch((err) => {
+            console.log(err);
+          });
 
         res.json({ order: order._id, status: order.status });
       }
-      //}
+      }
       res.status(200);
     })
     .catch((err) => console.log(err));
