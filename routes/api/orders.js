@@ -30,8 +30,9 @@ router.post("/", authenticateToken, async (req, res) => {
   var id = mongoose.Types.ObjectId(req.body.business);
 
   var manager = await Manager.findOne({}).catch((err) => console.log(err));
-
+  console.log("-----------------");
   console.log(manager);
+  console.log("-----------------");
   console.log(req.body.business);
   const order = new Order({
     user: req.user.id,
@@ -93,7 +94,7 @@ router.post("/", authenticateToken, async (req, res) => {
                   registrationIdsM.push(device);
                 });
 
-                const dataM = require("../../config/data")("Nueva Orden", "Su negocio ha recibido una nueva orden!");
+                const dataM = require("../../config/data")("Nueva Orden", "Ha recibido una nueva orden!");
 
                 push
                   .send(registrationIdsM, dataM)
