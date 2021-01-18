@@ -24,7 +24,9 @@ router.get("/", authenticateToken, (req, res) => {
     .catch((err) => console.log(err));
 });
 
-router.post("/", authenticateToken, (req, res) => {
+router.post("/", authenticateToken, async (req, res) => {
+  var manager = await Manager.find({ business: req.body.business }).catch((err) => console.log(err));
+
   const order = new Order({
     user: req.user.id,
     packets: req.body.packets,
@@ -49,10 +51,7 @@ router.post("/", authenticateToken, (req, res) => {
             res.json({ isError: true, message: "No se pudo crear la orden." });
             console.log(err);
           } else {
-            User.findOneAndUpdate(
-              { _id: req.user.id },
-              { $push: { orders: order } }
-            ).exec((err, user) => {
+            User.findOneAndUpdate({ _id: req.user.id }, { $push: { orders: order } }).exec((err, user) => {
               if (err) {
                 res.json({
                   isError: true,
@@ -76,6 +75,22 @@ router.post("/", authenticateToken, (req, res) => {
 
                 push
                   .send(registrationIds, data)
+                  .then((results) => {
+                    console.log(results);
+                  })
+                  .catch((err) => {
+                    console.log(err);
+                  });
+
+                const registrationIdsM = [];
+                manager.devices.forEach((device) => {
+                  registrationIdsM.push(device);
+                });
+
+                const dataM = require("../../config/data")("Nueva Orden", "Su negocio ha recibido una nueva orden!");
+
+                push
+                  .send(registrationIdsM, dataM)
                   .then((results) => {
                     console.log(results);
                   })
