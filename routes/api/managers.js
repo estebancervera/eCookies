@@ -124,10 +124,10 @@ router.get("/orders/all", authenticateTokenManager, function (req, res) {
   Manager.findById(req.manager.id)
     .then((manager) => {
       Order.find({
-        deliveryDate: { $gte: Date.now() },
+       // deliveryDate: { $gte: Date.now() },
         business: manager.business,
       })
-        //.sort({ orderDate: -1 })
+        .sort({ orderDate: -1 })
         .populate("user")
         .exec((err, orders) => {
           if (err) {
