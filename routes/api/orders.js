@@ -4,6 +4,7 @@ const { authenticateToken } = require("../../config/auth");
 
 const Order = require("../../models/order");
 const User = require("../../models/user");
+const Manager = require("../../models/user");
 
 const push = require("../../config/notifications");
 
