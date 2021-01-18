@@ -38,9 +38,9 @@ router.post("/user/", authenticateToken, async (req, res) => {
     if (!repeated) {
       user.devices.push(deviceToken);
       user.save();
-      res.status(200);
+      res.status(200).send("deviceID registered to account");;
     } else {
-      res.status(204);
+      res.status(204).send("deviceID already registered to account");;
     }
   }
 });
@@ -61,9 +61,9 @@ router.post("/manager/", authenticateTokenManager, async (req, res) => {
     if (!repeated) {
       manager.devices.push(deviceToken);
       manager.save();
-      res.status(200);
+      res.status(200).send("deviceID registered to account");;
     } else {
-      res.status(204);
+      res.status(204).send("deviceID already registered to account");
     }
   }
 });

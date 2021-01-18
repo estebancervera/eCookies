@@ -104,10 +104,30 @@ router.get("/orders", authenticateTokenManager, function (req, res) {
   Manager.findById(req.manager.id)
     .then((manager) => {
       Order.find({
-        //deliveryDate: { $gte: Date.now() },
+        deliveryDate: { $gte: Date.now() },
         business: manager.business,
       })
         .sort({ orderDate: -1 })
+        .populate("user")
+        .exec((err, orders) => {
+          if (err) {
+            console.log(err);
+          } else {
+            res.json(orders);
+          }
+        });
+    })
+    .catch((err) => console.log(err));
+});
+
+router.get("/orders/all", authenticateTokenManager, function (req, res) {
+  Manager.findById(req.manager.id)
+    .then((manager) => {
+      Order.find({
+        deliveryDate: { $gte: Date.now() },
+        business: manager.business,
+      })
+        //.sort({ orderDate: -1 })
         .populate("user")
         .exec((err, orders) => {
           if (err) {
