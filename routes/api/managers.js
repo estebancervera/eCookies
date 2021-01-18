@@ -9,7 +9,7 @@ var async = require("async");
 const Order = require("../../models/order");
 const Manager = require("../../models/manager");
 const Business = require("../../models/business");
-const business = require("../../models/business");
+const push = require("../../config/notifications");
 
 //Managers API
 router.get("/", authenticateTokenManager, function (req, res) {
@@ -121,24 +121,47 @@ router.get("/orders", authenticateTokenManager, function (req, res) {
 });
 
 router.get("/order/:id/rejected", authenticateTokenManager, async function (req, res) {
+  var manager = await Manager.findById(req.manager.id).catch((err) => console.log(err));
+
   Order.findById(req.params.id)
     .then((order) => {
       console.log("1");
-      // if (order.business.equals(req.manager.business)) {
-      console.log(req.manager);
-      console.log("2");
-      if (order.status === "pending") {
-        console.log("3");
-        order.status = "rejected";
-        order.save();
-        console.log("4");
-        res.json({ order: order._id, status: order.status });
+      if (order.business.equals(manager.business)) {
+        console.log(req.manager);
+        console.log("2");
+        if (order.status === "pending") {
+          console.log("3");
+          order.status = "rejected";
+          order.save();
+
+          // const registrationIds = [];
+          // user.devices.forEach((device) => {
+          //   registrationIds.push(device);
+          // });
+
+          // const data = require("../../config/data")(
+          //   "Cuenta Reportada",
+          //   "Usted ha sido reportado por un negocio por no cumplir con una de sus ordenes. Contacte al negocio si desea volver a poder hacer pedidos."
+          // );
+
+          // push
+          //   .send(registrationIds, data)
+          //   .then((results) => {
+          //     console.log(results);
+          //   })
+          //   .catch((err) => {
+          //     console.log(err);
+          //   });
+
+          console.log("4");
+          res.json({ order: order._id, status: order.status });
+        }
       }
-      //}
       res.status(200);
     })
     .catch((err) => console.log(err));
 });
+
 router.get("/order/:id/accepted", authenticateTokenManager, function (req, res) {
   Order.findById(req.params.id)
     .then((order) => {
@@ -150,6 +173,26 @@ router.get("/order/:id/accepted", authenticateTokenManager, function (req, res) 
         console.log("3");
         order.status = "accepted";
         order.save();
+
+        // const registrationIds = [];
+        // user.devices.forEach((device) => {
+        //   registrationIds.push(device);
+        // });
+
+        // const data = require("../../config/data")(
+        //   "Cuenta Reportada",
+        //   "Usted ha sido reportado por un negocio por no cumplir con una de sus ordenes. Contacte al negocio si desea volver a poder hacer pedidos."
+        // );
+
+        // push
+        //   .send(registrationIds, data)
+        //   .then((results) => {
+        //     console.log(results);
+        //   })
+        //   .catch((err) => {
+        //     console.log(err);
+        //   });
+
         console.log("4");
         res.json({ order: order._id, status: order.status });
       }
@@ -171,7 +214,27 @@ router.get("/order/:id/delivered", authenticateTokenManager, function (req, res)
         order.status = "delivered";
         order.save();
         console.log("4");
-        res.json({order: order._id, status: order.status});
+
+        // const registrationIds = [];
+        // user.devices.forEach((device) => {
+        //   registrationIds.push(device);
+        // });
+
+        // const data = require("../../config/data")(
+        //   "Cuenta Reportada",
+        //   "Usted ha sido reportado por un negocio por no cumplir con una de sus ordenes. Contacte al negocio si desea volver a poder hacer pedidos."
+        // );
+
+        // push
+        //   .send(registrationIds, data)
+        //   .then((results) => {
+        //     console.log(results);
+        //   })
+        //   .catch((err) => {
+        //     console.log(err);
+        //   });
+
+        res.json({ order: order._id, status: order.status });
       }
       //}
       res.status(200);
