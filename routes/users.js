@@ -92,7 +92,7 @@ router.post("/register", (req, res) => {
         port: 587,
         auth: {
           user: "noreply.ecookies@gmail.com",
-          pass: "pHtUxDk7jJfm8E25", // process.env.MAIL_PSWD,
+          pass:  process.env.MAIL_PSWD,
         },
       });
 
