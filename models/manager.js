@@ -15,7 +15,10 @@ var managerSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "Business",
   },
-  resetPasswordToken: String,
+  resetPasswordToken: {
+    type: String,
+    default: "",
+  },
   resetPasswordExpires: Date,
   accessLevel: {
     type: String,
@@ -23,6 +26,7 @@ var managerSchema = new mongoose.Schema({
   },
   devices: {
     type: [String],
+    default: [],
   },
 });
 

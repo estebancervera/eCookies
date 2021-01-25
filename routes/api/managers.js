@@ -38,6 +38,7 @@ router.get("/business/toggle", authenticateTokenManager, async (req, res) => {
 router.get("/business/:lat/:lon", authenticateTokenManager, function (req, res) {
   Business.findOne({ manager: req.manager._id })
     .then((business) => {
+      console.log(business.name);
       business.lat = req.params.lat;
       business.lon = req.params.lon;
       console.log(business);
@@ -124,7 +125,7 @@ router.get("/orders/all", authenticateTokenManager, function (req, res) {
   Manager.findById(req.manager.id)
     .then((manager) => {
       Order.find({
-       // deliveryDate: { $gte: Date.now() },
+        // deliveryDate: { $gte: Date.now() },
         business: manager.business,
       })
         .sort({ orderDate: -1 })
@@ -159,10 +160,7 @@ router.get("/order/:id/rejected", authenticateTokenManager, async function (req,
             registrationIds.push(device);
           });
 
-          const data = require("../../config/data")(
-                    "Orden Rechazada",
-                    "Su orden ha sido rechazada por el negocio."
-                  );
+          const data = require("../../config/data")("Orden Rechazada", "Su orden ha sido rechazada por el negocio.");
 
           push
             .send(registrationIds, data)
@@ -183,85 +181,77 @@ router.get("/order/:id/rejected", authenticateTokenManager, async function (req,
 });
 
 router.get("/order/:id/accepted", authenticateTokenManager, async function (req, res) {
-
   var manager = await Manager.findById(req.manager.id).catch((err) => console.log(err));
 
   Order.findById(req.params.id)
     .then((order) => {
       console.log("1");
       if (order.business.equals(manager.business)) {
-      console.log(req.manager);
-      console.log("2");
-      if (order.status === "pending") {
-        console.log("3");
-        order.status = "accepted";
-        order.save();
+        console.log(req.manager);
+        console.log("2");
+        if (order.status === "pending") {
+          console.log("3");
+          order.status = "accepted";
+          order.save();
 
-        const registrationIds = [];
-        manager.devices.forEach((device) => {
-          registrationIds.push(device);
-        });
-
-        const data = require("../../config/data")(
-                  "Orden Acceptada",
-                  "Su orden ha sido acceptada por el negocio!"
-                );
-
-        push
-          .send(registrationIds, data)
-          .then((results) => {
-            console.log(results);
-          })
-          .catch((err) => {
-            console.log(err);
+          const registrationIds = [];
+          manager.devices.forEach((device) => {
+            registrationIds.push(device);
           });
 
-        console.log("4");
-        res.json({ order: order._id, status: order.status });
+          const data = require("../../config/data")("Orden Acceptada", "Su orden ha sido acceptada por el negocio!");
+
+          push
+            .send(registrationIds, data)
+            .then((results) => {
+              console.log(results);
+            })
+            .catch((err) => {
+              console.log(err);
+            });
+
+          console.log("4");
+          res.json({ order: order._id, status: order.status });
+        }
       }
-       }
       res.status(200);
     })
     .catch((err) => console.log(err));
 });
 
 router.get("/order/:id/delivered", authenticateTokenManager, async function (req, res) {
-
   var manager = await Manager.findById(req.manager.id).catch((err) => console.log(err));
 
   console.log("1");
   Order.findById(req.params.id)
     .then((order) => {
       if (order.business.equals(manager.business)) {
-      console.log(req.manager);
-      console.log("2");
-      if (order.status === "accepted") {
-        console.log("3");
-        order.status = "delivered";
-        order.save();
-        console.log("4");
+        console.log(req.manager);
+        console.log("2");
+        if (order.status === "accepted") {
+          console.log("3");
+          order.status = "delivered";
+          order.save();
+          console.log("4");
 
-        const registrationIds = [];
-        manager.devices.forEach((device) => {
-          registrationIds.push(device);
-        });
-
-       const data = require("../../config/data")(
-                  "Orden Entregada",
-                  "Su orden ha sido entregada!"
-                );
-
-        push
-          .send(registrationIds, data)
-          .then((results) => {
-            console.log(results);
-          })
-          .catch((err) => {
-            console.log(err);
+          const registrationIds = [];
+          manager.devices.forEach((device) => {
+            registrationIds.push(device);
           });
 
-        res.json({ order: order._id, status: order.status });
-      }
+          const data = require("../../config/data")("Orden Entregada", "Su orden ha sido entregada!");
+
+          push
+            .send(registrationIds, data)
+            .then((results) => {
+              console.log(results);
+            })
+            .catch((err) => {
+              console.log(err);
+            });
+
+          res.json({ order: order._id, status: order.status });
+        }
       }
       res.status(200);
     })

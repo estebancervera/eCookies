@@ -146,6 +146,7 @@ router.post("/", ensureAuthenticated, requireAdmin, upload.array("file", 1), fun
           bcrypt.genSalt(10, (err, salt) =>
             bcrypt.hash(newAdmin.password, salt, (err, hash) => {
               if (err) {
+                console.log("errhash")
                 console.log(err);
               } else {
                 newAdmin.password = hash;
