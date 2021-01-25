@@ -37,8 +37,8 @@ router.get("/business/toggle", authenticateTokenManager, async (req, res) => {
 
 router.get("/business/:lat/:lon", authenticateTokenManager, function (req, res) {
 
-  console.log(req.manager._id)
-  Business.findOne({ manager: req.manager._id })
+  console.log(req.manager.id)
+  Business.findOne({ manager: req.manager.id })
     .then((business) => {
       console.log(business.name);
       business.lat = req.params.lat;
