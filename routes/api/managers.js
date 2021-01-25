@@ -36,9 +36,9 @@ router.get("/business/toggle", authenticateTokenManager, async (req, res) => {
 });
 
 router.get("/business/:lat/:lon", authenticateTokenManager, function (req, res) {
-
-  console.log(req.manager.id)
-  Business.findOne({ manager: req.manager.id })
+  console.log(req.manager);
+  console.log(req.manager.email);
+  Business.findOne({ email: req.manager.email })
     .then((business) => {
       console.log(business.name);
       business.lat = req.params.lat;
@@ -92,8 +92,8 @@ router.post("/login", (req, res, next) => {
         return next(err);
       }
       // User Found
-      console.log(manager._id)
-      console.log(manager.email)
+      console.log(manager._id);
+      console.log(manager.email);
       const userTokenObject = {
         id: manager._id,
         email: manager.email,
