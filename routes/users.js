@@ -30,7 +30,7 @@ router.get("/", (req, res) => {
 router.post("/register", (req, res) => {
   const { firstname, lastname, email, password, phone } = req.body;
   console.log(req.body);
-  console.log(lastname);
+  console.log(phone);
   User.findOne({ email: email }).then((user) => {
     if (user) {
       if (user.verified) {
@@ -92,7 +92,7 @@ router.post("/register", (req, res) => {
         port: 587,
         auth: {
           user: "noreply.ecookies@gmail.com",
-          pass:  process.env.MAIL_PSWD,
+          pass: process.env.MAIL_PSWD,
         },
       });
 
